@@ -14,7 +14,6 @@ import jakarta.persistence.Table;
 import lombok.val;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.enumtype.LocaleCode;
-import mx.lkmsoft.cis.jpa.enumtype.NotificationMethod;
 import mx.lkmsoft.cis.jpa.enumtype.Theme;
 
 /**
@@ -34,8 +33,7 @@ public class UserPreferences extends BaseEntity {
 	private UserProfile userProfile;
 
 	@Column(name = "notification_method")
-	@Enumerated(EnumType.STRING)
-	private NotificationMethod notificationMethod;
+	private String notificationMethod;
 
 	@Column(name = "language")
 	@Enumerated(EnumType.STRING)
@@ -103,11 +101,11 @@ public class UserPreferences extends BaseEntity {
 		this.userProfile = userProfile;
 	}
 
-	public NotificationMethod getNotificationMethod() {
+	public String getNotificationMethod() {
 		return notificationMethod;
 	}
 
-	public void setNotificationMethod(NotificationMethod notificationMethod) {
+	public void setNotificationMethod(String notificationMethod) {
 		this.notificationMethod = notificationMethod;
 	}
 

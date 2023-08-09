@@ -14,6 +14,8 @@ import jakarta.persistence.Table;
 import lombok.val;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.enumtype.LocaleCode;
+import mx.lkmsoft.cis.jpa.enumtype.NotificationMethod;
+import mx.lkmsoft.cis.jpa.enumtype.Theme;
 
 /**
  * Persistent class for entity stored in table "preferences"
@@ -31,16 +33,16 @@ public class UserPreferences extends BaseEntity {
 	@JoinColumn(name = "user_profile_id", referencedColumnName = "id")
 	private UserProfile userProfile;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "notification_method_id", referencedColumnName = "id")
+	@Column(name = "notification_method")
+	@Enumerated(EnumType.STRING)
 	private NotificationMethod notificationMethod;
 
 	@Column(name = "language")
 	@Enumerated(EnumType.STRING)
 	private LocaleCode language;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "theme_id", referencedColumnName = "id")
+	@Column(name = "theme")
+	@Enumerated(EnumType.STRING)
 	private Theme theme;
 
 	@Column(name = "private_practice")
@@ -217,11 +219,9 @@ public class UserPreferences extends BaseEntity {
 	@Override
 	public String toString() {
 		val profileId = userProfile != null ? userProfile.getId() : null;
-		val notifMethodId = notificationMethod != null ? notificationMethod.getId() : null;
-		val themeId = theme != null ? theme.getId() : null;
 
-		return "UserPreferences [id=" + id + ", userProfile=" + profileId + ", notificationMethod=" + notifMethodId
-				+ ", language=" + language + ", theme=" + themeId + ", privatePractice=" + privatePractice + ", paged="
+		return "UserPreferences [id=" + id + ", userProfile=" + profileId + ", notificationMethod=" + notificationMethod
+				+ ", language=" + language + ", theme=" + theme + ", privatePractice=" + privatePractice + ", paged="
 				+ paged + ", notifications=" + notifications + ", alerts=" + alerts + ", passwordChange="
 				+ passwordChange + ", passwordChangePeriod=" + passwordChangePeriod + ", lastPasswordChange="
 				+ lastPasswordChange + ", nextPasswordChange=" + nextPasswordChange + ", appointmentDuration="

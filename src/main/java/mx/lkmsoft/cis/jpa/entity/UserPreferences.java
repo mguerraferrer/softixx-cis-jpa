@@ -4,12 +4,16 @@ import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.val;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
+import mx.lkmsoft.cis.jpa.enumtype.LocaleCode;
 
 /**
  * Persistent class for entity stored in table "preferences"
@@ -31,9 +35,9 @@ public class UserPreferences extends BaseEntity {
 	@JoinColumn(name = "notification_method_id", referencedColumnName = "id")
 	private NotificationMethod notificationMethod;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "language_id", referencedColumnName = "id")
-	private Language language;
+	@Column(name = "language")
+	@Enumerated(EnumType.STRING)
+	private LocaleCode language;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "theme_id", referencedColumnName = "id")
@@ -76,7 +80,7 @@ public class UserPreferences extends BaseEntity {
 		super();
 	}
 
-	public UserPreferences(Theme theme, Language language, Integer paged) {
+	public UserPreferences(Theme theme, LocaleCode language, Integer paged) {
 		this.theme = theme;
 		this.language = language;
 		this.paged = paged;
@@ -105,11 +109,11 @@ public class UserPreferences extends BaseEntity {
 		this.notificationMethod = notificationMethod;
 	}
 
-	public Language getLanguage() {
+	public LocaleCode getLanguage() {
 		return language;
 	}
 
-	public void setLanguage(Language language) {
+	public void setLanguage(LocaleCode language) {
 		this.language = language;
 	}
 
@@ -210,33 +214,18 @@ public class UserPreferences extends BaseEntity {
 	}
 
 	/* toString */
+	@Override
 	public String toString() {
-		var sb = new StringBuilder();
-		sb.append("[");
-		sb.append(id);
-		sb.append("]:");
-		sb.append(privatePractice);
-		sb.append("|");
-		sb.append(paged);
-		sb.append("|");
-		sb.append(notifications);
-		sb.append("|");
-		sb.append(alerts);
-		sb.append("|");
-		sb.append(passwordChange);
-		sb.append("|");
-		sb.append(passwordChangePeriod);
-		sb.append("|");
-		sb.append(lastPasswordChange);
-		sb.append("|");
-		sb.append(nextPasswordChange);
-		sb.append("|");
-		sb.append(appointmentDuration);
-		sb.append("|");
-		sb.append(notifyAppointment);
-		sb.append("|");
-		sb.append(active);
-		return sb.toString();
+		val profileId = userProfile != null ? userProfile.getId() : null;
+		val notifMethodId = notificationMethod != null ? notificationMethod.getId() : null;
+		val themeId = theme != null ? theme.getId() : null;
+
+		return "UserPreferences [id=" + id + ", userProfile=" + profileId + ", notificationMethod=" + notifMethodId
+				+ ", language=" + language + ", theme=" + themeId + ", privatePractice=" + privatePractice + ", paged="
+				+ paged + ", notifications=" + notifications + ", alerts=" + alerts + ", passwordChange="
+				+ passwordChange + ", passwordChangePeriod=" + passwordChangePeriod + ", lastPasswordChange="
+				+ lastPasswordChange + ", nextPasswordChange=" + nextPasswordChange + ", appointmentDuration="
+				+ appointmentDuration + ", notifyAppointment=" + notifyAppointment + ", active=" + active + "]";
 	}
 
 }

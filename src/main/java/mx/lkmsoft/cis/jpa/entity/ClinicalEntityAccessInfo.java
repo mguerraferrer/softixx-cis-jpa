@@ -5,6 +5,8 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -12,6 +14,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
+import mx.lkmsoft.cis.jpa.enumtype.AccessLevel;
 
 /**
  * Persistent class for entity stored in table "clinical_entity_access_info"
@@ -33,8 +36,8 @@ public class ClinicalEntityAccessInfo extends BaseEntity {
 	@JoinColumn(name = "user_profile_id", referencedColumnName = "id")
 	private UserProfile userProfile;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "access_level_id", referencedColumnName = "id")
+	@Column(name = "access_level")
+	@Enumerated(EnumType.STRING)
 	private AccessLevel accessLevel;
 
 	@Column(name = "active")
@@ -105,7 +108,7 @@ public class ClinicalEntityAccessInfo extends BaseEntity {
 	@Override
 	public String toString() {
 		return "ClinicalEntityAccessInfo [id=" + id + ", clinicalEntity=" + clinicalEntity.getId() + ", userProfile="
-				+ userProfile.getId() + ", accessLevel=" + accessLevel.getId() + ", active=" + active + "]";
+				+ userProfile.getId() + ", accessLevel=" + accessLevel + ", active=" + active + "]";
 	}
 
 }

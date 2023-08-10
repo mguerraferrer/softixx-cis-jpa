@@ -39,14 +39,8 @@ public class PrivatePractice extends BaseEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "privatePractice", targetEntity = PrivatePracticeConsultationProcedure.class)
 	private List<PrivatePracticeConsultationProcedure> privatePracticeConsultationProcedures;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "privatePractice", targetEntity = PrivatePracticeCustomRole.class)
-	private List<PrivatePracticeCustomRole> privatePracticeCustomRoles;
-
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "privatePractice", targetEntity = PrivatePracticeAddress.class)
 	private List<PrivatePracticeAddress> privatePracticeAddresses;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "privatePractice", targetEntity = PrivatePracticeSystemOption.class)
-	private List<PrivatePracticeSystemOption> privatePracticeSystemOptions;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "privatePractice", targetEntity = PrivatePracticeFunctionality.class)
 	private List<PrivatePracticeFunctionality> privatePracticeFunctionalities;
@@ -102,17 +96,6 @@ public class PrivatePractice extends BaseEntity {
 		this.privatePracticeConsultationProcedures = privatePracticeConsultationProcedures;
 	}
 
-	public List<PrivatePracticeCustomRole> getPrivatePracticeCustomRoles() {
-		if (privatePracticeCustomRoles == null) {
-			privatePracticeCustomRoles = new ArrayList<>();
-		}
-		return privatePracticeCustomRoles;
-	}
-
-	public void setPrivatePracticeCustomRoles(List<PrivatePracticeCustomRole> privatePracticeCustomRoles) {
-		this.privatePracticeCustomRoles = privatePracticeCustomRoles;
-	}
-
 	public List<PrivatePracticeAddress> getPrivatePracticeAddresses() {
 		if (privatePracticeAddresses == null) {
 			privatePracticeAddresses = new ArrayList<>();
@@ -122,17 +105,6 @@ public class PrivatePractice extends BaseEntity {
 
 	public void setPrivatePracticeAddresses(List<PrivatePracticeAddress> privatePracticeAddresses) {
 		this.privatePracticeAddresses = privatePracticeAddresses;
-	}
-
-	public List<PrivatePracticeSystemOption> getPrivatePracticeSystemOptions() {
-		if (privatePracticeSystemOptions == null) {
-			privatePracticeSystemOptions = new ArrayList<>();
-		}
-		return privatePracticeSystemOptions;
-	}
-
-	public void setPrivatePracticeSystemOptions(List<PrivatePracticeSystemOption> privatePracticeSystemOptions) {
-		this.privatePracticeSystemOptions = privatePracticeSystemOptions;
 	}
 
 	public List<PrivatePracticeFunctionality> getPrivatePracticeFunctionalities() {

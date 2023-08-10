@@ -49,9 +49,6 @@ public class ClinicalEntity extends BaseEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "clinicalEntity", targetEntity = ClinicalEntitySpecialty.class)
 	private List<ClinicalEntitySpecialty> clinicalEntitySpecialties;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "clinicalEntity", targetEntity = ClinicalEntitySystemOption.class)
-	private List<ClinicalEntitySystemOption> clinicalEntitySystemOptions;
-
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "clinicalEntity", targetEntity = ClinicalEntityFunctionality.class)
 	private List<ClinicalEntityFunctionality> clinicalEntityFunctionalities;
 
@@ -63,9 +60,6 @@ public class ClinicalEntity extends BaseEntity {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "clinicalEntity", targetEntity = ClinicalEntityPreferences.class)
 	private List<ClinicalEntityPreferences> clinicalEntityPreferenceses;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "clinicalEntity", targetEntity = ClinicalEntityCustomRole.class)
-	private List<ClinicalEntityCustomRole> clinicalEntityCustomRoles;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "clinicalEntity", targetEntity = DoctorClinicalEntity.class)
 	private List<DoctorClinicalEntity> doctorClinicalEntities;
@@ -156,17 +150,6 @@ public class ClinicalEntity extends BaseEntity {
 		this.clinicalEntitySpecialties = clinicalEntitySpecialties;
 	}
 
-	public List<ClinicalEntitySystemOption> getClinicalEntitySystemOptions() {
-		if (clinicalEntitySystemOptions == null) {
-			clinicalEntitySystemOptions = new ArrayList<>();
-		}
-		return clinicalEntitySystemOptions;
-	}
-
-	public void setClinicalEntitySystemOptions(List<ClinicalEntitySystemOption> clinicalEntitySystemOptions) {
-		this.clinicalEntitySystemOptions = clinicalEntitySystemOptions;
-	}
-
 	public List<ClinicalEntityFunctionality> getClinicalEntityFunctionalities() {
 		if (clinicalEntityFunctionalities == null) {
 			clinicalEntityFunctionalities = new ArrayList<>();
@@ -209,17 +192,6 @@ public class ClinicalEntity extends BaseEntity {
 
 	public void setClinicalEntityPreferenceses(List<ClinicalEntityPreferences> clinicalEntityPreferenceses) {
 		this.clinicalEntityPreferenceses = clinicalEntityPreferenceses;
-	}
-
-	public List<ClinicalEntityCustomRole> getClinicalEntityCustomRoles() {
-		if (clinicalEntityCustomRoles == null) {
-			clinicalEntityCustomRoles = new ArrayList<>();
-		}
-		return clinicalEntityCustomRoles;
-	}
-
-	public void setClinicalEntityCustomRoles(List<ClinicalEntityCustomRole> clinicalEntityCustomRoles) {
-		this.clinicalEntityCustomRoles = clinicalEntityCustomRoles;
 	}
 
 	public List<DoctorClinicalEntity> getDoctorClinicalEntities() {

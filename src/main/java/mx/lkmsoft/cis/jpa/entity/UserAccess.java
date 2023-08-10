@@ -4,12 +4,15 @@ import java.time.LocalTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
+import mx.lkmsoft.cis.jpa.enumtype.AccessLevel;
 
 /**
  * Persistent class for entity stored in table "user_access"
@@ -27,29 +30,18 @@ public class UserAccess extends BaseEntity {
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private User user;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "level_access_id", referencedColumnName = "id")
+	@Column(name = "hash")
+	private String hash;
+
+	@Column(name = "access_level")
+	@Enumerated(EnumType.STRING)
 	private AccessLevel accessLevel;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "private_practice_functionality_id", referencedColumnName = "id")
-	private PrivatePracticeFunctionality privatePracticeFunctionality;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "clinical_entity_functionality_id", referencedColumnName = "id")
-	private ClinicalEntityFunctionality clinicalEntityFunctionality;
 
 	@Column(name = "start_time")
 	private LocalTime startTime;
 
 	@Column(name = "end_time")
 	private LocalTime endTime;
-
-	@Column(name = "access")
-	private boolean access;
-
-	@Column(name = "active")
-	private boolean active;
 
 	/* Getters and Setters */
 	public User getUser() {
@@ -60,28 +52,20 @@ public class UserAccess extends BaseEntity {
 		this.user = user;
 	}
 
+	public String getHash() {
+		return hash;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
+
 	public AccessLevel getAccessLevel() {
 		return accessLevel;
 	}
 
 	public void setAccessLevel(AccessLevel accessLevel) {
 		this.accessLevel = accessLevel;
-	}
-
-	public PrivatePracticeFunctionality getPrivatePracticeFunctionality() {
-		return privatePracticeFunctionality;
-	}
-
-	public void setPrivatePracticeFunctionality(PrivatePracticeFunctionality privatePracticeFunctionality) {
-		this.privatePracticeFunctionality = privatePracticeFunctionality;
-	}
-
-	public ClinicalEntityFunctionality getClinicalEntityFunctionality() {
-		return clinicalEntityFunctionality;
-	}
-
-	public void setClinicalEntityFunctionality(ClinicalEntityFunctionality clinicalEntityFunctionality) {
-		this.clinicalEntityFunctionality = clinicalEntityFunctionality;
 	}
 
 	public LocalTime getStartTime() {
@@ -100,32 +84,11 @@ public class UserAccess extends BaseEntity {
 		this.endTime = endTime;
 	}
 
-	public boolean isAccess() {
-		return access;
-	}
-
-	public void setAccess(boolean access) {
-		this.access = access;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
 	/* toString */
 	@Override
 	public String toString() {
-		long privatePracticeFncId = privatePracticeFunctionality != null ? privatePracticeFunctionality.getId() : null;
-		long clinicalEntityFncId = clinicalEntityFunctionality != null ? clinicalEntityFunctionality.getId() : null;
-
-		return "UserAccess [id=" + id + ", user=" + user.getId() + ", accessLevel=" + accessLevel.getId()
-				+ ", privatePracticeFunctionality=" + privatePracticeFncId + ", clinicalEntityFunctionality="
-				+ clinicalEntityFncId + ", startTime=" + startTime + ", endTime=" + endTime + ", access=" + access
-				+ ", active=" + active + "]";
+		return "UserAccess [id=" + id + ", user=" + user.getId() + ", hash=" + hash + ", accessLevel=" + accessLevel
+				+ ", startTime=" + startTime + ", endTime=" + endTime + "]";
 	}
 
 }

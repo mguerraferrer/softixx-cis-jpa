@@ -56,12 +56,6 @@ public class Functionality extends BaseEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "functionalityOwner", targetEntity = Functionality.class)
 	private List<Functionality> functionalities;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "functionality", targetEntity = AutoConfigFunctionality.class)
-	private List<AutoConfigFunctionality> autoConfigFunctionalities;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "functionality", targetEntity = AutoConfigFunctionalityRole.class)
-	private List<AutoConfigFunctionalityRole> autoConfigFunctionalityRoles;
-
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "functionality", targetEntity = PrivatePracticeFunctionality.class)
 	private List<PrivatePracticeFunctionality> privatePracticeFunctionalities;
 
@@ -152,28 +146,6 @@ public class Functionality extends BaseEntity {
 			functionalities = new ArrayList<>();
 		}
 		return functionalities;
-	}
-
-	public List<AutoConfigFunctionality> getAutoConfigFunctionalities() {
-		if (autoConfigFunctionalities == null) {
-			autoConfigFunctionalities = new ArrayList<>();
-		}
-		return autoConfigFunctionalities;
-	}
-
-	public void setAutoConfigFunctionalities(List<AutoConfigFunctionality> autoConfigFunctionalities) {
-		this.autoConfigFunctionalities = autoConfigFunctionalities;
-	}
-
-	public List<AutoConfigFunctionalityRole> getAutoConfigFunctionalityRoles() {
-		if (autoConfigFunctionalityRoles == null) {
-			autoConfigFunctionalityRoles = new ArrayList<>();
-		}
-		return autoConfigFunctionalityRoles;
-	}
-
-	public void setAutoConfigFunctionalityRoles(List<AutoConfigFunctionalityRole> autoConfigFunctionalityRoles) {
-		this.autoConfigFunctionalityRoles = autoConfigFunctionalityRoles;
 	}
 
 	public List<PrivatePracticeFunctionality> getPrivatePracticeFunctionalities() {

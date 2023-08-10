@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -12,6 +13,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
@@ -92,8 +94,8 @@ public class User extends BaseEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = UserPreferences.class)
 	private List<UserPreferences> userPreferences;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = Session.class)
-	private List<Session> sessions;
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	private Session session;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = UserAccess.class)
 	private List<UserAccess> userAccesses;
@@ -311,15 +313,12 @@ public class User extends BaseEntity {
 		this.userPreferences = userPreferences;
 	}
 
-	public List<Session> getSessions() {
-		if (sessions == null) {
-			sessions = new ArrayList<>();
-		}
-		return sessions;
+	public Session getSession() {
+		return session;
 	}
 
-	public void setSessions(List<Session> sessions) {
-		this.sessions = sessions;
+	public void setSession(Session session) {
+		this.session = session;
 	}
 
 	public List<UserAccess> getUserAccesses() {

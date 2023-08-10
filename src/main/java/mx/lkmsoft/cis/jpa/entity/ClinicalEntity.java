@@ -49,9 +49,6 @@ public class ClinicalEntity extends BaseEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "clinicalEntity", targetEntity = ClinicalEntitySpecialty.class)
 	private List<ClinicalEntitySpecialty> clinicalEntitySpecialties;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "clinicalEntity", targetEntity = ClinicalEntityFunctionality.class)
-	private List<ClinicalEntityFunctionality> clinicalEntityFunctionalities;
-
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "clinicalEntity", targetEntity = ClinicalEntityAddress.class)
 	private List<ClinicalEntityAddress> clinicalEntityAddresses;
 
@@ -148,17 +145,6 @@ public class ClinicalEntity extends BaseEntity {
 
 	public void setClinicalEntitySpecialties(List<ClinicalEntitySpecialty> clinicalEntitySpecialties) {
 		this.clinicalEntitySpecialties = clinicalEntitySpecialties;
-	}
-
-	public List<ClinicalEntityFunctionality> getClinicalEntityFunctionalities() {
-		if (clinicalEntityFunctionalities == null) {
-			clinicalEntityFunctionalities = new ArrayList<>();
-		}
-		return clinicalEntityFunctionalities;
-	}
-
-	public void setClinicalEntityFunctionalities(List<ClinicalEntityFunctionality> clinicalEntityFunctionalities) {
-		this.clinicalEntityFunctionalities = clinicalEntityFunctionalities;
 	}
 
 	public List<ClinicalEntityAddress> getClinicalEntityAddresses() {

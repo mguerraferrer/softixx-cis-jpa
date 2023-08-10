@@ -42,9 +42,6 @@ public class PrivatePractice extends BaseEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "privatePractice", targetEntity = PrivatePracticeAddress.class)
 	private List<PrivatePracticeAddress> privatePracticeAddresses;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "privatePractice", targetEntity = PrivatePracticeFunctionality.class)
-	private List<PrivatePracticeFunctionality> privatePracticeFunctionalities;
-	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "privatePractice", targetEntity = MasterAccount.class)
 	private List<MasterAccount> masterAccounts;
 	
@@ -107,17 +104,6 @@ public class PrivatePractice extends BaseEntity {
 		this.privatePracticeAddresses = privatePracticeAddresses;
 	}
 
-	public List<PrivatePracticeFunctionality> getPrivatePracticeFunctionalities() {
-		if (privatePracticeFunctionalities == null) {
-			privatePracticeFunctionalities = new ArrayList<>();
-		}
-		return privatePracticeFunctionalities;
-	}
-
-	public void setPrivatePracticeFunctionalities(List<PrivatePracticeFunctionality> privatePracticeFunctionalities) {
-		this.privatePracticeFunctionalities = privatePracticeFunctionalities;
-	}
-	
 	public List<MasterAccount> getMasterAccounts() {
 		if (masterAccounts == null) {
 			masterAccounts = new ArrayList<>();

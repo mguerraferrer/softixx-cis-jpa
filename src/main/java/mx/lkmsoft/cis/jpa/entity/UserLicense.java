@@ -27,11 +27,11 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 @SequenceGenerator(name = "default_gen", sequenceName = "sales.user_license_id_seq", allocationSize = 1)
 public class UserLicense extends BaseEntity {
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private User user;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "license_id", referencedColumnName = "id")
 	private License license;
 

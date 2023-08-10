@@ -4,12 +4,15 @@ import java.time.LocalTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
+import mx.lkmsoft.cis.jpa.enumtype.Role;
 
 /**
  * Persistent class for entity stored in table "role_access"
@@ -27,8 +30,8 @@ public class RoleAccess extends BaseEntity {
 	@JoinColumn(name = "level_access_id", referencedColumnName = "id")
 	private AccessLevel accessLevel;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "role_id", referencedColumnName = "id")
+	@Column(name = "role")
+	@Enumerated(EnumType.STRING)
 	private Role role;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -142,7 +145,7 @@ public class RoleAccess extends BaseEntity {
 		long privatePracticeFncId = privatePracticeFunctionality != null ? privatePracticeFunctionality.getId() : null;
 		long clinicalEntityFncId = clinicalEntityFunctionality != null ? clinicalEntityFunctionality.getId() : null;
 
-		return "RoleAccess [id=" + id + ", accessLevel=" + accessLevel.getId() + ", role=" + role.getId()
+		return "RoleAccess [id=" + id + ", accessLevel=" + accessLevel.getId() + ", role=" + role
 				+ ", privatePracticeFunctionality=" + privatePracticeFncId + ", clinicalEntityFunctionality="
 				+ clinicalEntityFncId + ", startTime=" + startTime + ", endTime=" + endTime + ", access=" + access
 				+ ", active=" + active + "]";

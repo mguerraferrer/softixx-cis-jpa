@@ -7,6 +7,8 @@ import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -15,6 +17,9 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
+import mx.lkmsoft.cis.jpa.enumtype.Gender;
+import mx.lkmsoft.cis.jpa.enumtype.MaritalStatus;
+import mx.lkmsoft.cis.jpa.enumtype.Race;
 
 /**
  * Persistent class for entity stored in table "person"
@@ -28,20 +33,20 @@ import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
 @SequenceGenerator(name = "default_gen", sequenceName = "common.person_id_seq", allocationSize = 1)
 public class Person extends BaseEntity {
 
-	@ManyToOne
-	@JoinColumn(name = "race_id", referencedColumnName = "id")
+	@Column(name = "race")
+	@Enumerated(EnumType.STRING)
 	private Race race;
 
 	@ManyToOne
 	@JoinColumn(name = "academic_status_id", referencedColumnName = "id")
 	private AcademicStatus academicStatus;
 
-	@ManyToOne
-	@JoinColumn(name = "marital_status_id", referencedColumnName = "id")
+	@Column(name = "marital_status")
+	@Enumerated(EnumType.STRING)
 	private MaritalStatus maritalStatus;
 
-	@ManyToOne
-	@JoinColumn(name = "gender_id", referencedColumnName = "id")
+	@Column(name = "gender")
+	@Enumerated(EnumType.STRING)
 	private Gender gender;
 
 	@ManyToOne
@@ -333,14 +338,11 @@ public class Person extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		long raceId = race != null ? race.getId() : null;
 		long academicStatusId = academicStatus != null ? academicStatus.getId() : null;
-		long maritalStatusId = maritalStatus != null ? maritalStatus.getId() : null;
-		long genderId = gender != null ? gender.getId() : null;
 		long countryId = country != null ? country.getId() : null;
 
-		return "Person [id=" + id + ", race=" + raceId + ", academicStatus=" + academicStatusId + ", maritalStatus="
-				+ maritalStatusId + ", gender=" + genderId + ", country=" + countryId + ", name=" + name
+		return "Person [id=" + id + ", race=" + race + ", academicStatus=" + academicStatusId + ", maritalStatus="
+				+ maritalStatus + ", gender=" + gender + ", country=" + countryId + ", name=" + name
 				+ ", paternalSurname=" + paternalSurname + ", maternalSurname=" + maternalSurname + ", identity="
 				+ identity + ", dob=" + dob + ", photo=" + photo + ", rfc=" + rfc + ", curp=" + curp + ", occupation="
 				+ occupation + ", religion=" + religion + ", active=" + active + "]";

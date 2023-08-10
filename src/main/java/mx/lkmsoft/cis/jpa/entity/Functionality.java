@@ -25,9 +25,9 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 @SequenceGenerator(name = "default_gen", sequenceName = "common.functionality_id_seq", allocationSize = 1)
 public class Functionality extends BaseEntity {
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "functionality_id", referencedColumnName = "id")
-	private Functionality functionality;
+	private Functionality functionalityOwner;
 
 	@Column(name = "name")
 	private String name;
@@ -53,7 +53,7 @@ public class Functionality extends BaseEntity {
 	@Column(name = "active")
 	private boolean active;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "functionality", targetEntity = Functionality.class)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "functionalityOwner", targetEntity = Functionality.class)
 	private List<Functionality> functionalities;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "functionality", targetEntity = AutoConfigFunctionality.class)
@@ -69,16 +69,18 @@ public class Functionality extends BaseEntity {
 	private List<ClinicalEntityFunctionality> clinicalEntityFunctionalities;
 
 	/* Getters and Setters */
-	public Functionality getFunctionality() {
-		return functionality;
-	}
-
-	public void setFunctionality(Functionality functionality) {
-		this.functionality = functionality;
-	}
+	
 
 	public String getName() {
 		return name;
+	}
+
+	public Functionality getFunctionalityOwner() {
+		return functionalityOwner;
+	}
+
+	public void setFunctionalityOwner(Functionality functionalityOwner) {
+		this.functionalityOwner = functionalityOwner;
 	}
 
 	public void setName(String name) {
@@ -199,7 +201,7 @@ public class Functionality extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		long functionalityId = functionality != null ? functionality.getId() : null;
+		long functionalityId = functionalityOwner != null ? functionalityOwner.getId() : null;
 
 		return "Functionality [id=" + id + ", functionality=" + functionalityId + ", module=" + module + ", menu="
 				+ menu + ", order=" + order + ", visible=" + visible + ", name=" + name + ", root=" + root + ", code="

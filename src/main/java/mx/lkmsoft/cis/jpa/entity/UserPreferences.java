@@ -11,7 +11,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import lombok.val;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.enumtype.LocaleCode;
 import mx.lkmsoft.cis.jpa.enumtype.Theme;
@@ -28,9 +27,9 @@ import mx.lkmsoft.cis.jpa.enumtype.Theme;
 @SequenceGenerator(name = "default_gen", sequenceName = "security.preferences_id_seq", allocationSize = 1)
 public class UserPreferences extends BaseEntity {
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "user_profile_id", referencedColumnName = "id")
-	private UserProfile userProfile;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	private User user;
 
 	@Column(name = "notification_method")
 	private String notificationMethod;
@@ -93,12 +92,12 @@ public class UserPreferences extends BaseEntity {
 	}
 
 	/* Getters and Setters */
-	public UserProfile getProfile() {
-		return userProfile;
+	public User getUser() {
+		return user;
 	}
 
-	public void setProfile(UserProfile userProfile) {
-		this.userProfile = userProfile;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public String getNotificationMethod() {
@@ -216,9 +215,7 @@ public class UserPreferences extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		val profileId = userProfile != null ? userProfile.getId() : null;
-
-		return "UserPreferences [id=" + id + ", userProfile=" + profileId + ", notificationMethod=" + notificationMethod
+		return "UserPreferences [id=" + id + ", user=" + user.getId() + ", notificationMethod=" + notificationMethod
 				+ ", language=" + language + ", theme=" + theme + ", privatePractice=" + privatePractice + ", paged="
 				+ paged + ", notifications=" + notifications + ", alerts=" + alerts + ", passwordChange="
 				+ passwordChange + ", passwordChangePeriod=" + passwordChangePeriod + ", lastPasswordChange="

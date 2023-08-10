@@ -4,12 +4,15 @@ import java.time.LocalTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
+import mx.lkmsoft.cis.jpa.enumtype.Role;
 
 /**
  * Persistent class for entity stored in table "secure_access"
@@ -27,8 +30,8 @@ public class SecureAccess extends BaseEntity {
 	@JoinColumn(name = "level_access_id", referencedColumnName = "id")
 	private AccessLevel accessLevel;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "role_id", referencedColumnName = "id")
+	@Column(name = "role")
+	@Enumerated(EnumType.STRING)
 	private Role role;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -143,13 +146,12 @@ public class SecureAccess extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		long roleId = role != null ? role.getId() : null;
 		long cecrId = clinicalEntityCustomRole != null ? clinicalEntityCustomRole.getId() : null;
 		long cesoId = clinicalEntitySystemOption != null ? clinicalEntitySystemOption.getId() : null;
 		long ppcrId = privatePracticeCustomRole != null ? privatePracticeCustomRole.getId() : null;
 		long ppsoId = privatePracticeSystemOption != null ? privatePracticeSystemOption.getId() : null;
 
-		return "SecureAccess [id=" + id + ", accessLevel=" + accessLevel.getId() + ", role=" + roleId
+		return "SecureAccess [id=" + id + ", accessLevel=" + accessLevel.getId() + ", role=" + role
 				+ ", clinicalEntityCustomRole=" + cecrId + ", clinicalEntitySystemOption=" + cesoId
 				+ ", privatePracticeCustomRole=" + ppcrId + ", privatePracticeSystemOption=" + ppsoId + ", startTime="
 				+ startTime + ", endTime=" + endTime + ", access=" + access + ", active=" + active + "]";

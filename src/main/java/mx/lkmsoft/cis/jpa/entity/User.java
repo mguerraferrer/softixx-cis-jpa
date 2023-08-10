@@ -4,33 +4,35 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
+import mx.lkmsoft.cis.jpa.enumtype.Role;
 
 @Entity
 @Table(name = "users", schema = "security")
 @SequenceGenerator(name = "default_gen", sequenceName = "security.user_seq_id", allocationSize = 1)
 public class User extends BaseEntity {
 
-	@Column(name = "email", length = 250)
+	@Column(name = "email")
 	private String email;
 
-	@Column(name = "photo", length = 64)
+	@Column(name = "photo")
 	private String photo;
 
-	@Column(name = "password", length = 128)
+	@Column(name = "password")
 	private String password;
 
-	@Column(name = "hash", length = 128)
+	@Column(name = "hash")
 	private String hash;
 
 	@Column(name = "creation_date")
@@ -72,8 +74,10 @@ public class User extends BaseEntity {
 	@Column(name = "active")
 	private boolean active;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(schema = "security", name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@ElementCollection(targetClass = Role.class)
+	@Enumerated(EnumType.STRING)
+	@CollectionTable(schema = "security", name = "users_roles")
+	@Column(name = "role")
 	private List<Role> roles;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = MasterAccount.class)
@@ -85,6 +89,9 @@ public class User extends BaseEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = UserProfile.class)
 	private List<UserProfile> userProfiles;
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = UserPreferences.class)
+	private List<UserPreferences> userPreferences;
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = Session.class)
 	private List<Session> sessions;
 
@@ -93,10 +100,10 @@ public class User extends BaseEntity {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = UserLicense.class)
 	private List<UserLicense> userLicenses;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = AuthErrorLog.class)
 	private List<AuthErrorLog> authErrorLogs;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = AuthErrorLog.class)
 	private List<UserAccessDevice> userAccessDevices;
 
@@ -257,7 +264,7 @@ public class User extends BaseEntity {
 
 	@Transient
 	public boolean hasRole(String roleCode) {
-		return roles.stream().anyMatch(role -> role.getName().equalsIgnoreCase(roleCode));
+		return roles.stream().anyMatch(role -> role.name().equalsIgnoreCase(roleCode));
 	}
 
 	public List<MasterAccount> getMasterAccounts() {
@@ -291,6 +298,17 @@ public class User extends BaseEntity {
 
 	public void setUserProfiles(List<UserProfile> userProfiles) {
 		this.userProfiles = userProfiles;
+	}
+
+	public List<UserPreferences> getUserPreferences() {
+		if (userPreferences == null) {
+			userPreferences = new ArrayList<>();
+		}
+		return userPreferences;
+	}
+
+	public void setUserPreferences(List<UserPreferences> userPreferences) {
+		this.userPreferences = userPreferences;
 	}
 
 	public List<Session> getSessions() {
@@ -352,7 +370,7 @@ public class User extends BaseEntity {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", email=" + email + ", photo=" + photo + ", password=" + null + ", hash=" + hash
-				+ ", creationDate=" + creationDate + ", activationDate=" + activationDate + ", lastAccess=" + lastAccess
+				+ ", roles=" + roles + ",creationDate=" + creationDate + ", activationDate=" + activationDate + ", lastAccess=" + lastAccess
 				+ ", firstVisit=" + firstVisit + ", initialConfigCompleted=" + initialConfigCompleted
 				+ ", forcePasswdChange=" + forcePasswdChange + ", activationCode=" + activationCode
 				+ ", activationCodeDuedate=" + activationCodeDuedate + ", changePasswdCode=" + changePasswdCode

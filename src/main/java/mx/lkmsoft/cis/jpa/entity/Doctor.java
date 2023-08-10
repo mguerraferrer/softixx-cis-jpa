@@ -3,6 +3,7 @@ package mx.lkmsoft.cis.jpa.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -32,7 +33,7 @@ public class Doctor extends BaseEntity {
 	@Column(name = "active")
 	private boolean active;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "doctor", targetEntity = DoctorSpecialty.class)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor", targetEntity = DoctorSpecialty.class, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<DoctorSpecialty> doctorSpecialties;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor", targetEntity = NurseDoctor.class)

@@ -2,12 +2,15 @@ package mx.lkmsoft.cis.jpa.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
+import mx.lkmsoft.cis.jpa.enumtype.Role;
 
 /**
  * Persistent class for entity stored in table "auto_config_functionality_role"
@@ -21,8 +24,8 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 @SequenceGenerator(name = "default_gen", sequenceName = "config.auto_config_functionality_role_id_seq", allocationSize = 1)
 public class AutoConfigFunctionalityRole extends BaseEntity {
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "role_id", referencedColumnName = "id")
+	@Column(name = "role")
+	@Enumerated(EnumType.STRING)
 	private Role role;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -82,7 +85,7 @@ public class AutoConfigFunctionalityRole extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		return "AutoConfigFunctionalityRole [id=" + id + ", role=" + role.getId() + ", functionality="
+		return "AutoConfigFunctionalityRole [id=" + id + ", role=" + role + ", functionality="
 				+ functionality.getId() + ", accessLevel=" + accessLevel.getId() + ", active=" + active + "]";
 	}
 

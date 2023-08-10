@@ -29,7 +29,7 @@ public class MasterAccount extends BaseEntity {
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private User user;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_license_id", referencedColumnName = "id")
 	private UserLicense userLicense;
 

@@ -25,31 +25,28 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 @SequenceGenerator(name = "default_gen", sequenceName = "security.user_profile_id_seq", allocationSize = 1)
 public class UserProfile extends BaseEntity {
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	private User user;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "doctor_id", referencedColumnName = "id")
 	private Doctor doctor;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "assistant_id", referencedColumnName = "id")
 	private Assistant assistant;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", referencedColumnName = "id")
-	private User user;
-
-	@ManyToOne
 	@JoinColumn(name = "nurse_id", referencedColumnName = "id")
 	private Nurse nurse;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "person_id", referencedColumnName = "id")
 	private Person person;
 
 	@Column(name = "active")
 	private boolean active;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userProfile", targetEntity = UserPreferences.class)
-	private List<UserPreferences> preferenceses;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userProfile", targetEntity = ClinicalEntityAccessInfo.class)
 	private List<ClinicalEntityAccessInfo> clinicalEntityAccessInfos;
@@ -113,17 +110,6 @@ public class UserProfile extends BaseEntity {
 
 	public void setActive(boolean active) {
 		this.active = active;
-	}
-
-	public List<UserPreferences> getPreferenceses() {
-		if (preferenceses == null) {
-			preferenceses = new ArrayList<>();
-		}
-		return preferenceses;
-	}
-
-	public void setPreferenceses(List<UserPreferences> preferenceses) {
-		this.preferenceses = preferenceses;
 	}
 
 	public List<ClinicalEntityAccessInfo> getClinicalEntityAccessInfos() {

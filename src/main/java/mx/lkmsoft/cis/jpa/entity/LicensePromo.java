@@ -6,6 +6,8 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -13,6 +15,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
+import mx.lkmsoft.cis.jpa.enumtype.PaymentMode;
 
 /**
  * Persistent class for entity stored in table "license_promo"
@@ -30,8 +33,8 @@ public class LicensePromo extends BaseEntity {
 	@JoinColumn(name = "license_id", referencedColumnName = "id")
 	private License license;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "payment_mode_id", referencedColumnName = "id")
+	@Column(name = "payment_mode")
+	@Enumerated(EnumType.STRING)
 	private PaymentMode paymentMode;
 
 	@Column(name = "code")
@@ -123,9 +126,9 @@ public class LicensePromo extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		return "LicensePromo [id=" + id + ", license=" + license.getId() + ", paymentMode=" + paymentMode.getId()
-				+ ", code=" + code + ", discount=" + discount + ", startDate=" + startDate + ", dueDate=" + dueDate
-				+ ", active=" + active + "]";
+		return "LicensePromo [id=" + id + ", license=" + license.getId() + ", paymentMode=" + paymentMode + ", code="
+				+ code + ", discount=" + discount + ", startDate=" + startDate + ", dueDate=" + dueDate + ", active="
+				+ active + "]";
 	}
 
 }

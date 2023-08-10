@@ -5,13 +5,14 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
+import mx.lkmsoft.cis.jpa.enumtype.LicenseType;
 
 /**
  * Persistent class for entity stored in table "license"
@@ -25,8 +26,8 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 @SequenceGenerator(name = "default_gen", sequenceName = "sales.license_id_seq", allocationSize = 1)
 public class License extends BaseEntity {
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "license_type_id", referencedColumnName = "id")
+	@Column(name = "license_type")
+	@Enumerated(EnumType.STRING)
 	private LicenseType licenseType;
 
 	@Column(name = "total_specialties")
@@ -221,7 +222,7 @@ public class License extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		return "License [id=" + id + ", licenseType=" + licenseType.getId() + ", totalSpecialties=" + totalSpecialties
+		return "License [id=" + id + ", licenseType=" + licenseType + ", totalSpecialties=" + totalSpecialties
 				+ ", totalDoctors=" + totalDoctors + ", totalAssistants=" + totalAssistants + ", totalNurses="
 				+ totalNurses + ", dailyConsultations=" + dailyConsultations + ", duration=" + duration
 				+ ", description=" + description + ", level=" + level + ", hash=" + hash + ", active=" + active

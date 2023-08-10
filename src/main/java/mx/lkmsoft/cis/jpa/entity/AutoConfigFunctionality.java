@@ -2,12 +2,15 @@ package mx.lkmsoft.cis.jpa.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
+import mx.lkmsoft.cis.jpa.enumtype.LicenseType;
 
 /**
  * Persistent class for entity stored in table "auto_config_functionality"
@@ -25,8 +28,8 @@ public class AutoConfigFunctionality extends BaseEntity {
 	@JoinColumn(name = "functionality_id", referencedColumnName = "id")
 	private Functionality functionality;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "license_type_id", referencedColumnName = "id")
+	@Column(name = "license_type")
+	@Enumerated(EnumType.STRING)
 	private LicenseType licenseType;
 
 	@Column(name = "private_practice")
@@ -95,7 +98,7 @@ public class AutoConfigFunctionality extends BaseEntity {
 	@Override
 	public String toString() {
 		return "AutoConfigFunctionality [id=" + id + ", functionality=" + functionality.getId() + ", licenseType="
-				+ licenseType.getId() + ", privatePractice=" + privatePractice + ", clinicalEntity=" + clinicalEntity
+				+ licenseType + ", privatePractice=" + privatePractice + ", clinicalEntity=" + clinicalEntity
 				+ ", active=" + active + "]";
 	}
 

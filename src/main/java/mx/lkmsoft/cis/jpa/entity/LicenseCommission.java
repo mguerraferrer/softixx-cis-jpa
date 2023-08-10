@@ -6,13 +6,15 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
+import mx.lkmsoft.cis.jpa.enumtype.OnlinePayment;
+import mx.lkmsoft.cis.jpa.enumtype.PaymentSource;
 
 /**
  * Persistent class for entity stored in table "license_commission"
@@ -26,12 +28,12 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 @SequenceGenerator(name = "default_gen", sequenceName = "sales.license_commission_id_seq", allocationSize = 1)
 public class LicenseCommission extends BaseEntity {
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "online_payment_id", referencedColumnName = "id")
+	@Column(name = "online_payment")
+	@Enumerated(EnumType.STRING)
 	private OnlinePayment onlinePayment;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "payment_source_id", referencedColumnName = "id")
+	@Column(name = "payment_source")
+	@Enumerated(EnumType.STRING)
 	private PaymentSource paymentSource;
 
 	@Column(name = "comission_percentage")
@@ -123,8 +125,8 @@ public class LicenseCommission extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		return "LicenseCommission [id=" + id + ", onlinePayment=" + onlinePayment.getId() + ", paymentSource="
-				+ paymentSource.getId() + ", comissionPercentage=" + comissionPercentage + ", comission=" + comission
+		return "LicenseCommission [id=" + id + ", onlinePayment=" + onlinePayment + ", paymentSource="
+				+ paymentSource + ", comissionPercentage=" + comissionPercentage + ", comission=" + comission
 				+ ", tax=" + tax + ", taxPercentage=" + taxPercentage + ", active=" + active + "]";
 	}
 

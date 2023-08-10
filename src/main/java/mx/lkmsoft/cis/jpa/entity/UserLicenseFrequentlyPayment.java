@@ -4,12 +4,14 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
+import mx.lkmsoft.cis.jpa.enumtype.PaymentMode;
 
 /**
  * Persistent class for entity stored in table "user_license_payment_frequently"
@@ -27,8 +29,8 @@ public class UserLicenseFrequentlyPayment extends BaseEntity {
 	@JoinColumn(name = "user_license_id", referencedColumnName = "id")
 	private UserLicense userLicense;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "payment_mode_id", referencedColumnName = "id")
+	@Column(name = "payment_mode")
+	@Enumerated(EnumType.STRING)
 	private PaymentMode paymentMode;
 
 	@Column(name = "next_payment")
@@ -74,7 +76,7 @@ public class UserLicenseFrequentlyPayment extends BaseEntity {
 	@Override
 	public String toString() {
 		return "UserLicenseFrequentlyPayment [id=" + id + ", userLicense=" + userLicense.getId() + ", paymentMode="
-				+ paymentMode.getId() + ", nextPayment=" + nextPayment + ", active=" + active + "]";
+				+ paymentMode + ", nextPayment=" + nextPayment + ", active=" + active + "]";
 	}
 
 }

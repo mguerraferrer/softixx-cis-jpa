@@ -4,12 +4,16 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
+import mx.lkmsoft.cis.jpa.enumtype.PaymentMode;
+import mx.lkmsoft.cis.jpa.enumtype.PaymentSource;
 
 /**
  * Persistent class for entity stored in table "user_license_payment_history"
@@ -30,12 +34,12 @@ public class UserLicensePaymentHistory extends BaseEntity {
 	@Column(name = "transaction_id")
 	private String transactionId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "payment_mode_id", referencedColumnName = "id")
+	@Column(name = "payment_mode")
+	@Enumerated(EnumType.STRING)
 	private PaymentMode paymentMode;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "payment_source_id", referencedColumnName = "id")
+	@Column(name = "payment_source")
+	@Enumerated(EnumType.STRING)
 	private PaymentSource paymentSource;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -220,14 +224,12 @@ public class UserLicensePaymentHistory extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		long paymentModeId = paymentMode != null ? paymentMode.getId() : null;
-		long paymentSourceId = paymentSource != null ? paymentSource.getId() : null;
 		long licensePromoId = licensePromo != null ? licensePromo.getId() : null;
 		long licenseDirectPromoId = licenseDirectPromo != null ? licenseDirectPromo.getId() : null;
 		long licenseCommissionId = licenseCommission != null ? licenseCommission.getId() : null;
 
 		return "UserLicensePaymentHistory [id=" + id + ", userLicense=" + userLicense.getId() + ", transactionId="
-				+ transactionId + ", paymentMode=" + paymentModeId + ", paymentSource=" + paymentSourceId
+				+ transactionId + ", paymentMode=" + paymentMode + ", paymentSource=" + paymentSource
 				+ ", licensePromo=" + licensePromoId + ", licenseDirectPromo=" + licenseDirectPromoId
 				+ ", licenseCommission=" + licenseCommissionId + ", paymentDate=" + paymentDate + ", reference="
 				+ reference + ", currency=" + currency + ", discountCode=" + discountCode + ", subtotal=" + subtotal

@@ -1,6 +1,7 @@
 package mx.lkmsoft.cis.jpa.entity;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,6 +32,9 @@ public class ExceptionHandlerLog extends BaseEntity {
 	@Column(name = "log_time")
 	private LocalDateTime logTime;
 
+	@Column(name = "code")
+	private String code;
+
 	public ExceptionHandlerLog() {
 	}
 
@@ -39,6 +43,15 @@ public class ExceptionHandlerLog extends BaseEntity {
 		this.exceptionClass = exceptionClass;
 		this.exceptionMessage = exceptionMessage;
 		this.logTime = LocalDateTime.now();
+		this.code = UUID.randomUUID().toString();
+	}
+	
+	public ExceptionHandlerLog(String handlerMethod, String exceptionClass, String exceptionMessage, String code) {
+		this.handlerMethod = handlerMethod;
+		this.exceptionClass = exceptionClass;
+		this.exceptionMessage = exceptionMessage;
+		this.logTime = LocalDateTime.now();
+		this.code = code;
 	}
 
 	/* Getters and Setters */
@@ -74,10 +87,18 @@ public class ExceptionHandlerLog extends BaseEntity {
 		this.logTime = logTime;
 	}
 
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
 	@Override
 	public String toString() {
 		return "AuthErrorLog [id=" + id + ", handlerMethod=" + handlerMethod + ", exceptionClass=" + exceptionClass
-				+ ", exceptionMessage=" + exceptionMessage + ", logTime=" + logTime + "]";
+				+ ", exceptionMessage=" + exceptionMessage + ", logTime=" + logTime + ", code=" + code + "]";
 	}
 
 }

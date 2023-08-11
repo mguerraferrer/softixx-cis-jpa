@@ -82,17 +82,14 @@ public class User extends BaseEntity {
 	@Column(name = "role")
 	private List<Role> roles;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = MasterAccount.class)
-	private List<MasterAccount> masterAccounts;
-
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = AssociatedAccount.class)
 	private List<AssociatedAccount> associatedAccounts;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = UserProfile.class)
-	private List<UserProfile> userProfiles;
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	private UserProfile userProfile;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = UserPreferences.class)
-	private List<UserPreferences> userPreferences;
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	private UserPreferences userPreferences;
 
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	private Session session;
@@ -269,17 +266,6 @@ public class User extends BaseEntity {
 		return roles.stream().anyMatch(role -> role.name().equalsIgnoreCase(roleCode));
 	}
 
-	public List<MasterAccount> getMasterAccounts() {
-		if (masterAccounts == null) {
-			masterAccounts = new ArrayList<>();
-		}
-		return masterAccounts;
-	}
-
-	public void setMasterAccounts(List<MasterAccount> masterAccounts) {
-		this.masterAccounts = masterAccounts;
-	}
-
 	public List<AssociatedAccount> getAssociatedAccounts() {
 		if (associatedAccounts == null) {
 			associatedAccounts = new ArrayList<>();
@@ -291,25 +277,19 @@ public class User extends BaseEntity {
 		this.associatedAccounts = associatedAccounts;
 	}
 
-	public List<UserProfile> getUserProfiles() {
-		if (userProfiles == null) {
-			userProfiles = new ArrayList<>();
-		}
-		return userProfiles;
+	public UserProfile getUserProfile() {
+		return userProfile;
 	}
 
-	public void setUserProfiles(List<UserProfile> userProfiles) {
-		this.userProfiles = userProfiles;
+	public void setUserProfile(UserProfile userProfile) {
+		this.userProfile = userProfile;
 	}
 
-	public List<UserPreferences> getUserPreferences() {
-		if (userPreferences == null) {
-			userPreferences = new ArrayList<>();
-		}
+	public UserPreferences getUserPreferences() {
 		return userPreferences;
 	}
 
-	public void setUserPreferences(List<UserPreferences> userPreferences) {
+	public void setUserPreferences(UserPreferences userPreferences) {
 		this.userPreferences = userPreferences;
 	}
 

@@ -26,10 +26,6 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 public class MasterAccount extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", referencedColumnName = "id")
-	private User user;
-
-	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_license_id", referencedColumnName = "id")
 	private UserLicense userLicense;
 
@@ -50,24 +46,14 @@ public class MasterAccount extends BaseEntity {
 	public MasterAccount() {
 	}
 
-	public MasterAccount(PrivatePractice privatePractice, ClinicalEntity clinicalEntity, User user,
-			UserLicense userLicense) {
+	public MasterAccount(PrivatePractice privatePractice, ClinicalEntity clinicalEntity, UserLicense userLicense) {
 		this.privatePractice = privatePractice;
 		this.clinicalEntity = clinicalEntity;
-		this.user = user;
 		this.userLicense = userLicense;
 		this.active = false;
 	}
 
 	/* Getters and Setters */
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
 	public UserLicense getUserLicense() {
 		return userLicense;
 	}
@@ -114,8 +100,8 @@ public class MasterAccount extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		return "MasterAccount [id=" + id + ", user=" + user + ", userLicense=" + userLicense + ", clinicalEntity="
-				+ clinicalEntity + ", privatePractice=" + privatePractice + ", active=" + active + "]";
+		return "MasterAccount [id=" + id + ", userLicense=" + userLicense + ", clinicalEntity=" + clinicalEntity
+				+ ", privatePractice=" + privatePractice + ", active=" + active + "]";
 	}
 
 }

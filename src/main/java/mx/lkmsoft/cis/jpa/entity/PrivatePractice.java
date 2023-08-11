@@ -37,10 +37,10 @@ public class PrivatePractice extends BaseEntity {
 	private boolean active;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "privatePractice", targetEntity = PrivatePracticeConsultationProcedure.class)
-	private List<PrivatePracticeConsultationProcedure> privatePracticeConsultationProcedures;
+	private List<PrivatePracticeConsultationProcedure> consultationProcedures;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "privatePractice", targetEntity = PrivatePracticeAddress.class)
-	private List<PrivatePracticeAddress> privatePracticeAddresses;
+	private List<PrivatePracticeAddress> addresses;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "privatePractice", targetEntity = MasterAccount.class)
 	private List<MasterAccount> masterAccounts;
@@ -82,26 +82,26 @@ public class PrivatePractice extends BaseEntity {
 		this.active = active;
 	}
 
-	public List<PrivatePracticeConsultationProcedure> getPrivatePracticeServices() {
-		if (privatePracticeConsultationProcedures == null) {
-			privatePracticeConsultationProcedures = new ArrayList<>();
+	public List<PrivatePracticeConsultationProcedure> getConsultationProcedures() {
+		if (consultationProcedures == null) {
+			consultationProcedures = new ArrayList<>();
 		}
-		return privatePracticeConsultationProcedures;
+		return consultationProcedures;
 	}
 
-	public void setPrivatePracticeServices(List<PrivatePracticeConsultationProcedure> privatePracticeConsultationProcedures) {
-		this.privatePracticeConsultationProcedures = privatePracticeConsultationProcedures;
+	public void setConsultationProcedure(List<PrivatePracticeConsultationProcedure> consultationProcedures) {
+		this.consultationProcedures = consultationProcedures;
 	}
 
-	public List<PrivatePracticeAddress> getPrivatePracticeAddresses() {
-		if (privatePracticeAddresses == null) {
-			privatePracticeAddresses = new ArrayList<>();
+	public List<PrivatePracticeAddress> getAddresses() {
+		if (addresses == null) {
+			addresses = new ArrayList<>();
 		}
-		return privatePracticeAddresses;
+		return addresses;
 	}
 
-	public void setPrivatePracticeAddresses(List<PrivatePracticeAddress> privatePracticeAddresses) {
-		this.privatePracticeAddresses = privatePracticeAddresses;
+	public void setAddresses(List<PrivatePracticeAddress> addresses) {
+		this.addresses = addresses;
 	}
 
 	public List<MasterAccount> getMasterAccounts() {

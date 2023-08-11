@@ -9,6 +9,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
@@ -25,7 +26,7 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 @SequenceGenerator(name = "default_gen", sequenceName = "security.user_profile_id_seq", allocationSize = 1)
 public class UserProfile extends BaseEntity {
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private User user;
 	

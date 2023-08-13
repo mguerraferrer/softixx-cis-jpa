@@ -62,17 +62,9 @@ public class SettingsBag extends BaseEntity {
 	}
 
 	/* toString */
-    public String toString() { 
-        var sb = new StringBuilder(); 
-        sb.append("["); 
-        sb.append(id);
-        sb.append("]:"); 
-        sb.append(code);
-        sb.append("|");
-        sb.append(value);
-        sb.append("|");
-        sb.append(active);
-        return sb.toString();
-    }
+	@Override
+	public String toString() {
+		return "SettingsBag [id=" + id + ", code=" + code + ", value=" + value + ", active=" + active + "]";
+	}
 
 }

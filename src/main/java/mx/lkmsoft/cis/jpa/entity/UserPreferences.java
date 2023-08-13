@@ -10,8 +10,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.enumtype.LocaleCode;
+import mx.lkmsoft.cis.jpa.enumtype.NotificationMethod;
+import mx.lkmsoft.cis.jpa.enumtype.Pagination;
+import mx.lkmsoft.cis.jpa.enumtype.PasswordChangePeriod;
 import mx.lkmsoft.cis.jpa.enumtype.Theme;
 
 /**
@@ -31,7 +35,8 @@ public class UserPreferences extends BaseEntity {
 	private User user;
 
 	@Column(name = "notification_method")
-	private String notificationMethod;
+	@Enumerated(EnumType.STRING)
+	private NotificationMethod notificationMethod;
 
 	@Column(name = "language")
 	@Enumerated(EnumType.STRING)
@@ -44,8 +49,9 @@ public class UserPreferences extends BaseEntity {
 	@Column(name = "private_practice")
 	private boolean privatePractice;
 
-	@Column(name = "paged")
-	private Integer paged;
+	@Column(name = "pagination")
+	@Enumerated(EnumType.STRING)
+	private Pagination pagination;
 
 	@Column(name = "notifications")
 	private boolean notifications;
@@ -57,7 +63,8 @@ public class UserPreferences extends BaseEntity {
 	private boolean passwordChange;
 
 	@Column(name = "password_change_period")
-	private Integer passwordChangePeriod;
+	@Enumerated(EnumType.STRING)
+	private PasswordChangePeriod passwordChangePeriod;
 
 	@Column(name = "last_password_change")
 	private LocalDate lastPasswordChange;
@@ -78,10 +85,10 @@ public class UserPreferences extends BaseEntity {
 		super();
 	}
 
-	public UserPreferences(Theme theme, LocaleCode language, Integer paged) {
+	public UserPreferences(Theme theme, LocaleCode language, Pagination pagination) {
 		this.theme = theme;
 		this.language = language;
-		this.paged = paged;
+		this.pagination = pagination;
 		this.privatePractice = false;
 		this.notifications = true;
 		this.alerts = true;
@@ -99,11 +106,11 @@ public class UserPreferences extends BaseEntity {
 		this.user = user;
 	}
 
-	public String getNotificationMethod() {
+	public NotificationMethod getNotificationMethod() {
 		return notificationMethod;
 	}
 
-	public void setNotificationMethod(String notificationMethod) {
+	public void setNotificationMethod(NotificationMethod notificationMethod) {
 		this.notificationMethod = notificationMethod;
 	}
 
@@ -131,12 +138,12 @@ public class UserPreferences extends BaseEntity {
 		this.privatePractice = privatePractice;
 	}
 
-	public Integer getPaged() {
-		return paged;
+	public Pagination getPagination() {
+		return pagination;
 	}
 
-	public void setPaged(Integer paged) {
-		this.paged = paged;
+	public void setPagination(Pagination pagination) {
+		this.pagination = pagination;
 	}
 
 	public boolean isNotifications() {
@@ -163,12 +170,17 @@ public class UserPreferences extends BaseEntity {
 		this.passwordChange = passwordChange;
 	}
 
-	public Integer getPasswordChangePeriod() {
+	public PasswordChangePeriod getPasswordChangePeriod() {
 		return passwordChangePeriod;
 	}
 
-	public void setPasswordChangePeriod(Integer passwordChangePeriod) {
+	public void setPasswordChangePeriod(PasswordChangePeriod passwordChangePeriod) {
 		this.passwordChangePeriod = passwordChangePeriod;
+	}
+	
+	@Transient
+	public Integer getPeriod(PasswordChangePeriod passwordChangePeriod) {
+		return PasswordChangePeriod.getValue(this.passwordChangePeriod);
 	}
 
 	public LocalDate getLastPasswordChange() {
@@ -215,8 +227,8 @@ public class UserPreferences extends BaseEntity {
 	@Override
 	public String toString() {
 		return "UserPreferences [id=" + id + ", user=" + user.getId() + ", notificationMethod=" + notificationMethod
-				+ ", language=" + language + ", theme=" + theme + ", privatePractice=" + privatePractice + ", paged="
-				+ paged + ", notifications=" + notifications + ", alerts=" + alerts + ", passwordChange="
+				+ ", language=" + language + ", theme=" + theme + ", privatePractice=" + privatePractice + ", pagination="
+				+ pagination + ", notifications=" + notifications + ", alerts=" + alerts + ", passwordChange="
 				+ passwordChange + ", passwordChangePeriod=" + passwordChangePeriod + ", lastPasswordChange="
 				+ lastPasswordChange + ", nextPasswordChange=" + nextPasswordChange + ", appointmentDuration="
 				+ appointmentDuration + ", notifyAppointment=" + notifyAppointment + ", active=" + active + "]";

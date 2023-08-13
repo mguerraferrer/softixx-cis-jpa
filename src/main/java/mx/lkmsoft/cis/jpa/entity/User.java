@@ -291,6 +291,7 @@ public class User extends BaseEntity {
 
 	public void setUserPreferences(UserPreferences userPreferences) {
 		this.userPreferences = userPreferences;
+		this.userPreferences.setUser(this);
 	}
 
 	public Session getSession() {

@@ -72,12 +72,6 @@ public class UserPreferences extends BaseEntity {
 	@Column(name = "next_password_change")
 	private LocalDate nextPasswordChange;
 
-	@Column(name = "appointment_duration")
-	private Integer appointmentDuration;
-
-	@Column(name = "notify_appointment")
-	private boolean notifyAppointment;
-
 	@Column(name = "active")
 	private boolean active;
 
@@ -93,7 +87,6 @@ public class UserPreferences extends BaseEntity {
 		this.notifications = true;
 		this.alerts = true;
 		this.passwordChange = false;
-		this.notifyAppointment = true;
 		this.active = true;
 	}
 
@@ -177,7 +170,7 @@ public class UserPreferences extends BaseEntity {
 	public void setPasswordChangePeriod(PasswordChangePeriod passwordChangePeriod) {
 		this.passwordChangePeriod = passwordChangePeriod;
 	}
-	
+
 	@Transient
 	public Integer getPeriod(PasswordChangePeriod passwordChangePeriod) {
 		return PasswordChangePeriod.getValue(this.passwordChangePeriod);
@@ -199,22 +192,6 @@ public class UserPreferences extends BaseEntity {
 		this.nextPasswordChange = nextPasswordChange;
 	}
 
-	public Integer getAppointmentDuration() {
-		return appointmentDuration;
-	}
-
-	public void setAppointmentDuration(Integer appointmentDuration) {
-		this.appointmentDuration = appointmentDuration;
-	}
-
-	public boolean isNotifyAppointment() {
-		return notifyAppointment;
-	}
-
-	public void setNotifyAppointment(boolean notifyAppointment) {
-		this.notifyAppointment = notifyAppointment;
-	}
-
 	public boolean isActive() {
 		return active;
 	}
@@ -227,11 +204,10 @@ public class UserPreferences extends BaseEntity {
 	@Override
 	public String toString() {
 		return "UserPreferences [id=" + id + ", user=" + user.getId() + ", notificationMethod=" + notificationMethod
-				+ ", language=" + language + ", theme=" + theme + ", privatePractice=" + privatePractice + ", pagination="
-				+ pagination + ", notifications=" + notifications + ", alerts=" + alerts + ", passwordChange="
-				+ passwordChange + ", passwordChangePeriod=" + passwordChangePeriod + ", lastPasswordChange="
-				+ lastPasswordChange + ", nextPasswordChange=" + nextPasswordChange + ", appointmentDuration="
-				+ appointmentDuration + ", notifyAppointment=" + notifyAppointment + ", active=" + active + "]";
+				+ ", language=" + language + ", theme=" + theme + ", privatePractice=" + privatePractice
+				+ ", pagination=" + pagination + ", notifications=" + notifications + ", alerts=" + alerts
+				+ ", passwordChange=" + passwordChange + ", passwordChangePeriod=" + passwordChangePeriod
+				+ ", lastPasswordChange=" + lastPasswordChange + ", nextPasswordChange=" + nextPasswordChange + "]";
 	}
 
 }

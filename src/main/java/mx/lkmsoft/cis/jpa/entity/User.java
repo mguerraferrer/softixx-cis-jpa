@@ -105,6 +105,9 @@ public class User extends BaseEntity {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = AuthErrorLog.class)
 	private List<UserAccessDevice> userAccessDevices;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = AuthErrorLog.class)
+	private List<ErrorLog> errorLogs;
 
 	/* Getters and Setters */
 	public String getEmail() {
@@ -344,6 +347,17 @@ public class User extends BaseEntity {
 
 	public void setUserAccessDevices(List<UserAccessDevice> userAccessDevices) {
 		this.userAccessDevices = userAccessDevices;
+	}
+
+	public List<ErrorLog> getErrorLogs() {
+		if (errorLogs == null) {
+			errorLogs = new ArrayList<>();
+		}
+		return errorLogs;
+	}
+
+	public void setErrorLogs(List<ErrorLog> errorLogs) {
+		this.errorLogs = errorLogs;
 	}
 
 	/* toString */

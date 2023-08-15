@@ -16,7 +16,8 @@ import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 /**
- * Persistent class for entity stored in table "private_practice_consultation_procedure"
+ * Persistent class for entity stored in table
+ * "private_practice_consultation_procedure"
  *
  * @author Maikel Guerra Ferrer
  *
@@ -35,8 +36,8 @@ public class PrivatePracticeConsultationProcedure extends BaseEntity {
 	@JoinColumn(name = "doctor_specialty_id", referencedColumnName = "id")
 	private DoctorSpecialty doctorSpecialty;
 
-	@Column(name = "code")
-	private String code;
+	@Column(name = "hash")
+	private String hash;
 
 	@Column(name = "description")
 	private String description;
@@ -61,18 +62,18 @@ public class PrivatePracticeConsultationProcedure extends BaseEntity {
 
 	@Column(name = "active")
 	private boolean active;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "privatePracticeProcedure", targetEntity = Appointment.class)
 	private List<Appointment> appointments;
 
 	public PrivatePracticeConsultationProcedure() {
 	}
 
-	public PrivatePracticeConsultationProcedure(PrivatePractice privatePractice, DoctorSpecialty doctorSpecialty, String code,
-			String description, BigDecimal subtotal, BigDecimal total) {
+	public PrivatePracticeConsultationProcedure(PrivatePractice privatePractice, DoctorSpecialty doctorSpecialty,
+			String hash, String description, BigDecimal subtotal, BigDecimal total) {
 		this.privatePractice = privatePractice;
 		this.doctorSpecialty = doctorSpecialty;
-		this.code = code;
+		this.hash = hash;
 		this.description = description;
 		this.subtotal = subtotal;
 		this.total = total;
@@ -80,12 +81,12 @@ public class PrivatePracticeConsultationProcedure extends BaseEntity {
 	}
 
 	/* Getters and Setters */
-	public String getCode() {
-		return code;
+	public String getHash() {
+		return hash;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setHash(String hash) {
+		this.hash = hash;
 	}
 
 	public String getDescription() {
@@ -183,7 +184,7 @@ public class PrivatePracticeConsultationProcedure extends BaseEntity {
 	@Override
 	public String toString() {
 		return "PrivatePracticeConsultationProcedure [id=" + id + ", privatePractice=" + privatePractice.getId()
-				+ ", doctorSpecialty=" + doctorSpecialty.getId() + ", code=" + code + ", description=" + description
+				+ ", doctorSpecialty=" + doctorSpecialty.getId() + ", hash=" + hash + ", description=" + description
 				+ ", subtotal=" + subtotal + ", tax=" + tax + ", discount=" + discount + ", total=" + total
 				+ ", discountStartDate=" + discountStartDate + ", discountDueDate=" + discountDueDate + ", active="
 				+ active + "]";

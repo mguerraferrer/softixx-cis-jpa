@@ -33,9 +33,6 @@ public class ClinicalEntitySpecialty extends BaseEntity {
 	@JoinColumn(name = "specialty_id", referencedColumnName = "id")
 	private Specialty specialty;
 
-	@Column(name = "hash")
-	private String hash;
-
 	@Column(name = "active")
 	private boolean active;
 
@@ -43,22 +40,6 @@ public class ClinicalEntitySpecialty extends BaseEntity {
 	private List<ClinicalEntityConsultationProcedure> clinicalEntityConsultationProcedures;
 
 	/* Getters and Setters */
-	public String getHash() {
-		return hash;
-	}
-
-	public void setHash(String hash) {
-		this.hash = hash;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
 	public ClinicalEntity getClinicalEntity() {
 		return clinicalEntity;
 	}
@@ -75,6 +56,14 @@ public class ClinicalEntitySpecialty extends BaseEntity {
 		this.specialty = specialty;
 	}
 
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
 	public List<ClinicalEntityConsultationProcedure> getClinicalEntityServices() {
 		if (clinicalEntityConsultationProcedures == null) {
 			clinicalEntityConsultationProcedures = new ArrayList<>();
@@ -82,7 +71,8 @@ public class ClinicalEntitySpecialty extends BaseEntity {
 		return clinicalEntityConsultationProcedures;
 	}
 
-	public void setClinicalEntityServices(List<ClinicalEntityConsultationProcedure> clinicalEntityConsultationProcedures) {
+	public void setClinicalEntityServices(
+			List<ClinicalEntityConsultationProcedure> clinicalEntityConsultationProcedures) {
 		this.clinicalEntityConsultationProcedures = clinicalEntityConsultationProcedures;
 	}
 
@@ -90,7 +80,7 @@ public class ClinicalEntitySpecialty extends BaseEntity {
 	@Override
 	public String toString() {
 		return "ClinicalEntitySpecialty [id=" + id + ", clinicalEntity=" + clinicalEntity.getId() + ", specialty="
-				+ specialty.getIcon() + ", hash=" + hash + ", active=" + active + "]";
+				+ specialty.getId() + ", active=" + active + "]";
 	}
-	
+
 }

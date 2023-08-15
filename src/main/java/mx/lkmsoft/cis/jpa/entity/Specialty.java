@@ -26,9 +26,6 @@ public class Specialty extends BaseEntity {
 	@Column(name = "code")
 	private String code;
 
-	@Column(name = "specialized_sheet_code")
-	private String specializedSheetCode;
-
 	@Column(name = "icon")
 	private String icon;
 
@@ -49,13 +46,10 @@ public class Specialty extends BaseEntity {
 
 	@Column(name = "active")
 	private boolean active;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "specialty", targetEntity = DoctorSpecialty.class)
 	private List<DoctorSpecialty> doctorSpecialties;
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "specialty", targetEntity = DoctorClinicalEntitySpecialty.class)
-	private List<DoctorClinicalEntitySpecialty> doctorClinicalEntitySpecialties;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "specialty", targetEntity = ClinicalEntitySpecialty.class)
 	private List<ClinicalEntitySpecialty> clinicalEntitySpecialties;
 
@@ -66,14 +60,6 @@ public class Specialty extends BaseEntity {
 
 	public void setCode(String code) {
 		this.code = code;
-	}
-
-	public String getSpecializedSheetCode() {
-		return specializedSheetCode;
-	}
-
-	public void setSpecializedSheetCode(String specializedSheetCode) {
-		this.specializedSheetCode = specializedSheetCode;
 	}
 
 	public String getIcon() {
@@ -143,17 +129,6 @@ public class Specialty extends BaseEntity {
 		this.doctorSpecialties = doctorSpecialties;
 	}
 
-	public List<DoctorClinicalEntitySpecialty> getDoctorClinicalEntitySpecialties() {
-		if (doctorClinicalEntitySpecialties == null) {
-			doctorClinicalEntitySpecialties = new ArrayList<>();
-		}
-		return doctorClinicalEntitySpecialties;
-	}
-
-	public void setDoctorClinicalEntitySpecialties(List<DoctorClinicalEntitySpecialty> doctorClinicalEntitySpecialties) {
-		this.doctorClinicalEntitySpecialties = doctorClinicalEntitySpecialties;
-	}
-
 	public List<ClinicalEntitySpecialty> getClinicalEntitySpecialties() {
 		if (clinicalEntitySpecialties == null) {
 			clinicalEntitySpecialties = new ArrayList<>();
@@ -168,10 +143,9 @@ public class Specialty extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		return "Specialty [id=" + id + ", code=" + code + ", specializedSheetCode=" + specializedSheetCode + ", icon="
-				+ icon + ", image=" + image + ", availableForPrivatePractice=" + availableForPrivatePractice
-				+ ", availableForClinicalEntity=" + availableForClinicalEntity + ", value=" + value + ", visible="
-				+ visible + ", active=" + active + "]";
+		return "Specialty [id=" + id + ", code=" + code + ", icon=" + icon + ", image=" + image
+				+ ", availableForPrivatePractice=" + availableForPrivatePractice + ", availableForClinicalEntity="
+				+ availableForClinicalEntity + ", value=" + value + ", visible=" + visible + ", active=" + active + "]";
 	}
 
 }

@@ -1,0 +1,10 @@
+package mx.lkmsoft.cis.jpa.enumtype;
+
+/**
+ * @author Maikel Guerra Ferrer
+ *
+ */
+public enum AcademicStatus {
+	DAYCARE, NURSERY, KINDER_I, KINDER_II, PRE_FIRST, PRE_PRIMARY, PRIMARY, SECONDARY, COMMERCIAL,
+	HIGH_SCHOOL, HIGHER_TECHNICAL, BACHELOR_DEGREE, ENGINEERING, POSTGRADUATE, NO_EDUCATION
+}

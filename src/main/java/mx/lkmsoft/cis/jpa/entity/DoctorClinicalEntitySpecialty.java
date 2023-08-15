@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -13,7 +12,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
-import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
 
 /**
  * Persistent class for entity stored in table
@@ -29,19 +27,12 @@ import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
 public class DoctorClinicalEntitySpecialty extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "specialty_id", referencedColumnName = "id")
-	private Specialty specialty;
-
-	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "doctor_clinical_entity_id", referencedColumnName = "id")
 	private DoctorClinicalEntity doctorClinicalEntity;
 
-	@Column(name = "professional_license")
-	@Convert(converter = AttributeEncryptor.class)
-	private String professionalLicense;
-
-	@Column(name = "appointment_duration")
-	private Integer appointmentDuration;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "doctor_specialty_id", referencedColumnName = "id")
+	private DoctorSpecialty doctorSpecialty;
 
 	@Column(name = "active")
 	private boolean active;
@@ -52,30 +43,39 @@ public class DoctorClinicalEntitySpecialty extends BaseEntity {
 	public DoctorClinicalEntitySpecialty() {
 	}
 
-	public DoctorClinicalEntitySpecialty(DoctorClinicalEntity doctorClinicalEntity, Specialty specialty,
-			String professionalLicense, Integer appointmentDuration) {
+	public DoctorClinicalEntitySpecialty(DoctorClinicalEntity doctorClinicalEntity, DoctorSpecialty doctorSpecialty) {
 		this.doctorClinicalEntity = doctorClinicalEntity;
-		this.specialty = specialty;
-		this.professionalLicense = professionalLicense;
-		this.appointmentDuration = appointmentDuration;
+		this.doctorSpecialty = doctorSpecialty;
 		this.active = true;
 	}
 
 	/* Getters and Setters */
-	public String getProfessionalLicense() {
-		return professionalLicense;
+	public DoctorClinicalEntity getDoctorClinicalEntity() {
+		return doctorClinicalEntity;
 	}
 
-	public void setProfessionalLicense(String professionalLicense) {
-		this.professionalLicense = professionalLicense;
+	public void setDoctorClinicalEntity(DoctorClinicalEntity doctorClinicalEntity) {
+		this.doctorClinicalEntity = doctorClinicalEntity;
 	}
 
-	public Integer getAppointmentDuration() {
-		return appointmentDuration;
+	public DoctorSpecialty getDoctorSpecialty() {
+		return doctorSpecialty;
 	}
 
-	public void setAppointmentDuration(Integer appointmentDuration) {
-		this.appointmentDuration = appointmentDuration;
+	public void setDoctorSpecialty(DoctorSpecialty doctorSpecialty) {
+		this.doctorSpecialty = doctorSpecialty;
+	}
+
+	public List<DoctorClinicalEntityConsultationProcedure> getDoctorClinicalEntityConsultationProcedures() {
+		if (doctorClinicalEntityConsultationProcedures == null) {
+			doctorClinicalEntityConsultationProcedures = new ArrayList<>();
+		}
+		return doctorClinicalEntityConsultationProcedures;
+	}
+
+	public void setDoctorClinicalEntityConsultationProcedures(
+			List<DoctorClinicalEntityConsultationProcedure> doctorClinicalEntityConsultationProcedures) {
+		this.doctorClinicalEntityConsultationProcedures = doctorClinicalEntityConsultationProcedures;
 	}
 
 	public boolean isActive() {
@@ -86,39 +86,11 @@ public class DoctorClinicalEntitySpecialty extends BaseEntity {
 		this.active = active;
 	}
 
-	public List<DoctorClinicalEntityConsultationProcedure> getDoctorClinicalEntityServices() {
-		if (doctorClinicalEntityConsultationProcedures == null) {
-			doctorClinicalEntityConsultationProcedures = new ArrayList<>();
-		}
-		return doctorClinicalEntityConsultationProcedures;
-	}
-
-	public void setDoctorClinicalEntityServices(List<DoctorClinicalEntityConsultationProcedure> doctorClinicalEntityConsultationProcedures) {
-		this.doctorClinicalEntityConsultationProcedures = doctorClinicalEntityConsultationProcedures;
-	}
-
-	public DoctorClinicalEntity getDoctorClinicalEntity() {
-		return doctorClinicalEntity;
-	}
-
-	public void setDoctorClinicalEntity(DoctorClinicalEntity doctorClinicalEntity) {
-		this.doctorClinicalEntity = doctorClinicalEntity;
-	}
-
-	public Specialty getSpecialty() {
-		return specialty;
-	}
-
-	public void setSpecialty(Specialty specialty) {
-		this.specialty = specialty;
-	}
-
 	/* toString */
 	@Override
 	public String toString() {
-		return "DoctorClinicalEntitySpecialty [id=" + id + ", specialty=" + specialty.getId()
-				+ ", doctorClinicalEntity=" + doctorClinicalEntity.getId() + ", professionalLicense="
-				+ professionalLicense + ", appointmentDuration=" + appointmentDuration + ", active=" + active + "]";
+		return "DoctorClinicalEntitySpecialty [id=" + id + ", doctorSpecialty=" + doctorSpecialty.getId()
+				+ ", doctorClinicalEntity=" + doctorClinicalEntity.getId() + ", active=" + active + "]";
 	}
 
 }

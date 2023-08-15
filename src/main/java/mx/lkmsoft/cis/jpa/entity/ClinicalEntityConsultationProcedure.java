@@ -32,8 +32,8 @@ public class ClinicalEntityConsultationProcedure extends BaseEntity {
 	@JoinColumn(name = "clinical_entity_specialty_id", referencedColumnName = "id")
 	private ClinicalEntitySpecialty clinicalEntitySpecialty;
 
-	@Column(name = "code")
-	private String code;
+	@Column(name = "hash")
+	private String hash;
 
 	@Column(name = "description")
 	private String description;
@@ -63,12 +63,12 @@ public class ClinicalEntityConsultationProcedure extends BaseEntity {
 	private List<Appointment> appointments;
 
 	/* Getters and Setters */
-	public String getCode() {
-		return code;
+	public String getHash() {
+		return hash;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setHash(String hash) {
+		this.hash = hash;
 	}
 
 	public String getDescription() {
@@ -158,7 +158,7 @@ public class ClinicalEntityConsultationProcedure extends BaseEntity {
 	@Override
 	public String toString() {
 		return "ClinicalEntityConsultationProcedure [id=" + id + ", clinicalEntitySpecialty="
-				+ clinicalEntitySpecialty + ", code=" + code + ", description=" + description + ", subtotal="
+				+ clinicalEntitySpecialty + ", hash=" + hash + ", description=" + description + ", subtotal="
 				+ subtotal + ", tax=" + tax + ", discount=" + discount + ", total=" + total + ", discountStartDate="
 				+ discountStartDate + ", discountDueDate=" + discountDueDate + ", active=" + active + "]";
 	}

@@ -39,24 +39,22 @@ public class DoctorSpecialty extends BaseEntity {
 	@Convert(converter = AttributeEncryptor.class)
 	private String professionalLicense;
 
-	@Column(name = "appointment_duration")
-	private Integer appointmentDuration;
-
 	@Column(name = "active")
 	private boolean active;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctorSpecialty", targetEntity = PrivatePracticeConsultationProcedure.class)
 	private List<PrivatePracticeConsultationProcedure> privatePracticeConsultationProcedures;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctorSpecialty", targetEntity = DoctorClinicalEntitySpecialty.class)
+	private List<DoctorClinicalEntitySpecialty> doctorClinicalEntitySpecialties; 
 
 	public DoctorSpecialty() {
 	}
 
-	public DoctorSpecialty(Doctor doctor, Specialty specialty, String professionalLicense,
-			Integer appointmentDuration) {
+	public DoctorSpecialty(Doctor doctor, Specialty specialty, String professionalLicense) {
 		this.doctor = doctor;
 		this.specialty = specialty;
 		this.professionalLicense = professionalLicense;
-		this.appointmentDuration = appointmentDuration;
 		this.active = true;
 	}
 
@@ -67,14 +65,6 @@ public class DoctorSpecialty extends BaseEntity {
 
 	public void setProfessionalLicense(String professionalLicense) {
 		this.professionalLicense = professionalLicense;
-	}
-
-	public Integer getAppointmentDuration() {
-		return appointmentDuration;
-	}
-
-	public void setAppointmentDuration(Integer appointmentDuration) {
-		this.appointmentDuration = appointmentDuration;
 	}
 
 	public boolean isActive() {
@@ -108,7 +98,8 @@ public class DoctorSpecialty extends BaseEntity {
 		return privatePracticeConsultationProcedures;
 	}
 
-	public void setPrivatePracticeServices(List<PrivatePracticeConsultationProcedure> privatePracticeConsultationProcedures) {
+	public void setPrivatePracticeServices(
+			List<PrivatePracticeConsultationProcedure> privatePracticeConsultationProcedures) {
 		this.privatePracticeConsultationProcedures = privatePracticeConsultationProcedures;
 	}
 
@@ -116,8 +107,7 @@ public class DoctorSpecialty extends BaseEntity {
 	@Override
 	public String toString() {
 		return "DoctorSpecialty [id=" + id + ", doctor=" + doctor.getId() + ", specialty=" + specialty.getId()
-				+ ", professionalLicense=" + professionalLicense + ", appointmentDuration=" + appointmentDuration
-				+ ", active=" + active + "]";
+				+ ", professionalLicense=" + professionalLicense + ", active=" + active + "]";
 	}
 
 }

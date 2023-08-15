@@ -17,6 +17,7 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
+import mx.lkmsoft.cis.jpa.enumtype.AcademicStatus;
 import mx.lkmsoft.cis.jpa.enumtype.Gender;
 import mx.lkmsoft.cis.jpa.enumtype.MaritalStatus;
 import mx.lkmsoft.cis.jpa.enumtype.Race;
@@ -37,8 +38,8 @@ public class Person extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private Race race;
 
-	@ManyToOne
-	@JoinColumn(name = "academic_status_id", referencedColumnName = "id")
+	@Column(name = "academic_status")
+	@Enumerated(EnumType.STRING)
 	private AcademicStatus academicStatus;
 
 	@Column(name = "marital_status")
@@ -338,10 +339,9 @@ public class Person extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		long academicStatusId = academicStatus != null ? academicStatus.getId() : null;
 		long countryId = country != null ? country.getId() : null;
 
-		return "Person [id=" + id + ", race=" + race + ", academicStatus=" + academicStatusId + ", maritalStatus="
+		return "Person [id=" + id + ", race=" + race + ", academicStatus=" + academicStatus + ", maritalStatus="
 				+ maritalStatus + ", gender=" + gender + ", country=" + countryId + ", name=" + name
 				+ ", paternalSurname=" + paternalSurname + ", maternalSurname=" + maternalSurname + ", identity="
 				+ identity + ", dob=" + dob + ", photo=" + photo + ", rfc=" + rfc + ", curp=" + curp + ", occupation="

@@ -34,9 +34,6 @@ public class User extends BaseEntity {
 	@Column(name = "password")
 	private String password;
 
-	@Column(name = "hash")
-	private String hash;
-
 	@Column(name = "creation_date")
 	private LocalDateTime creationDate;
 
@@ -105,7 +102,7 @@ public class User extends BaseEntity {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = AuthErrorLog.class)
 	private List<UserAccessDevice> userAccessDevices;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = AuthErrorLog.class)
 	private List<ErrorLog> errorLogs;
 
@@ -132,14 +129,6 @@ public class User extends BaseEntity {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getHash() {
-		return hash;
-	}
-
-	public void setHash(String hash) {
-		this.hash = hash;
 	}
 
 	public LocalDateTime getCreationDate() {
@@ -359,12 +348,38 @@ public class User extends BaseEntity {
 	public void setErrorLogs(List<ErrorLog> errorLogs) {
 		this.errorLogs = errorLogs;
 	}
+	
+	/**
+	 * Update user data on successful authentication
+	 * 
+	 * @param user The User who successfully authenticated
+	 */
+	@Transient
+	public void updateOnSuccessfulAuth() {
+		if (this.isFirstVisit()) {
+			this.setFirstVisit(false);
+		}
+		
+		this.setFailedAttempts(0);
+		this.setBlockedAccess(false);
+		this.setLastAccess(LocalDateTime.now());
+	}
+	
+	/**
+	 * Update user data on log out
+	 * 
+	 * @param user The User who log out
+	 */
+	@Transient
+	public void updateOnLogout() {
+		this.setLastAccess(LocalDateTime.now());
+	}
 
 	/* toString */
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", email=" + email + ", photo=" + photo + ", password=" + null + ", hash=" + hash
-				+ ", roles=" + roles + ",creationDate=" + creationDate + ", activationDate=" + activationDate + ", lastAccess=" + lastAccess
+		return "User [id=" + id + ", email=" + email + ", photo=" + photo + ", password=" + null + ", roles=" + roles
+				+ ",creationDate=" + creationDate + ", activationDate=" + activationDate + ", lastAccess=" + lastAccess
 				+ ", firstVisit=" + firstVisit + ", initialConfigCompleted=" + initialConfigCompleted
 				+ ", forcePasswdChange=" + forcePasswdChange + ", activationCode=" + activationCode
 				+ ", activationCodeDuedate=" + activationCodeDuedate + ", changePasswdCode=" + changePasswdCode

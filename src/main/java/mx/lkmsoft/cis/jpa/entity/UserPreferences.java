@@ -46,9 +46,6 @@ public class UserPreferences extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private Theme theme;
 
-	@Column(name = "private_practice")
-	private boolean privatePractice;
-
 	@Column(name = "pagination")
 	@Enumerated(EnumType.STRING)
 	private Pagination pagination;
@@ -79,12 +76,12 @@ public class UserPreferences extends BaseEntity {
 		super();
 	}
 
-	public UserPreferences(Theme theme, LocaleCode language, Pagination pagination) {
-		this.theme = theme;
-		this.language = language;
+	public UserPreferences(Pagination pagination, boolean notifications, NotificationMethod notificationMethod) {
+		this.theme = Theme.PRIMARY;
+		this.language = LocaleCode.ES_MX;
 		this.pagination = pagination;
-		this.privatePractice = false;
-		this.notifications = true;
+		this.notifications = notifications;
+		this.notificationMethod = notificationMethod;
 		this.alerts = true;
 		this.passwordChange = false;
 		this.active = true;
@@ -121,14 +118,6 @@ public class UserPreferences extends BaseEntity {
 
 	public void setTheme(Theme theme) {
 		this.theme = theme;
-	}
-
-	public boolean isPrivatePractice() {
-		return privatePractice;
-	}
-
-	public void setPrivatePractice(boolean privatePractice) {
-		this.privatePractice = privatePractice;
 	}
 
 	public Pagination getPagination() {
@@ -204,10 +193,10 @@ public class UserPreferences extends BaseEntity {
 	@Override
 	public String toString() {
 		return "UserPreferences [id=" + id + ", user=" + user.getId() + ", notificationMethod=" + notificationMethod
-				+ ", language=" + language + ", theme=" + theme + ", privatePractice=" + privatePractice
-				+ ", pagination=" + pagination + ", notifications=" + notifications + ", alerts=" + alerts
-				+ ", passwordChange=" + passwordChange + ", passwordChangePeriod=" + passwordChangePeriod
-				+ ", lastPasswordChange=" + lastPasswordChange + ", nextPasswordChange=" + nextPasswordChange + "]";
+				+ ", language=" + language + ", theme=" + theme + ", pagination=" + pagination + ", notifications="
+				+ notifications + ", alerts=" + alerts + ", passwordChange=" + passwordChange
+				+ ", passwordChangePeriod=" + passwordChangePeriod + ", lastPasswordChange=" + lastPasswordChange
+				+ ", nextPasswordChange=" + nextPasswordChange + "]";
 	}
 
 }

@@ -13,7 +13,8 @@ import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 /**
- * Persistent class for entity stored in table "doctor_clinical_entity_consultation_procedure"
+ * Persistent class for entity stored in table
+ * "doctor_clinical_entity_consultation_procedure"
  *
  * @author Maikel Guerra Ferrer
  *
@@ -28,8 +29,8 @@ public class DoctorClinicalEntityConsultationProcedure extends BaseEntity {
 	@JoinColumn(name = "doctor_clinical_entity_specialty_id", referencedColumnName = "id")
 	private DoctorClinicalEntitySpecialty doctorClinicalEntitySpecialty;
 
-	@Column(name = "code")
-	private String code;
+	@Column(name = "hash")
+	private String hash;
 
 	@Column(name = "description")
 	private String description;
@@ -56,12 +57,12 @@ public class DoctorClinicalEntityConsultationProcedure extends BaseEntity {
 	private boolean active;
 
 	/* Getters and Setters */
-	public String getCode() {
-		return code;
+	public String getHash() {
+		return hash;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setHash(String hash) {
+		this.hash = hash;
 	}
 
 	public String getDescription() {
@@ -140,7 +141,7 @@ public class DoctorClinicalEntityConsultationProcedure extends BaseEntity {
 	@Override
 	public String toString() {
 		return "DoctorClinicalEntityConsultationProcedure [id=" + id + ", doctorClinicalEntitySpecialty="
-				+ doctorClinicalEntitySpecialty.getId() + ", code=" + code + ", description=" + description
+				+ doctorClinicalEntitySpecialty.getId() + ", hash=" + hash + ", description=" + description
 				+ ", subtotal=" + subtotal + ", tax=" + tax + ", discount=" + discount + ", total=" + total
 				+ ", discountStartDate=" + discountStartDate + ", discountDueDate=" + discountDueDate + ", active="
 				+ active + "]";

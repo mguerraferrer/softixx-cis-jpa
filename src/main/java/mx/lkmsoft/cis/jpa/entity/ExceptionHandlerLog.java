@@ -29,6 +29,9 @@ public class ExceptionHandlerLog extends BaseEntity {
 	@Column(name = "exception_message")
 	private String exceptionMessage;
 
+	@Column(name = "request_url")
+	private String requestUrl;
+
 	@Column(name = "log_time")
 	private LocalDateTime logTime;
 
@@ -38,18 +41,27 @@ public class ExceptionHandlerLog extends BaseEntity {
 	public ExceptionHandlerLog() {
 	}
 
-	public ExceptionHandlerLog(String handlerMethod, String exceptionClass, String exceptionMessage) {
+	public ExceptionHandlerLog(String handlerMethod, 
+							   String exceptionClass, 
+							   String exceptionMessage,
+							   String requestUrl) {
 		this.handlerMethod = handlerMethod;
 		this.exceptionClass = exceptionClass;
 		this.exceptionMessage = exceptionMessage;
+		this.requestUrl = requestUrl;
 		this.logTime = LocalDateTime.now();
 		this.code = UUID.randomUUID().toString();
 	}
-	
-	public ExceptionHandlerLog(String handlerMethod, String exceptionClass, String exceptionMessage, String code) {
+
+	public ExceptionHandlerLog(String handlerMethod, 
+							   String exceptionClass, 
+							   String exceptionMessage, 
+							   String requestUrl,
+							   String code) {
 		this.handlerMethod = handlerMethod;
 		this.exceptionClass = exceptionClass;
 		this.exceptionMessage = exceptionMessage;
+		this.requestUrl = requestUrl;
 		this.logTime = LocalDateTime.now();
 		this.code = code;
 	}
@@ -79,6 +91,14 @@ public class ExceptionHandlerLog extends BaseEntity {
 		this.exceptionMessage = exceptionMessage;
 	}
 
+	public String getRequestUrl() {
+		return requestUrl;
+	}
+
+	public void setRequestUrl(String requestUrl) {
+		this.requestUrl = requestUrl;
+	}
+
 	public LocalDateTime getLogTime() {
 		return logTime;
 	}
@@ -98,7 +118,8 @@ public class ExceptionHandlerLog extends BaseEntity {
 	@Override
 	public String toString() {
 		return "AuthErrorLog [id=" + id + ", handlerMethod=" + handlerMethod + ", exceptionClass=" + exceptionClass
-				+ ", exceptionMessage=" + exceptionMessage + ", logTime=" + logTime + ", code=" + code + "]";
+				+ ", exceptionMessage=" + exceptionMessage + ", requestUrl=" + requestUrl + ", logTime=" + logTime
+				+ ", code=" + code + "]";
 	}
 
 }

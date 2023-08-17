@@ -93,9 +93,6 @@ public class Person extends BaseEntity {
 	private String religion;
 
 	@OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
-	private Patient patient;
-
-	@OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
 	private UserProfile userProfile;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "person", targetEntity = PersonAddress.class)
@@ -254,15 +251,6 @@ public class Person extends BaseEntity {
 
 	public void setReligion(String religion) {
 		this.religion = religion;
-	}
-
-	public Patient getPatient() {
-		return patient;
-	}
-
-	public void setPatient(Patient patient) {
-		this.patient = patient;
-		this.patient.setPerson(this);
 	}
 
 	public UserProfile getUserProfile() {

@@ -29,11 +29,8 @@ public class MedicalSchedule extends BaseEntity {
 	@Column(name = "doctor_id")
 	private Long doctorId;
 
-	@Column(name = "private_practice_id")
-	private Long privatePracticeId;
-
-	@Column(name = "clinical_entity_id")
-	private Long clinicalEntityId;
+	@Column(name = "healthcare_center_id")
+	private Long healthcareCenterId;
 
 	@Column(name = "end_date")
 	private LocalDate endDate;
@@ -47,17 +44,9 @@ public class MedicalSchedule extends BaseEntity {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "medicalSchedule", targetEntity = NonWorkingDay.class, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<NonWorkingDay> nonWorkingDays;
 
-	public MedicalSchedule withPrivatePractice(Long doctorId, Long privatePracticeId, LocalDate endDate) {
+	public MedicalSchedule withHealthcareCenter(Long doctorId, Long healthcareCenterId, LocalDate endDate) {
 		this.doctorId = doctorId;
-		this.privatePracticeId = privatePracticeId;
-		this.endDate = endDate;
-		this.active = LocalDateUtils.isFutureOrPresent(endDate);
-		return this;
-	}
-
-	public MedicalSchedule withClinicalEntity(Long doctorId, Long clinicalEntityId, LocalDate endDate) {
-		this.doctorId = doctorId;
-		this.clinicalEntityId = clinicalEntityId;
+		this.healthcareCenterId = healthcareCenterId;
 		this.endDate = endDate;
 		this.active = LocalDateUtils.isFutureOrPresent(endDate);
 		return this;
@@ -72,20 +61,12 @@ public class MedicalSchedule extends BaseEntity {
 		this.doctorId = doctorId;
 	}
 
-	public Long getPrivatePracticeId() {
-		return privatePracticeId;
+	public Long getHealthcareCenterId() {
+		return healthcareCenterId;
 	}
 
-	public void setPrivatePracticeId(Long privatePracticeId) {
-		this.privatePracticeId = privatePracticeId;
-	}
-
-	public Long getClinicalEntityId() {
-		return clinicalEntityId;
-	}
-
-	public void setClinicalEntityId(Long clinicalEntityId) {
-		this.clinicalEntityId = clinicalEntityId;
+	public void setHealthcareCenterId(Long healthcareCenterId) {
+		this.healthcareCenterId = healthcareCenterId;
 	}
 
 	public LocalDate getEndDate() {
@@ -143,8 +124,7 @@ public class MedicalSchedule extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		return "MedicalSchedule [id=" + id + ", doctorId=" + doctorId + ", privatePracticeId=" + privatePracticeId
-				+ ", clinicalEntityId=" + clinicalEntityId + ", endDate=" + endDate + ", active=" + active + "]";
+		return "MedicalSchedule [id=" + id + ", doctorId=" + doctorId + ", healthcareCenterId=" + healthcareCenterId + ", endDate=" + endDate + ", active=" + active + "]";
 	}
 
 }

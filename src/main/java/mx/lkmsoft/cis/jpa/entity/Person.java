@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -13,6 +14,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
@@ -65,7 +67,7 @@ public class Person extends BaseEntity {
 	@Column(name = "maternal_surname")
 	@Convert(converter = AttributeEncryptor.class)
 	private String maternalSurname;
-	
+
 	@Column(name = "identity")
 	@Convert(converter = AttributeEncryptor.class)
 	private String identity;
@@ -90,24 +92,18 @@ public class Person extends BaseEntity {
 	@Column(name = "religion")
 	private String religion;
 
-	@Column(name = "active")
-	private boolean active;
+	@OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
+	private Patient patient;
+
+	@OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
+	private UserProfile userProfile;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "person", targetEntity = PersonAddress.class)
 	private List<PersonAddress> personAddresses;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "person", targetEntity = PersonAccess.class)
-	private List<PersonAccess> personAccesses;
-
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "person", targetEntity = PersonContactInfo.class)
 	private List<PersonContactInfo> personContactInfos;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "person", targetEntity = Patient.class)
-	private List<Patient> patients;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "person", targetEntity = UserProfile.class)
-	private List<UserProfile> userProfiles;
-	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "person", targetEntity = Appointment.class)
 	private List<Appointment> appointments;
 
@@ -122,7 +118,6 @@ public class Person extends BaseEntity {
 		this.gender = gender;
 		this.rfc = "";
 		this.curp = "";
-		this.active = true;
 	}
 
 	public Person(String name, String paternalSurname, String maternalSurname, Gender gender, LocalDate dob) {
@@ -134,13 +129,12 @@ public class Person extends BaseEntity {
 		this.dob = dob;
 		this.rfc = "";
 		this.curp = "";
-		this.active = true;
 	}
 
 	private String identity(final String name, final String paternalSurname, final String maternalSurname) {
 		return String.format("%s %s %s", name.trim(), paternalSurname.trim(), maternalSurname.trim());
 	}
-	
+
 	/* Getters and Setters */
 	public Race getRace() {
 		return race;
@@ -205,7 +199,7 @@ public class Person extends BaseEntity {
 	public void setMaternalSurname(String maternalSurname) {
 		this.maternalSurname = maternalSurname;
 	}
-	
+
 	public String getIdentity() {
 		return identity;
 	}
@@ -262,12 +256,21 @@ public class Person extends BaseEntity {
 		this.religion = religion;
 	}
 
-	public boolean isActive() {
-		return active;
+	public Patient getPatient() {
+		return patient;
 	}
 
-	public void setActive(boolean active) {
-		this.active = active;
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+		this.patient.setPerson(this);
+	}
+
+	public UserProfile getUserProfile() {
+		return userProfile;
+	}
+
+	public void setUserProfile(UserProfile userProfile) {
+		this.userProfile = userProfile;
 	}
 
 	public List<PersonAddress> getPersonAddresses() {
@@ -281,17 +284,6 @@ public class Person extends BaseEntity {
 		this.personAddresses = personAddresses;
 	}
 
-	public void setPersonAccesses(List<PersonAccess> personAccesses) {
-		this.personAccesses = personAccesses;
-	}
-
-	public List<PersonAccess> getPersonAccesses() {
-		if (personAccesses == null) {
-			personAccesses = new ArrayList<>();
-		}
-		return personAccesses;
-	}
-
 	public List<PersonContactInfo> getPersonContactInfos() {
 		if (personContactInfos == null) {
 			personContactInfos = new ArrayList<>();
@@ -301,28 +293,6 @@ public class Person extends BaseEntity {
 
 	public void setPersonContactInfos(List<PersonContactInfo> personContactInfos) {
 		this.personContactInfos = personContactInfos;
-	}
-
-	public List<Patient> getPatients() {
-		if (patients == null) {
-			patients = new ArrayList<>();
-		}
-		return patients;
-	}
-
-	public void setPatients(List<Patient> patients) {
-		this.patients = patients;
-	}
-
-	public List<UserProfile> getUserProfiles() {
-		if (userProfiles == null) {
-			userProfiles = new ArrayList<>();
-		}
-		return userProfiles;
-	}
-
-	public void setUserProfiles(List<UserProfile> userProfiles) {
-		this.userProfiles = userProfiles;
 	}
 
 	public List<Appointment> getAppointments() {
@@ -345,7 +315,7 @@ public class Person extends BaseEntity {
 				+ maritalStatus + ", gender=" + gender + ", country=" + countryId + ", name=" + name
 				+ ", paternalSurname=" + paternalSurname + ", maternalSurname=" + maternalSurname + ", identity="
 				+ identity + ", dob=" + dob + ", photo=" + photo + ", rfc=" + rfc + ", curp=" + curp + ", occupation="
-				+ occupation + ", religion=" + religion + ", active=" + active + "]";
+				+ occupation + ", religion=" + religion + "]";
 	}
 
 }

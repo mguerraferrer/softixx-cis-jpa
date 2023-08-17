@@ -8,12 +8,13 @@ import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 /**
  * Persistent class for entity stored in table "user_license"
@@ -24,11 +25,14 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 @Entity
 @Table(name = "user_license", schema = "sales")
-@SequenceGenerator(name = "default_gen", sequenceName = "sales.user_license_id_seq", allocationSize = 1)
-public class UserLicense extends BaseEntity {
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", referencedColumnName = "id")
+public class UserLicense {
+	
+	@Id
+	private Long id;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	@MapsId
+	@JoinColumn(name = "id")
 	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -50,8 +54,8 @@ public class UserLicense extends BaseEntity {
 	@Column(name = "private_practice")
 	private boolean privatePractice;
 
-	@Column(name = "clinical_entity")
-	private boolean clinicalEntity;
+	@Column(name = "healthcare_center")
+	private boolean healthcareCenter;
 
 	@Column(name = "active")
 	private boolean active;
@@ -71,20 +75,25 @@ public class UserLicense extends BaseEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userLicense", targetEntity = UserLicenseEditionHistory.class)
 	private List<UserLicenseEditionHistory> userLicenseEditionHistories;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userLicense", targetEntity = MasterAccount.class)
-	private List<MasterAccount> masterAccounts;
-
 	public UserLicense() {
 	}
 
-	public UserLicense(License license, User user, String serie, LocalDate dueDate) {
-		this.license = license;
+	public UserLicense(User user, License license, String serie, LocalDate dueDate) {
 		this.user = user;
+		this.license = license;
 		this.serie = serie;
 		this.dueDate = dueDate;
 	}
 
 	/* Getters and Setters */
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
 	public User getUser() {
 		return user;
 	}
@@ -141,12 +150,12 @@ public class UserLicense extends BaseEntity {
 		this.privatePractice = privatePractice;
 	}
 
-	public boolean isClinicalEntity() {
-		return clinicalEntity;
+	public boolean isHealthcareCenter() {
+		return healthcareCenter;
 	}
 
-	public void setClinicalEntity(boolean clinicalEntity) {
-		this.clinicalEntity = clinicalEntity;
+	public void setHealthcareCenter(boolean healthcareCenter) {
+		this.healthcareCenter = healthcareCenter;
 	}
 
 	public boolean isActive() {
@@ -212,23 +221,12 @@ public class UserLicense extends BaseEntity {
 		this.userLicenseEditionHistories = userLicenseEditionHistories;
 	}
 
-	public List<MasterAccount> getMasterAccounts() {
-		if (masterAccounts == null) {
-			masterAccounts = new ArrayList<>();
-		}
-		return masterAccounts;
-	}
-
-	public void setMasterAccounts(List<MasterAccount> masterAccounts) {
-		this.masterAccounts = masterAccounts;
-	}
-
 	/* toString */
 	@Override
 	public String toString() {
 		return "UserLicense [id=" + id + ", user=" + user.getId() + ", license=" + license.getId() + ", serie=" + serie
 				+ ", activationDate=" + activationDate + ", actualizationDate=" + actualizationDate + ", dueDate="
-				+ dueDate + ", privatePractice=" + privatePractice + ", clinicalEntity=" + clinicalEntity + ", active="
+				+ dueDate + ", privatePractice=" + privatePractice + ", healthcareCenter=" + healthcareCenter + ", active="
 				+ active + "]";
 	}
 

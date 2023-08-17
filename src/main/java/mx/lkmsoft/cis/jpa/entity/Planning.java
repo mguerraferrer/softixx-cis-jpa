@@ -32,8 +32,8 @@ public class Planning extends BaseEntity {
 	@JoinColumn(name = "medical_schedule_id", referencedColumnName = "id")
 	private MedicalSchedule medicalSchedule;
 
-	@Column(name = "doctor_clinical_entity_specialty_id")
-	private Long doctorClinicalEntitySpecialtyId;
+	@Column(name = "doctor_healthcare_center_specialty_id")
+	private Long doctorHealthcareCenterSpecialtyId;
 
 	@Column(name = "doctor_specialty_id")
 	private Long doctorSpecialtyId;
@@ -70,12 +70,12 @@ public class Planning extends BaseEntity {
 		this.medicalSchedule = medicalSchedule;
 	}
 
-	public Long getDoctorClinicalEntitySpecialtyId() {
-		return doctorClinicalEntitySpecialtyId;
+	public Long getDoctorHealthcareCenterSpecialtyId() {
+		return doctorHealthcareCenterSpecialtyId;
 	}
 
-	public void setDoctorClinicalEntitySpecialtyId(Long doctorClinicalEntitySpecialtyId) {
-		this.doctorClinicalEntitySpecialtyId = doctorClinicalEntitySpecialtyId;
+	public void setDoctorHealthcareCenterSpecialtyId(Long doctorHealthcareCenterSpecialtyId) {
+		this.doctorHealthcareCenterSpecialtyId = doctorHealthcareCenterSpecialtyId;
 	}
 
 	public Long getDoctorSpecialtyId() {
@@ -156,8 +156,8 @@ public class Planning extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		return "Planning [id=" + id + ", medicalSchedule=" + medicalSchedule.getId() + ", doctorClinicalEntitySpecialtyId="
-				+ doctorClinicalEntitySpecialtyId + ", doctorSpecialtyId=" + doctorSpecialtyId
+		return "Planning [id=" + id + ", medicalSchedule=" + medicalSchedule.getId() + ", doctorHealthcareCenterSpecialtyId="
+				+ doctorHealthcareCenterSpecialtyId + ", doctorSpecialtyId=" + doctorSpecialtyId
 				+ ", agendaVisualization=" + agendaVisualization + ", fixedSchedule=" + fixedSchedule
 				+ ", appointmentDuration=" + appointmentDuration + "]";
 	}

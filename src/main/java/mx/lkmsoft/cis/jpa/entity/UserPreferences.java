@@ -6,12 +6,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.enumtype.LocaleCode;
 import mx.lkmsoft.cis.jpa.enumtype.NotificationMethod;
 import mx.lkmsoft.cis.jpa.enumtype.Pagination;
@@ -27,11 +28,14 @@ import mx.lkmsoft.cis.jpa.enumtype.Theme;
 
 @Entity
 @Table(name = "preferences", schema = "security")
-@SequenceGenerator(name = "default_gen", sequenceName = "security.preferences_id_seq", allocationSize = 1)
-public class UserPreferences extends BaseEntity {
+public class UserPreferences {
 
-	@OneToOne
-	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	@Id
+	private Long id;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	@MapsId
+	@JoinColumn(name = "id")
 	private User user;
 
 	@Column(name = "notification_method")
@@ -76,7 +80,8 @@ public class UserPreferences extends BaseEntity {
 		super();
 	}
 
-	public UserPreferences(Pagination pagination, boolean notifications, NotificationMethod notificationMethod) {
+	public UserPreferences(User user, Pagination pagination, boolean notifications, NotificationMethod notificationMethod) {
+		this.user = user;
 		this.theme = Theme.PRIMARY;
 		this.language = LocaleCode.ES_MX;
 		this.pagination = pagination;
@@ -88,6 +93,14 @@ public class UserPreferences extends BaseEntity {
 	}
 
 	/* Getters and Setters */
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
 	public User getUser() {
 		return user;
 	}

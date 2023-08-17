@@ -17,23 +17,27 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 /**
  * Persistent class for entity stored in table
- * "clinical_entity_consultation_procedure"
+ * "private_practice_consultation_procedure"
  *
  * @author Maikel Guerra Ferrer
  *
  */
 
 @Entity
-@Table(name = "clinical_entity_consultation_procedure", schema = "common")
-@SequenceGenerator(name = "default_gen", sequenceName = "common.clinical_entity_consultation_procedure_id_seq", allocationSize = 1)
-public class ClinicalEntityConsultationProcedure extends BaseEntity {
+@Table(name = "consultation_procedure", schema = "common")
+@SequenceGenerator(name = "default_gen", sequenceName = "common.consultation_procedure_id_seq", allocationSize = 1)
+public class ConsultationProcedure extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "clinical_entity_specialty_id", referencedColumnName = "id")
-	private ClinicalEntitySpecialty clinicalEntitySpecialty;
+	@JoinColumn(name = "healthcare_center_id", referencedColumnName = "id")
+	private HealthcareCenter healthcareCenter;
 
-	@Column(name = "hash")
-	private String hash;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "doctor_specialty_id", referencedColumnName = "id")
+	private DoctorSpecialty doctorSpecialty;
+
+	@Column(name = "code")
+	private String code;
 
 	@Column(name = "description")
 	private String description;
@@ -59,16 +63,46 @@ public class ClinicalEntityConsultationProcedure extends BaseEntity {
 	@Column(name = "active")
 	private boolean active;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "clinicalEntityProcedure", targetEntity = Appointment.class)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "consultationProcedure", targetEntity = Appointment.class)
 	private List<Appointment> appointments;
 
-	/* Getters and Setters */
-	public String getHash() {
-		return hash;
+	public ConsultationProcedure() {
 	}
 
-	public void setHash(String hash) {
-		this.hash = hash;
+	public ConsultationProcedure(HealthcareCenter healthcareCenter, DoctorSpecialty doctorSpecialty, String code,
+			String description, BigDecimal subtotal, BigDecimal total) {
+		this.healthcareCenter = healthcareCenter;
+		this.doctorSpecialty = doctorSpecialty;
+		this.code = code;
+		this.description = description;
+		this.subtotal = subtotal;
+		this.total = total;
+		this.active = true;
+	}
+
+	/* Getters and Setters */
+	public HealthcareCenter getHealthcareCenter() {
+		return healthcareCenter;
+	}
+
+	public void setHealthcareCenter(HealthcareCenter healthcareCenter) {
+		this.healthcareCenter = healthcareCenter;
+	}
+
+	public DoctorSpecialty getDoctorSpecialty() {
+		return doctorSpecialty;
+	}
+
+	public void setDoctorSpecialty(DoctorSpecialty doctorSpecialty) {
+		this.doctorSpecialty = doctorSpecialty;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public String getDescription() {
@@ -135,14 +169,6 @@ public class ClinicalEntityConsultationProcedure extends BaseEntity {
 		this.active = active;
 	}
 
-	public ClinicalEntitySpecialty getClinicalEntitySpecialty() {
-		return clinicalEntitySpecialty;
-	}
-
-	public void setClinicalEntitySpecialty(ClinicalEntitySpecialty clinicalEntitySpecialty) {
-		this.clinicalEntitySpecialty = clinicalEntitySpecialty;
-	}
-
 	public List<Appointment> getAppointments() {
 		if (appointments == null) {
 			appointments = new ArrayList<>();
@@ -157,10 +183,11 @@ public class ClinicalEntityConsultationProcedure extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		return "ClinicalEntityConsultationProcedure [id=" + id + ", clinicalEntitySpecialty="
-				+ clinicalEntitySpecialty + ", hash=" + hash + ", description=" + description + ", subtotal="
-				+ subtotal + ", tax=" + tax + ", discount=" + discount + ", total=" + total + ", discountStartDate="
-				+ discountStartDate + ", discountDueDate=" + discountDueDate + ", active=" + active + "]";
+		return "ConsultationProcedure [id=" + id + ", healthcareCenter=" + healthcareCenter.getId()
+				+ ", doctorSpecialty=" + doctorSpecialty.getId() + ", code=" + code + ", description=" + description
+				+ ", subtotal=" + subtotal + ", tax=" + tax + ", discount=" + discount + ", total=" + total
+				+ ", discountStartDate=" + discountStartDate + ", discountDueDate=" + discountDueDate + ", active="
+				+ active + "]";
 	}
 
 }

@@ -9,6 +9,7 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
@@ -33,6 +34,9 @@ public class Doctor extends BaseEntity {
 	@Column(name = "active")
 	private boolean active;
 
+	@OneToOne(mappedBy = "doctor", cascade = CascadeType.ALL)
+	private UserProfile userProfile;
+	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor", targetEntity = DoctorSpecialty.class, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<DoctorSpecialty> doctorSpecialties;
 
@@ -41,16 +45,7 @@ public class Doctor extends BaseEntity {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor", targetEntity = AssistantDoctor.class)
 	private List<AssistantDoctor> assistantDoctors;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor", targetEntity = PrivatePractice.class)
-	private List<PrivatePractice> privatePractices;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor", targetEntity = UserProfile.class)
-	private List<UserProfile> userProfiles;
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor", targetEntity = DoctorClinicalEntity.class)
-	private List<DoctorClinicalEntity> doctorClinicalEntities;
-
 	public Doctor() {
 	}
 
@@ -76,6 +71,14 @@ public class Doctor extends BaseEntity {
 		this.active = active;
 	}
 
+	public UserProfile getUserProfile() {
+		return userProfile;
+	}
+
+	public void setUserProfile(UserProfile userProfile) {
+		this.userProfile = userProfile;
+	}
+	
 	public List<DoctorSpecialty> getDoctorSpecialties() {
 		if (doctorSpecialties == null) {
 			doctorSpecialties = new ArrayList<>();
@@ -107,39 +110,6 @@ public class Doctor extends BaseEntity {
 
 	public void setAssistantDoctors(List<AssistantDoctor> assistantDoctors) {
 		this.assistantDoctors = assistantDoctors;
-	}
-
-	public List<PrivatePractice> getPrivatePractices() {
-		if (privatePractices == null) {
-			privatePractices = new ArrayList<>();
-		}
-		return privatePractices;
-	}
-
-	public void setPrivatePractices(List<PrivatePractice> privatePractices) {
-		this.privatePractices = privatePractices;
-	}
-
-	public List<UserProfile> getUserProfiles() {
-		if (userProfiles == null) {
-			userProfiles = new ArrayList<>();
-		}
-		return userProfiles;
-	}
-
-	public void setUserProfiles(List<UserProfile> userProfiles) {
-		this.userProfiles = userProfiles;
-	}
-
-	public List<DoctorClinicalEntity> getDoctorClinicalEntities() {
-		if (doctorClinicalEntities == null) {
-			doctorClinicalEntities = new ArrayList<>();
-		}
-		return doctorClinicalEntities;
-	}
-
-	public void setDoctorClinicalEntities(List<DoctorClinicalEntity> doctorClinicalEntities) {
-		this.doctorClinicalEntities = doctorClinicalEntities;
 	}
 
 	/* toString */

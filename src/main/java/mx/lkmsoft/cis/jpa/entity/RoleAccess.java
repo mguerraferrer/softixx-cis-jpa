@@ -27,10 +27,10 @@ public class RoleAccess extends BaseEntity {
 	@Column(name = "role")
 	@Enumerated(EnumType.STRING)
 	private Role role;
-	
-	@Column(name = "hash")
-	private String hash;
-	
+
+	@Column(name = "reference_code")
+	private String referenceCode;
+
 	@Column(name = "access_level")
 	@Enumerated(EnumType.STRING)
 	private AccessLevel accessLevel;
@@ -49,7 +49,7 @@ public class RoleAccess extends BaseEntity {
 	public void setRole(Role role) {
 		this.role = role;
 	}
-	
+
 	public AccessLevel getAccessLevel() {
 		return accessLevel;
 	}
@@ -58,12 +58,12 @@ public class RoleAccess extends BaseEntity {
 		this.accessLevel = accessLevel;
 	}
 
-	public String getHash() {
-		return hash;
+	public String getReferenceCode() {
+		return referenceCode;
 	}
 
-	public void setHash(String hash) {
-		this.hash = hash;
+	public void setReferenceCode(String referenceCode) {
+		this.referenceCode = referenceCode;
 	}
 
 	public LocalTime getStartTime() {
@@ -85,8 +85,8 @@ public class RoleAccess extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		return "RoleAccess [id=" + id + ", role=" + role + ", hash=" + hash
-				+ ", accessLevel=" + accessLevel +", startTime=" + startTime + ", endTime=" + endTime + "]";
+		return "RoleAccess [id=" + id + ", role=" + role + ", referenceCode=" + referenceCode + ", accessLevel="
+				+ accessLevel + ", startTime=" + startTime + ", endTime=" + endTime + "]";
 	}
 
 }

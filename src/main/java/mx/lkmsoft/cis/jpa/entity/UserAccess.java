@@ -30,8 +30,8 @@ public class UserAccess extends BaseEntity {
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private User user;
 
-	@Column(name = "hash")
-	private String hash;
+	@Column(name = "reference_code")
+	private String referenceCode;
 
 	@Column(name = "access_level")
 	@Enumerated(EnumType.STRING)
@@ -52,12 +52,12 @@ public class UserAccess extends BaseEntity {
 		this.user = user;
 	}
 
-	public String getHash() {
-		return hash;
+	public String getReferenceCode() {
+		return referenceCode;
 	}
 
-	public void setHash(String hash) {
-		this.hash = hash;
+	public void setReferenceCode(String referenceCode) {
+		this.referenceCode = referenceCode;
 	}
 
 	public AccessLevel getAccessLevel() {
@@ -87,8 +87,8 @@ public class UserAccess extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		return "UserAccess [id=" + id + ", user=" + user.getId() + ", hash=" + hash + ", accessLevel=" + accessLevel
-				+ ", startTime=" + startTime + ", endTime=" + endTime + "]";
+		return "UserAccess [id=" + id + ", user=" + user.getId() + ", referenceCode=" + referenceCode + ", accessLevel="
+				+ accessLevel + ", startTime=" + startTime + ", endTime=" + endTime + "]";
 	}
 
 }

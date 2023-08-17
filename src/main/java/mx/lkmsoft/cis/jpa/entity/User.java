@@ -79,9 +79,6 @@ public class User extends BaseEntity {
 	@Column(name = "role")
 	private List<Role> roles;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = AssociatedAccount.class)
-	private List<AssociatedAccount> associatedAccounts;
-
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	private UserProfile userProfile;
 
@@ -91,11 +88,17 @@ public class User extends BaseEntity {
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	private Session session;
 
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	private UserLicense userLicense;
+	
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	private MasterAccount masterAccount;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = HealthcareCenterAccess.class)
+	private List<HealthcareCenterAccess> healthcareCenterAccesses;
+	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = UserAccess.class)
 	private List<UserAccess> userAccesses;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = UserLicense.class)
-	private List<UserLicense> userLicenses;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = AuthErrorLog.class)
 	private List<AuthErrorLog> authErrorLogs;
@@ -258,23 +261,13 @@ public class User extends BaseEntity {
 		return roles.stream().anyMatch(role -> role.name().equalsIgnoreCase(roleCode));
 	}
 
-	public List<AssociatedAccount> getAssociatedAccounts() {
-		if (associatedAccounts == null) {
-			associatedAccounts = new ArrayList<>();
-		}
-		return associatedAccounts;
-	}
-
-	public void setAssociatedAccounts(List<AssociatedAccount> associatedAccounts) {
-		this.associatedAccounts = associatedAccounts;
-	}
-
 	public UserProfile getUserProfile() {
 		return userProfile;
 	}
 
 	public void setUserProfile(UserProfile userProfile) {
 		this.userProfile = userProfile;
+		this.userProfile.setUser(this);
 	}
 
 	public UserPreferences getUserPreferences() {
@@ -294,6 +287,34 @@ public class User extends BaseEntity {
 		this.session = session;
 	}
 
+	public UserLicense getUserLicense() {
+		return userLicense;
+	}
+
+	public void setUserLicense(UserLicense userLicense) {
+		this.userLicense = userLicense;
+		this.userLicense.setUser(this);
+	}
+
+	public MasterAccount getMasterAccount() {
+		return masterAccount;
+	}
+
+	public void setMasterAccount(MasterAccount masterAccount) {
+		this.masterAccount = masterAccount;
+	}
+	
+	public List<HealthcareCenterAccess> getHealthcareCenterAccesses() {
+		if (healthcareCenterAccesses == null) {
+			healthcareCenterAccesses = new ArrayList<>();
+		}
+		return healthcareCenterAccesses;
+	}
+
+	public void setHealthcareCenterAccesses(List<HealthcareCenterAccess> healthcareCenterAccesses) {
+		this.healthcareCenterAccesses = healthcareCenterAccesses;
+	}
+
 	public List<UserAccess> getUserAccesses() {
 		if (userAccesses == null) {
 			userAccesses = new ArrayList<>();
@@ -303,17 +324,6 @@ public class User extends BaseEntity {
 
 	public void setUserAccesses(List<UserAccess> userAccesses) {
 		this.userAccesses = userAccesses;
-	}
-
-	public List<UserLicense> getUserLicenses() {
-		if (userLicenses == null) {
-			userLicenses = new ArrayList<>();
-		}
-		return userLicenses;
-	}
-
-	public void setUserLicenses(List<UserLicense> userLicenses) {
-		this.userLicenses = userLicenses;
 	}
 
 	public List<AuthErrorLog> getAuthErrorLogs() {

@@ -3,10 +3,12 @@ package mx.lkmsoft.cis.jpa.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
@@ -26,14 +28,11 @@ public class Assistant extends BaseEntity {
 	@Column(name = "active")
 	private boolean active;
 
+	@OneToOne(mappedBy = "assistant", cascade = CascadeType.ALL)
+	private UserProfile userProfile;
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "assistant", targetEntity = AssistantDoctor.class)
 	private List<AssistantDoctor> assistantDoctors;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "assistant", targetEntity = AssistantClinicalEntity.class)
-	private List<AssistantClinicalEntity> assistantClinicalEntities;
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "assistant", targetEntity = UserProfile.class)
-	private List<UserProfile> userProfiles;
 
 	/* Getters and Setters */
 	public boolean isActive() {
@@ -42,6 +41,14 @@ public class Assistant extends BaseEntity {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public UserProfile getUserProfile() {
+		return userProfile;
+	}
+
+	public void setUserProfile(UserProfile userProfile) {
+		this.userProfile = userProfile;
 	}
 
 	public List<AssistantDoctor> getAssistantDoctors() {
@@ -53,28 +60,6 @@ public class Assistant extends BaseEntity {
 
 	public void setAssistantDoctors(List<AssistantDoctor> assistantDoctors) {
 		this.assistantDoctors = assistantDoctors;
-	}
-
-	public List<AssistantClinicalEntity> getAssistantClinicalEntities() {
-		if (assistantClinicalEntities == null) {
-			assistantClinicalEntities = new ArrayList<>();
-		}
-		return assistantClinicalEntities;
-	}
-
-	public void setAssistantClinicalEntities(List<AssistantClinicalEntity> assistantClinicalEntities) {
-		this.assistantClinicalEntities = assistantClinicalEntities;
-	}
-	
-	public List<UserProfile> getUserProfiles() {
-		if (userProfiles == null) {
-			userProfiles = new ArrayList<>();
-		}
-		return userProfiles;
-	}
-
-	public void setUserProfiles(List<UserProfile> userProfiles) {
-		this.userProfiles = userProfiles;
 	}
 
 	/* toString */

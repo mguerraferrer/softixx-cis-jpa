@@ -3,10 +3,12 @@ package mx.lkmsoft.cis.jpa.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
@@ -26,14 +28,11 @@ public class Nurse extends BaseEntity {
 	@Column(name = "active")
 	private boolean active;
 
+	@OneToOne(mappedBy = "nurse", cascade = CascadeType.ALL)
+	private UserProfile userProfile;
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "nurse", targetEntity = NurseDoctor.class)
 	private List<NurseDoctor> nurseDoctors;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "nurse", targetEntity = UserProfile.class)
-	private List<UserProfile> userProfiles;
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "nurse", targetEntity = NurseClinicalEntity.class)
-	private List<NurseClinicalEntity> nurseClinicalEntities;
 
 	/* Getters and Setters */
 	public boolean isActive() {
@@ -55,26 +54,12 @@ public class Nurse extends BaseEntity {
 		this.nurseDoctors = nurseDoctors;
 	}
 
-	public List<UserProfile> getUserProfiles() {
-		if (userProfiles == null) {
-			userProfiles = new ArrayList<>();
-		}
-		return userProfiles;
+	public UserProfile getUserProfile() {
+		return userProfile;
 	}
 
-	public void setUserProfiles(List<UserProfile> userProfiles) {
-		this.userProfiles = userProfiles;
-	}
-
-	public List<NurseClinicalEntity> getNurseClinicalEntities() {
-		if (nurseClinicalEntities == null) {
-			nurseClinicalEntities = new ArrayList<>();
-		}
-		return nurseClinicalEntities;
-	}
-
-	public void setNurseClinicalEntities(List<NurseClinicalEntity> nurseClinicalEntities) {
-		this.nurseClinicalEntities = nurseClinicalEntities;
+	public void setUserProfile(UserProfile userProfile) {
+		this.userProfile = userProfile;
 	}
 
 	/* toString */

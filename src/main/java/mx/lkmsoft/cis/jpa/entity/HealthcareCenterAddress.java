@@ -4,28 +4,31 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
 
 /**
- * Persistent class for entity stored in table "private_practice_address"
+ * Persistent class for entity stored in table "healthcare_center_address"
  *
  * @author Maikel Guerra Ferrer
  *
  */
-
 @Entity
-@Table(name = "private_practice_address", schema = "common")
-@SequenceGenerator(name = "default_gen", sequenceName = "common.private_practice_address_id_seq", allocationSize = 1)
-public class PrivatePracticeAddress extends BaseEntity {
+@Table(name = "healthcare_center_address", schema = "common")
+public class HealthcareCenterAddress {
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "private_practice_id", referencedColumnName = "id")
-	private PrivatePractice privatePractice;
+	@Id
+	private Long id;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@MapsId
+	@JoinColumn(name = "id")
+	private HealthcareCenter healthcareCenter;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "colony_id", referencedColumnName = "id")
@@ -59,16 +62,21 @@ public class PrivatePracticeAddress extends BaseEntity {
 	@Convert(converter = AttributeEncryptor.class)
 	private String lon;
 
-	@Column(name = "active")
-	private boolean active;
-
 	/* Getters and Setters */
-	public PrivatePractice getPrivatePractice() {
-		return privatePractice;
+	public Long getId() {
+		return id;
 	}
 
-	public void setPrivatePractice(PrivatePractice privatePractice) {
-		this.privatePractice = privatePractice;
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public HealthcareCenter getHealthcareCenter() {
+		return healthcareCenter;
+	}
+
+	public void setHealthcareCenter(HealthcareCenter healthcareCenter) {
+		this.healthcareCenter = healthcareCenter;
 	}
 
 	public Colony getColony() {
@@ -135,21 +143,13 @@ public class PrivatePracticeAddress extends BaseEntity {
 		this.lon = lon;
 	}
 
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
 	/* toString */
 	@Override
 	public String toString() {
-		return "PrivatePracticeAddress [id=" + id + ", privatePractice=" + privatePractice.getId() + ", colony="
+		return "HealthcareCenterAddress [id=" + id + ", healthcareCenter=" + healthcareCenter.getId() + ", colony="
 				+ colony.getId() + ", street=" + street + ", btwStreet=" + btwStreet + ", outsideNumber="
 				+ outsideNumber + ", insideNumber=" + insideNumber + ", reference=" + reference + ", lat=" + lat
-				+ ", lon=" + lon + ", active=" + active + "]";
+				+ ", lon=" + lon + "]";
 	}
 
 }

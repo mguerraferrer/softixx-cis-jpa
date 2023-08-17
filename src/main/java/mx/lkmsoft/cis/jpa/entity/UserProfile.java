@@ -1,18 +1,12 @@
 package mx.lkmsoft.cis.jpa.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 /**
  * Persistent class for entity stored in table "profile"
@@ -23,48 +17,62 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 @Entity
 @Table(name = "user_profile", schema = "security")
-@SequenceGenerator(name = "default_gen", sequenceName = "security.user_profile_id_seq", allocationSize = 1)
-public class UserProfile extends BaseEntity {
+public class UserProfile {
 
-	@OneToOne
-	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	@Id
+	private Long id;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@MapsId
+	@JoinColumn(name = "id")
 	private User user;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
+
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "doctor_id", referencedColumnName = "id")
 	private Doctor doctor;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "assistant_id", referencedColumnName = "id")
 	private Assistant assistant;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "nurse_id", referencedColumnName = "id")
 	private Nurse nurse;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "person_id", referencedColumnName = "id")
 	private Person person;
-
-	@Column(name = "active")
-	private boolean active;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userProfile", targetEntity = ClinicalEntityAccessInfo.class)
-	private List<ClinicalEntityAccessInfo> clinicalEntityAccessInfos;
 
 	public UserProfile() {
 	}
 
-	public UserProfile(Person person, User user, Doctor doctor, Nurse nurse, Assistant assistant) {
-		this.person = person;
+	public UserProfile(User user, Person person, Doctor doctor) {
 		this.user = user;
+		this.person = person;
 		this.doctor = doctor;
+	}
+
+	public UserProfile(User user, Person person, Nurse nurse) {
+		this.user = user;
+		this.person = person;
 		this.nurse = nurse;
+	}
+
+	public UserProfile(User user, Person person, Assistant assistant) {
+		this.user = user;
+		this.person = person;
 		this.assistant = assistant;
-		this.active = true;
 	}
 
 	/* Getters and Setters */
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public Doctor getDoctor() {
 		return doctor;
 	}
@@ -105,36 +113,14 @@ public class UserProfile extends BaseEntity {
 		this.person = person;
 	}
 
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
-	public List<ClinicalEntityAccessInfo> getClinicalEntityAccessInfos() {
-		if (clinicalEntityAccessInfos == null) {
-			clinicalEntityAccessInfos = new ArrayList<>();
-		}
-		return clinicalEntityAccessInfos;
-	}
-
-	public void setClinicalEntityAccessInfos(List<ClinicalEntityAccessInfo> clinicalEntityAccessInfos) {
-		this.clinicalEntityAccessInfos = clinicalEntityAccessInfos;
-	}
-
 	/* toString */
 	@Override
 	public String toString() {
 		long doctorId = doctor != null ? doctor.getId() : null;
 		long assistantId = assistant != null ? assistant.getId() : null;
-		long userId = user != null ? user.getId() : null;
 		long nurseId = nurse != null ? nurse.getId() : null;
-		long personId = person != null ? person.getId() : null;
 
-		return "UserProfile [id=" + id + ", doctor=" + doctorId + ", assistant=" + assistantId + ", user=" + userId
-				+ ", nurse=" + nurseId + ", person=" + personId + ", active=" + active + "]";
+		return "UserProfile [user=" + user.getId() + ", doctor=" + doctorId + ", assistant=" + assistantId + ", nurse=" + nurseId + ", person=" + person.getId() + "]";
 	}
 
 }

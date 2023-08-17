@@ -48,12 +48,8 @@ public class Appointment extends BaseEntity {
 	private Person person;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "private_practice_consultation_procedure_id", referencedColumnName = "id")
-	private PrivatePracticeConsultationProcedure privatePracticeProcedure;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "clinical_entity_consultation_procedure_id", referencedColumnName = "id")
-	private ClinicalEntityConsultationProcedure clinicalEntityProcedure;
+	@JoinColumn(name = "consultation_procedure_id", referencedColumnName = "id")
+	private ConsultationProcedure consultationProcedure;
 
 	@Column(name = "appointment_type")
 	@Enumerated(EnumType.STRING)
@@ -109,8 +105,8 @@ public class Appointment extends BaseEntity {
 	private String additionalInfo;
 
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private AppointmentReminder reminder;
-	
+	private AppointmentReminder reminder;
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "appointment", targetEntity = AppointmentNotification.class, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<AppointmentNotification> appointmentNotifications;
 
@@ -121,16 +117,10 @@ public class Appointment extends BaseEntity {
 		this.folio = CryptoUtils.generateHash().toUpperCase();
 	}
 
-	public Appointment(Planning planning, 
-					   PrivatePracticeConsultationProcedure privatePracticeProcedure,
-					   ClinicalEntityConsultationProcedure clinicalEntityProcedure, 
-					   Person person, 
-					   LocalDate appointmentDate,
-					   LocalTime startTime,
-					   LocalTime endTime) {
+	public Appointment(Planning planning, ConsultationProcedure consultationProcedure, Person person,
+			LocalDate appointmentDate, LocalTime startTime, LocalTime endTime) {
 		this.planning = planning;
-		this.privatePracticeProcedure = privatePracticeProcedure;
-		this.clinicalEntityProcedure = clinicalEntityProcedure;
+		this.consultationProcedure = consultationProcedure;
 		this.person = person;
 		this.appointmentDate = appointmentDate;
 		this.startTime = startTime;
@@ -142,9 +132,8 @@ public class Appointment extends BaseEntity {
 	public static Appointment clone(Appointment appointment, LocalDate appointmentDate, LocalTime startTime,
 			LocalTime endTime) {
 		if (appointment != null) {
-			Appointment clone = new Appointment(appointment.getPlanning(), appointment.getPrivatePracticeProcedure(),
-					appointment.getClinicalEntityProcedure(), appointment.getPerson(), appointmentDate, startTime,
-					endTime);
+			Appointment clone = new Appointment(appointment.getPlanning(), appointment.getConsultationProcedure(),
+					appointment.getPerson(), appointmentDate, startTime, endTime);
 			clone.setOriginalAppointment(appointment);
 			clone.setType(appointment.getType());
 			clone.setOrigin(AppointmentOrigin.CLONED);
@@ -186,20 +175,12 @@ public class Appointment extends BaseEntity {
 		this.person = person;
 	}
 
-	public PrivatePracticeConsultationProcedure getPrivatePracticeProcedure() {
-		return privatePracticeProcedure;
+	public ConsultationProcedure getConsultationProcedure() {
+		return consultationProcedure;
 	}
 
-	public void setPrivatePracticeProcedure(PrivatePracticeConsultationProcedure privatePracticeProcedure) {
-		this.privatePracticeProcedure = privatePracticeProcedure;
-	}
-
-	public ClinicalEntityConsultationProcedure getClinicalEntityProcedure() {
-		return clinicalEntityProcedure;
-	}
-
-	public void setClinicalEntityProcedure(ClinicalEntityConsultationProcedure clinicalEntityProcedure) {
-		this.clinicalEntityProcedure = clinicalEntityProcedure;
+	public void setConsultationProcedure(ConsultationProcedure consultationProcedure) {
+		this.consultationProcedure = consultationProcedure;
 	}
 
 	public AppointmentType getType() {
@@ -356,7 +337,7 @@ public class Appointment extends BaseEntity {
 			this.appointmentNotifications.addAll(appointmentNotifications);
 		}
 	}
-	
+
 	public void clearNotifications() {
 		if (this.appointmentNotifications != null) {
 			this.appointmentNotifications.clear();
@@ -385,19 +366,16 @@ public class Appointment extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		long ppProcedureId = privatePracticeProcedure != null ? privatePracticeProcedure.getId() : null;
-		long ceProcedureId = clinicalEntityProcedure != null ? clinicalEntityProcedure.getId() : null;
 		long relTypeId = relationshipType != null ? relationshipType.getId() : null;
 		long originalAppointmentId = originalAppointment != null ? originalAppointment.getId() : null;
 
 		return "Appointment [id=" + id + ", personId=" + person.getId() + ", planning=" + planning.getId()
-				+ ", privatePracticeProcedure=" + ppProcedureId + ", clinicalEntityProcedure=" + ceProcedureId
-				+ ", type=" + type + ", origin=" + origin + ", status=" + status + ", confirmation=" + confirmation
-				+ ", cancelledBy=" + cancelledBy + ", rescheduledBy=" + rescheduledBy + ", anotherPersonName="
-				+ anotherPersonName + ", relationshipType=" + relTypeId + ", originalAppointmentId="
-				+ originalAppointmentId + ", appointmentDate=" + appointmentDate + ", startTime=" + startTime
-				+ ", endTime=" + endTime + ", folio=" + folio + ", month=" + month + ", additionalInfo="
-				+ additionalInfo + "]";
+				+ ", consultationProcedure=" + consultationProcedure.getId() + ", type=" + type + ", origin=" + origin
+				+ ", status=" + status + ", confirmation=" + confirmation + ", cancelledBy=" + cancelledBy
+				+ ", rescheduledBy=" + rescheduledBy + ", anotherPersonName=" + anotherPersonName
+				+ ", relationshipType=" + relTypeId + ", originalAppointmentId=" + originalAppointmentId
+				+ ", appointmentDate=" + appointmentDate + ", startTime=" + startTime + ", endTime=" + endTime
+				+ ", folio=" + folio + ", month=" + month + ", additionalInfo=" + additionalInfo + "]";
 	}
 
 }

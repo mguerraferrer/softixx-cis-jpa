@@ -22,7 +22,7 @@ import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
 class AttributeEncryptorTest {
 	
 	private AttributeEncryptor attributeEncryptor;
-    private String secretKey = "1234567812345678";
+    private String secretKey = "a12z3h*8!3ncr1pt0r$5yhcn";
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -54,7 +54,8 @@ class AttributeEncryptorTest {
 	
 	@ParameterizedTest
 	@CsvSource({
-		"Lorem, Ipsum, Dolor, Lorem Ipsum Dolor"
+		"Sanitas La Moraleja, Clínica del Bienestar, Clínica SIROT, Clínica ADAME",
+		"Clínica ORLOC, Clínica SEDIT, Clínica ZICA, null"
 	})
 	void testEncryptionThenDecryption(String text1, String text2, String text3, String text4) {
 		val text1Encrypted = attributeEncryptor.convertToDatabaseColumn(text1);

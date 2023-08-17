@@ -3,71 +3,50 @@ package mx.lkmsoft.cis.jpa.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 /**
- * Persistent class for entity stored in table "master_account"
+ * Persistent class for entity stored in table "healthcare_center_specialty"
  *
  * @author Maikel Guerra Ferrer
  *
  */
 
 @Entity
-@Table(name = "master_account", schema = "security")
-public class MasterAccount {
-
-	@Id
-	private Long id;
-
-	@OneToOne(fetch = FetchType.LAZY)
-	@MapsId
-	@JoinColumn(name = "id")
-	private User user;
+@Table(name = "healthcare_center_specialties", schema = "common")
+@SequenceGenerator(name = "default_gen", sequenceName = "common.healthcare_center_specialty_id_seq", allocationSize = 1)
+public class HealthcareCenterSpecialty extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "healthcare_center_id", referencedColumnName = "id")
 	private HealthcareCenter healthcareCenter;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "specialty_id", referencedColumnName = "id")
+	private Specialty specialty;
+
 	@Column(name = "active")
 	private boolean active;
 
-	public MasterAccount() {
-	}
-
-	public MasterAccount(User user, HealthcareCenter healthcareCenter) {
-		this.user = user;
-		this.healthcareCenter = healthcareCenter;
-		this.active = true;
-	}
-
 	/* Getters and Setters */
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
 	public HealthcareCenter getHealthcareCenter() {
 		return healthcareCenter;
 	}
 
 	public void setHealthcareCenter(HealthcareCenter healthcareCenter) {
 		this.healthcareCenter = healthcareCenter;
+	}
+
+	public Specialty getSpecialty() {
+		return specialty;
+	}
+
+	public void setSpecialty(Specialty specialty) {
+		this.specialty = specialty;
 	}
 
 	public boolean isActive() {
@@ -81,8 +60,8 @@ public class MasterAccount {
 	/* toString */
 	@Override
 	public String toString() {
-		return "MasterAccount [id=" + id + ", user=" + user + ", healthcareCenter=" + healthcareCenter + ", active="
-				+ active + "]";
+		return "HealthcareCenterSpecialty [id=" + id + ", healthcareCenter=" + healthcareCenter.getId() + ", specialty="
+				+ specialty.getId() + ", active=" + active + "]";
 	}
 
 }

@@ -32,12 +32,6 @@ public class Specialty extends BaseEntity {
 	@Column(name = "image")
 	private String image;
 
-	@Column(name = "available_for_private_practice")
-	private boolean availableForPrivatePractice;
-
-	@Column(name = "available_for_clinical_entity")
-	private boolean availableForClinicalEntity;
-
 	@Column(name = "value")
 	private String value;
 
@@ -50,8 +44,8 @@ public class Specialty extends BaseEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "specialty", targetEntity = DoctorSpecialty.class)
 	private List<DoctorSpecialty> doctorSpecialties;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "specialty", targetEntity = ClinicalEntitySpecialty.class)
-	private List<ClinicalEntitySpecialty> clinicalEntitySpecialties;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "specialty", targetEntity = HealthcareCenterSpecialty.class)
+	private List<HealthcareCenterSpecialty> healthcareCenterSpecialties;
 
 	/* Getters and Setters */
 	public String getCode() {
@@ -76,22 +70,6 @@ public class Specialty extends BaseEntity {
 
 	public void setImage(String image) {
 		this.image = image;
-	}
-
-	public boolean isAvailableForPrivatePractice() {
-		return availableForPrivatePractice;
-	}
-
-	public void setAvailableForPrivatePractice(boolean availableForPrivatePractice) {
-		this.availableForPrivatePractice = availableForPrivatePractice;
-	}
-
-	public boolean isAvailableForClinicalEntity() {
-		return availableForClinicalEntity;
-	}
-
-	public void setAvailableForClinicalEntity(boolean availableForClinicalEntity) {
-		this.availableForClinicalEntity = availableForClinicalEntity;
 	}
 
 	public String getValue() {
@@ -129,23 +107,22 @@ public class Specialty extends BaseEntity {
 		this.doctorSpecialties = doctorSpecialties;
 	}
 
-	public List<ClinicalEntitySpecialty> getClinicalEntitySpecialties() {
-		if (clinicalEntitySpecialties == null) {
-			clinicalEntitySpecialties = new ArrayList<>();
+	public List<HealthcareCenterSpecialty> getHealthcareCenterSpecialties() {
+		if (healthcareCenterSpecialties == null) {
+			healthcareCenterSpecialties = new ArrayList<>();
 		}
-		return clinicalEntitySpecialties;
+		return healthcareCenterSpecialties;
 	}
 
-	public void setClinicalEntitySpecialties(List<ClinicalEntitySpecialty> clinicalEntitySpecialties) {
-		this.clinicalEntitySpecialties = clinicalEntitySpecialties;
+	public void setHealthcareCenterSpecialties(List<HealthcareCenterSpecialty> healthcareCenterSpecialties) {
+		this.healthcareCenterSpecialties = healthcareCenterSpecialties;
 	}
 
 	/* toString */
 	@Override
 	public String toString() {
-		return "Specialty [id=" + id + ", code=" + code + ", icon=" + icon + ", image=" + image
-				+ ", availableForPrivatePractice=" + availableForPrivatePractice + ", availableForClinicalEntity="
-				+ availableForClinicalEntity + ", value=" + value + ", visible=" + visible + ", active=" + active + "]";
+		return "Specialty [id=" + id + ", code=" + code + ", icon=" + icon + ", image=" + image + ", value=" + value
+				+ ", visible=" + visible + ", active=" + active + "]";
 	}
 
 }

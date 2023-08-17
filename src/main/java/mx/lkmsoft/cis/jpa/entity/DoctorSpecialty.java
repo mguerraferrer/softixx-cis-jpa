@@ -42,12 +42,9 @@ public class DoctorSpecialty extends BaseEntity {
 	@Column(name = "active")
 	private boolean active;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctorSpecialty", targetEntity = PrivatePracticeConsultationProcedure.class)
-	private List<PrivatePracticeConsultationProcedure> privatePracticeConsultationProcedures;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctorSpecialty", targetEntity = ConsultationProcedure.class)
+	private List<ConsultationProcedure> consultationProcedures;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctorSpecialty", targetEntity = DoctorClinicalEntitySpecialty.class)
-	private List<DoctorClinicalEntitySpecialty> doctorClinicalEntitySpecialties; 
-
 	public DoctorSpecialty() {
 	}
 
@@ -91,16 +88,15 @@ public class DoctorSpecialty extends BaseEntity {
 		this.specialty = specialty;
 	}
 
-	public List<PrivatePracticeConsultationProcedure> getPrivatePracticeServices() {
-		if (privatePracticeConsultationProcedures == null) {
-			privatePracticeConsultationProcedures = new ArrayList<>();
+	public List<ConsultationProcedure> getConsultationProcedures() {
+		if (consultationProcedures == null) {
+			consultationProcedures = new ArrayList<>();
 		}
-		return privatePracticeConsultationProcedures;
+		return consultationProcedures;
 	}
 
-	public void setPrivatePracticeServices(
-			List<PrivatePracticeConsultationProcedure> privatePracticeConsultationProcedures) {
-		this.privatePracticeConsultationProcedures = privatePracticeConsultationProcedures;
+	public void setConsultationProcedures(List<ConsultationProcedure> consultationProcedures) {
+		this.consultationProcedures = consultationProcedures;
 	}
 
 	/* toString */

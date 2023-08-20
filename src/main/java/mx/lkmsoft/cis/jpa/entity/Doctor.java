@@ -8,6 +8,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
@@ -40,11 +43,17 @@ public class Doctor extends BaseEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor", targetEntity = DoctorSpecialty.class, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<DoctorSpecialty> doctorSpecialties;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor", targetEntity = NurseDoctor.class)
-	private List<NurseDoctor> nurseDoctors;
+	@ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(schema = "common", name = "nurse_doctor", 
+               joinColumns = @JoinColumn(name = "doctor_id"), 
+               inverseJoinColumns = @JoinColumn(name = "nurse_id"))
+    private List<Nurse> nurses;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor", targetEntity = AssistantDoctor.class)
-	private List<AssistantDoctor> assistantDoctors;
+	@ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(schema = "common", name = "assistant_doctor", 
+               joinColumns = @JoinColumn(name = "doctor_id"), 
+               inverseJoinColumns = @JoinColumn(name = "assistant_id"))
+    private List<Assistant> assistants;
 	
 	public Doctor() {
 	}
@@ -90,26 +99,26 @@ public class Doctor extends BaseEntity {
 		this.doctorSpecialties = doctorSpecialties;
 	}
 
-	public List<NurseDoctor> getNurseDoctors() {
-		if (nurseDoctors == null) {
-			nurseDoctors = new ArrayList<>();
+	public List<Nurse> getNurses() {
+		if (nurses == null) {
+			nurses = new ArrayList<>();
 		}
-		return nurseDoctors;
+		return nurses;
 	}
 
-	public void setNurseDoctors(List<NurseDoctor> nurseDoctors) {
-		this.nurseDoctors = nurseDoctors;
+	public void setNurses(List<Nurse> nurses) {
+		this.nurses = nurses;
 	}
 
-	public List<AssistantDoctor> getAssistantDoctors() {
-		if (assistantDoctors == null) {
-			assistantDoctors = new ArrayList<>();
+	public List<Assistant> getAssistants() {
+		if (assistants == null) {
+			assistants = new ArrayList<>();
 		}
-		return assistantDoctors;
+		return assistants;
 	}
 
-	public void setAssistantDoctors(List<AssistantDoctor> assistantDoctors) {
-		this.assistantDoctors = assistantDoctors;
+	public void setAssistants(List<Assistant> assistants) {
+		this.assistants = assistants;
 	}
 
 	/* toString */

@@ -6,8 +6,7 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -31,8 +30,8 @@ public class Assistant extends BaseEntity {
 	@OneToOne(mappedBy = "assistant", cascade = CascadeType.ALL)
 	private UserProfile userProfile;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "assistant", targetEntity = AssistantDoctor.class)
-	private List<AssistantDoctor> assistantDoctors;
+	@ManyToMany(mappedBy = "assistants")
+	private List<Doctor> doctors;
 
 	/* Getters and Setters */
 	public boolean isActive() {
@@ -51,15 +50,15 @@ public class Assistant extends BaseEntity {
 		this.userProfile = userProfile;
 	}
 
-	public List<AssistantDoctor> getAssistantDoctors() {
-		if (assistantDoctors == null) {
-			assistantDoctors = new ArrayList<>();
+	public List<Doctor> getDoctors() {
+		if (doctors == null) {
+			doctors = new ArrayList<>();
 		}
-		return assistantDoctors;
+		return doctors;
 	}
 
-	public void setAssistantDoctors(List<AssistantDoctor> assistantDoctors) {
-		this.assistantDoctors = assistantDoctors;
+	public void setDoctors(List<Doctor> doctors) {
+		this.doctors = doctors;
 	}
 
 	/* toString */

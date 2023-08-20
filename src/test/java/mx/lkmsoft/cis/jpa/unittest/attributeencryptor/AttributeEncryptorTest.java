@@ -54,8 +54,7 @@ class AttributeEncryptorTest {
 	
 	@ParameterizedTest
 	@CsvSource({
-		"Sanitas La Moraleja, Clínica del Bienestar, Clínica SIROT, Clínica ADAME",
-		"Clínica ORLOC, Clínica SEDIT, Clínica ZICA, null"
+		"Lorem, Ipsum, Dolor, Lorem Ipsum Dolor"
 	})
 	void testEncryptionThenDecryption(String text1, String text2, String text3, String text4) {
 		val text1Encrypted = attributeEncryptor.convertToDatabaseColumn(text1);

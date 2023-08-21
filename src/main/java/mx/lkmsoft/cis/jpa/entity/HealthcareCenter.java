@@ -2,19 +2,20 @@ package mx.lkmsoft.cis.jpa.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import mx.lkmsoft.cis.common.uuid.UuidGeneratorUtils;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
+import mx.lkmsoft.cis.jpa.embeddable.EmbeddableContact;
+import mx.lkmsoft.cis.jpa.embeddable.EmbeddableSocial;
 
 /**
  * Persistent class for entity stored in table "healthcare_center"
@@ -53,14 +54,17 @@ public class HealthcareCenter extends BaseEntity {
 	@Column(name = "pwd_expiration")
 	private Integer pwdExpiration;
 
+	@Embedded
+	private EmbeddableSocial social;
+
+	@Embedded
+	protected EmbeddableContact contact;
+
 	@Column(name = "active")
 	private boolean active;
 
-	@OneToOne(mappedBy = "healthcareCenter", cascade = CascadeType.ALL)
-	private HealthcareCenterContact healthcareCenterContact;
-
-	@OneToOne(mappedBy = "healthcareCenter", cascade = CascadeType.ALL)
-	private HealthcareCenterAddress healthcareCenterAddress;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "healthcareCenter", targetEntity = HealthcareCenterAddress.class)
+	private List<HealthcareCenterAddress> healthcareCenterAddresses;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "healthcareCenter", targetEntity = HealthcareCenterAccess.class)
 	private List<HealthcareCenterAccess> healthcareCenterAccesses;
@@ -81,7 +85,7 @@ public class HealthcareCenter extends BaseEntity {
 		this.name = name;
 		this.businessName = businessName;
 		this.logo = null;
-		this.code = UUID.randomUUID().toString().toUpperCase().replace("-", "");
+		this.code = UuidGeneratorUtils.asStringCode();
 		this.active = true;
 	}
 
@@ -142,6 +146,22 @@ public class HealthcareCenter extends BaseEntity {
 		this.pwdExpiration = pwdExpiration;
 	}
 
+	public EmbeddableSocial getSocial() {
+		return social;
+	}
+
+	public void setSocial(EmbeddableSocial social) {
+		this.social = social;
+	}
+
+	public EmbeddableContact getContact() {
+		return contact;
+	}
+
+	public void setContact(EmbeddableContact contact) {
+		this.contact = contact;
+	}
+
 	public boolean isActive() {
 		return active;
 	}
@@ -150,22 +170,15 @@ public class HealthcareCenter extends BaseEntity {
 		this.active = active;
 	}
 
-	public HealthcareCenterContact getHealthcareCenterContact() {
-		return healthcareCenterContact;
+	public List<HealthcareCenterAddress> getHealthcareCenterAddresses() {
+		if (healthcareCenterAddresses == null) {
+			healthcareCenterAddresses = new ArrayList<>();
+		}
+		return healthcareCenterAddresses;
 	}
 
-	public void setHealthcareCenterContact(HealthcareCenterContact healthcareCenterContact) {
-		this.healthcareCenterContact = healthcareCenterContact;
-		this.healthcareCenterContact.setHealthcareCenter(this);
-	}
-
-	public HealthcareCenterAddress getHealthcareCenterAddress() {
-		return healthcareCenterAddress;
-	}
-
-	public void setHealthcareCenterAddress(HealthcareCenterAddress healthcareCenterAddress) {
-		this.healthcareCenterAddress = healthcareCenterAddress;
-		this.healthcareCenterAddress.setHealthcareCenter(this);
+	public void setHealthcareCenterAddresses(List<HealthcareCenterAddress> healthcareCenterAddresses) {
+		this.healthcareCenterAddresses = healthcareCenterAddresses;
 	}
 
 	public List<HealthcareCenterAccess> getHealthcareCenterAccesses() {
@@ -217,7 +230,8 @@ public class HealthcareCenter extends BaseEntity {
 	public String toString() {
 		return "HealthcareCenter [id=" + id + ", name=" + name + ", businessName=" + businessName + ", logo=" + logo
 				+ ", code=" + code + ", ipRangeStart=" + ipRangeStart + ", ipRangeEnd=" + ipRangeEnd
-				+ ", pwdExpiration=" + pwdExpiration + ", active=" + active + "]";
+				+ ", pwdExpiration=" + pwdExpiration + ", contact=" + contact + ", social=" + social + ", active="
+				+ active + "]";
 	}
 
 }

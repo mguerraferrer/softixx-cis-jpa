@@ -1,28 +1,24 @@
 package mx.lkmsoft.cis.jpa.entity;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
-import mx.lkmsoft.cis.jpa.enumtype.AcademicStatus;
+import mx.lkmsoft.cis.jpa.embeddable.EmbeddableContact;
 import mx.lkmsoft.cis.jpa.enumtype.Gender;
-import mx.lkmsoft.cis.jpa.enumtype.MaritalStatus;
-import mx.lkmsoft.cis.jpa.enumtype.Race;
 
 /**
  * Persistent class for entity stored in table "person"
@@ -35,26 +31,6 @@ import mx.lkmsoft.cis.jpa.enumtype.Race;
 @Table(name = "person", schema = "common")
 @SequenceGenerator(name = "default_gen", sequenceName = "common.person_id_seq", allocationSize = 1)
 public class Person extends BaseEntity {
-
-	@Column(name = "race")
-	@Enumerated(EnumType.STRING)
-	private Race race;
-
-	@Column(name = "academic_status")
-	@Enumerated(EnumType.STRING)
-	private AcademicStatus academicStatus;
-
-	@Column(name = "marital_status")
-	@Enumerated(EnumType.STRING)
-	private MaritalStatus maritalStatus;
-
-	@Column(name = "gender")
-	@Enumerated(EnumType.STRING)
-	private Gender gender;
-
-	@ManyToOne
-	@JoinColumn(name = "country_id", referencedColumnName = "id")
-	private Country country;
 
 	@Column(name = "name")
 	@Convert(converter = AttributeEncryptor.class)
@@ -72,37 +48,33 @@ public class Person extends BaseEntity {
 	@Convert(converter = AttributeEncryptor.class)
 	private String identity;
 
-	@Column(name = "dob")
-	private LocalDate dob;
+	@Column(name = "gender")
+	@Enumerated(EnumType.STRING)
+	private Gender gender;
 
 	@Column(name = "photo")
 	private String photo;
 
-	@Column(name = "rfc")
+	@Column(name = "mobile1")
 	@Convert(converter = AttributeEncryptor.class)
-	private String rfc;
+	private String mobile1;
 
-	@Column(name = "curp")
+	@Column(name = "mobile2")
 	@Convert(converter = AttributeEncryptor.class)
-	private String curp;
+	private String mobile2;
 
-	@Column(name = "occupation")
-	private String occupation;
+	@Column(name = "mobile3")
+	@Convert(converter = AttributeEncryptor.class)
+	private String mobile3;
 
-	@Column(name = "religion")
-	private String religion;
-
+	@Embedded
+	protected EmbeddableContact contact;
+	
 	@OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
 	private UserProfile userProfile;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "person", targetEntity = PersonAddress.class)
-	private List<PersonAddress> personAddresses;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "person", targetEntity = PersonContactInfo.class)
-	private List<PersonContactInfo> personContactInfos;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "person", targetEntity = Appointment.class)
-	private List<Appointment> appointments;
+	private List<PersonAddress> addresses;
 
 	public Person() {
 	}
@@ -113,19 +85,6 @@ public class Person extends BaseEntity {
 		this.maternalSurname = maternalSurname != null ? maternalSurname.trim() : "";
 		this.identity = identity(this.name, this.paternalSurname, this.maternalSurname);
 		this.gender = gender;
-		this.rfc = "";
-		this.curp = "";
-	}
-
-	public Person(String name, String paternalSurname, String maternalSurname, Gender gender, LocalDate dob) {
-		this.name = name;
-		this.paternalSurname = paternalSurname != null ? paternalSurname.trim() : "";
-		this.maternalSurname = maternalSurname != null ? maternalSurname.trim() : "";
-		this.identity = identity(this.name, this.paternalSurname, this.maternalSurname);
-		this.gender = gender;
-		this.dob = dob;
-		this.rfc = "";
-		this.curp = "";
 	}
 
 	private String identity(final String name, final String paternalSurname, final String maternalSurname) {
@@ -133,46 +92,6 @@ public class Person extends BaseEntity {
 	}
 
 	/* Getters and Setters */
-	public Race getRace() {
-		return race;
-	}
-
-	public void setRace(Race race) {
-		this.race = race;
-	}
-
-	public AcademicStatus getAcademicStatus() {
-		return academicStatus;
-	}
-
-	public void setAcademicStatus(AcademicStatus academicStatus) {
-		this.academicStatus = academicStatus;
-	}
-
-	public MaritalStatus getMaritalStatus() {
-		return maritalStatus;
-	}
-
-	public void setMaritalStatus(MaritalStatus maritalStatus) {
-		this.maritalStatus = maritalStatus;
-	}
-
-	public Gender getGender() {
-		return gender;
-	}
-
-	public void setGender(Gender gender) {
-		this.gender = gender;
-	}
-
-	public Country getCountry() {
-		return country;
-	}
-
-	public void setCountry(Country country) {
-		this.country = country;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -205,12 +124,12 @@ public class Person extends BaseEntity {
 		this.identity = identity;
 	}
 
-	public LocalDate getDob() {
-		return dob;
+	public Gender getGender() {
+		return gender;
 	}
 
-	public void setDob(LocalDate dob) {
-		this.dob = dob;
+	public void setGender(Gender gender) {
+		this.gender = gender;
 	}
 
 	public String getPhoto() {
@@ -221,38 +140,38 @@ public class Person extends BaseEntity {
 		this.photo = photo;
 	}
 
-	public String getRfc() {
-		return rfc;
+	public String getMobile1() {
+		return mobile1;
 	}
 
-	public void setRfc(String rfc) {
-		this.rfc = rfc;
+	public void setMobile1(String mobile1) {
+		this.mobile1 = mobile1;
 	}
 
-	public String getCurp() {
-		return curp;
+	public String getMobile2() {
+		return mobile2;
 	}
 
-	public void setCurp(String curp) {
-		this.curp = curp;
+	public void setMobile2(String mobile2) {
+		this.mobile2 = mobile2;
 	}
 
-	public String getOccupation() {
-		return occupation;
+	public String getMobile3() {
+		return mobile3;
 	}
 
-	public void setOccupation(String occupation) {
-		this.occupation = occupation;
+	public void setMobile3(String mobile3) {
+		this.mobile3 = mobile3;
 	}
 
-	public String getReligion() {
-		return religion;
+	public EmbeddableContact getContact() {
+		return contact;
 	}
 
-	public void setReligion(String religion) {
-		this.religion = religion;
+	public void setContact(EmbeddableContact contact) {
+		this.contact = contact;
 	}
-
+	
 	public UserProfile getUserProfile() {
 		return userProfile;
 	}
@@ -261,49 +180,24 @@ public class Person extends BaseEntity {
 		this.userProfile = userProfile;
 	}
 
-	public List<PersonAddress> getPersonAddresses() {
-		if (personAddresses == null) {
-			personAddresses = new ArrayList<>();
+	public List<PersonAddress> getAddresses() {
+		if (addresses == null) {
+			addresses = new ArrayList<>();
 		}
-		return personAddresses;
+		return addresses;
 	}
 
-	public void setPersonAddresses(List<PersonAddress> personAddresses) {
-		this.personAddresses = personAddresses;
-	}
-
-	public List<PersonContactInfo> getPersonContactInfos() {
-		if (personContactInfos == null) {
-			personContactInfos = new ArrayList<>();
-		}
-		return personContactInfos;
-	}
-
-	public void setPersonContactInfos(List<PersonContactInfo> personContactInfos) {
-		this.personContactInfos = personContactInfos;
-	}
-
-	public List<Appointment> getAppointments() {
-		if (appointments == null) {
-			appointments = new ArrayList<>();
-		}
-		return appointments;
-	}
-
-	public void setAppointments(List<Appointment> appointments) {
-		this.appointments = appointments;
+	public void setAddresses(List<PersonAddress> addresses) {
+		this.addresses = addresses;
 	}
 
 	/* toString */
 	@Override
 	public String toString() {
-		long countryId = country != null ? country.getId() : null;
-
-		return "Person [id=" + id + ", race=" + race + ", academicStatus=" + academicStatus + ", maritalStatus="
-				+ maritalStatus + ", gender=" + gender + ", country=" + countryId + ", name=" + name
-				+ ", paternalSurname=" + paternalSurname + ", maternalSurname=" + maternalSurname + ", identity="
-				+ identity + ", dob=" + dob + ", photo=" + photo + ", rfc=" + rfc + ", curp=" + curp + ", occupation="
-				+ occupation + ", religion=" + religion + "]";
+		return "Person [id=" + id + ", name=" + name + ", paternalSurname=" + paternalSurname + ", maternalSurname="
+				+ maternalSurname + ", identity=" + identity + ", gender=" + gender + ", photo=" + photo + ", mobile1="
+				+ mobile1 + ", mobile2=" + mobile2 + ", mobile3=" + mobile3 + ", addresses=" + addresses + ", contact="
+				+ contact + "]";
 	}
 
 }

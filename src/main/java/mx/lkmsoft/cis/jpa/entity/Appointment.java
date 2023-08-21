@@ -18,6 +18,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import lombok.val;
 import mx.lkmsoft.cis.common.crypto.CryptoUtils;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.enumtype.AppointmentCancelled;
@@ -26,6 +27,7 @@ import mx.lkmsoft.cis.jpa.enumtype.AppointmentOrigin;
 import mx.lkmsoft.cis.jpa.enumtype.AppointmentReschedule;
 import mx.lkmsoft.cis.jpa.enumtype.AppointmentStatus;
 import mx.lkmsoft.cis.jpa.enumtype.AppointmentType;
+import mx.lkmsoft.cis.jpa.enumtype.Relationship;
 
 /**
  * Persistent class for entity stored in table "appointment"
@@ -44,8 +46,8 @@ public class Appointment extends BaseEntity {
 	private Planning planning;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "person_id", referencedColumnName = "id")
-	private Person person;
+	@JoinColumn(name = "patient_id", referencedColumnName = "id")
+	private Patient patient;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "consultation_procedure_id", referencedColumnName = "id")
@@ -78,9 +80,9 @@ public class Appointment extends BaseEntity {
 	@Column(name = "another_person_name")
 	private String anotherPersonName;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "relationship_type_id", referencedColumnName = "id")
-	private RelationshipType relationshipType;
+	@Column(name = "relationship")
+	@Enumerated(EnumType.STRING)
+	private Relationship relationship;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "appointment_id", referencedColumnName = "id")
@@ -117,11 +119,11 @@ public class Appointment extends BaseEntity {
 		this.folio = CryptoUtils.generateHash().toUpperCase();
 	}
 
-	public Appointment(Planning planning, ConsultationProcedure consultationProcedure, Person person,
+	public Appointment(Planning planning, ConsultationProcedure consultationProcedure, Patient patient,
 			LocalDate appointmentDate, LocalTime startTime, LocalTime endTime) {
 		this.planning = planning;
 		this.consultationProcedure = consultationProcedure;
-		this.person = person;
+		this.patient = patient;
 		this.appointmentDate = appointmentDate;
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -132,8 +134,8 @@ public class Appointment extends BaseEntity {
 	public static Appointment clone(Appointment appointment, LocalDate appointmentDate, LocalTime startTime,
 			LocalTime endTime) {
 		if (appointment != null) {
-			Appointment clone = new Appointment(appointment.getPlanning(), appointment.getConsultationProcedure(),
-					appointment.getPerson(), appointmentDate, startTime, endTime);
+			val clone = new Appointment(appointment.getPlanning(), appointment.getConsultationProcedure(),
+					appointment.getPatient(), appointmentDate, startTime, endTime);
 			clone.setOriginalAppointment(appointment);
 			clone.setType(appointment.getType());
 			clone.setOrigin(AppointmentOrigin.CLONED);
@@ -146,7 +148,7 @@ public class Appointment extends BaseEntity {
 
 	public Appointment reschedule(Appointment appointment, LocalDate appointmentDate, LocalTime startTime,
 			LocalTime endTime) {
-		Appointment reschedule = clone(appointment, appointmentDate, startTime, endTime);
+		val reschedule = clone(appointment, appointmentDate, startTime, endTime);
 		if (reschedule != null) {
 			reschedule.setOriginalAppointment(appointment);
 			reschedule.setType(appointment.getType());
@@ -167,12 +169,12 @@ public class Appointment extends BaseEntity {
 		this.planning = planning;
 	}
 
-	public Person getPerson() {
-		return person;
+	public Patient getPatient() {
+		return patient;
 	}
 
-	public void setPerson(Person person) {
-		this.person = person;
+	public void setPatient(Patient patient) {
+		this.patient = patient;
 	}
 
 	public ConsultationProcedure getConsultationProcedure() {
@@ -239,12 +241,12 @@ public class Appointment extends BaseEntity {
 		this.anotherPersonName = anotherPersonName;
 	}
 
-	public RelationshipType getRelationshipType() {
-		return relationshipType;
+	public Relationship getRelationship() {
+		return relationship;
 	}
 
-	public void setRelationshipType(RelationshipType relationshipType) {
-		this.relationshipType = relationshipType;
+	public void setRelationship(Relationship relationship) {
+		this.relationship = relationship;
 	}
 
 	public Appointment getOriginalAppointment() {
@@ -366,16 +368,16 @@ public class Appointment extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		long relTypeId = relationshipType != null ? relationshipType.getId() : null;
-		long originalAppointmentId = originalAppointment != null ? originalAppointment.getId() : null;
+		val rel = relationship != null ? relationship.name() : null;
+		val originalAppointmentId = originalAppointment != null ? originalAppointment.getId() : null;
 
-		return "Appointment [id=" + id + ", personId=" + person.getId() + ", planning=" + planning.getId()
+		return "Appointment [id=" + id + ", patient=" + patient.getId() + ", planning=" + planning.getId()
 				+ ", consultationProcedure=" + consultationProcedure.getId() + ", type=" + type + ", origin=" + origin
 				+ ", status=" + status + ", confirmation=" + confirmation + ", cancelledBy=" + cancelledBy
-				+ ", rescheduledBy=" + rescheduledBy + ", anotherPersonName=" + anotherPersonName
-				+ ", relationshipType=" + relTypeId + ", originalAppointmentId=" + originalAppointmentId
-				+ ", appointmentDate=" + appointmentDate + ", startTime=" + startTime + ", endTime=" + endTime
-				+ ", folio=" + folio + ", month=" + month + ", additionalInfo=" + additionalInfo + "]";
+				+ ", rescheduledBy=" + rescheduledBy + ", anotherPersonName=" + anotherPersonName + ", relationship="
+				+ rel + ", originalAppointmentId=" + originalAppointmentId + ", appointmentDate=" + appointmentDate
+				+ ", startTime=" + startTime + ", endTime=" + endTime + ", folio=" + folio + ", month=" + month
+				+ ", additionalInfo=" + additionalInfo + "]";
 	}
 
 }

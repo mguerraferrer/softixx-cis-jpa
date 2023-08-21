@@ -25,8 +25,8 @@ public class Country extends NomenclatorEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "country", targetEntity = State.class)
 	private List<State> states;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "country", targetEntity = Person.class)
-	private List<Person> persons;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "country", targetEntity = Patient.class)
+	private List<Patient> patients;
 
 	/* Getters and Setters */
 	public List<State> getStates() {
@@ -40,15 +40,15 @@ public class Country extends NomenclatorEntity {
 		this.states = states;
 	}
 	
-	public List<Person> getPersons() {
-		if (persons == null) {
-			persons = new ArrayList<>();
+	public List<Patient> getPatients() {
+		if (patients == null) {
+			patients = new ArrayList<>();
 		}
-		return persons;
+		return patients;
 	}
 
-	public void setPersons(List<Person> persons) {
-		this.persons = persons;
+	public void setPatients(List<Patient> patients) {
+		this.patients = patients;
 	}
 
 	/* toString */

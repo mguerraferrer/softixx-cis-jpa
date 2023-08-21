@@ -1,12 +1,12 @@
 package mx.lkmsoft.cis.jpa.entity;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import mx.lkmsoft.cis.common.uuid.UuidGeneratorUtils;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 /**
@@ -50,7 +50,7 @@ public class ExceptionHandlerLog extends BaseEntity {
 		this.exceptionMessage = exceptionMessage;
 		this.requestUrl = requestUrl;
 		this.logTime = LocalDateTime.now();
-		this.code = UUID.randomUUID().toString();
+		this.code = UuidGeneratorUtils.asStringCode();
 	}
 
 	public ExceptionHandlerLog(String handlerMethod, 

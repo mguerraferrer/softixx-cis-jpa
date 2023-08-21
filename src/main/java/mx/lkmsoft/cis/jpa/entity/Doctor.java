@@ -6,6 +6,7 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -17,6 +18,7 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
+import mx.lkmsoft.cis.jpa.embeddable.EmbeddableSocial;
 
 /**
  * Persistent class for entity stored in table "doctor"
@@ -34,27 +36,26 @@ public class Doctor extends BaseEntity {
 	@Convert(converter = AttributeEncryptor.class)
 	private String professionalLicense;
 
+	@Embedded
+	private EmbeddableSocial social;
+
 	@Column(name = "active")
 	private boolean active;
 
 	@OneToOne(mappedBy = "doctor", cascade = CascadeType.ALL)
 	private UserProfile userProfile;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor", targetEntity = DoctorSpecialty.class, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<DoctorSpecialty> doctorSpecialties;
 
 	@ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(schema = "common", name = "nurse_doctor", 
-               joinColumns = @JoinColumn(name = "doctor_id"), 
-               inverseJoinColumns = @JoinColumn(name = "nurse_id"))
-    private List<Nurse> nurses;
+	@JoinTable(schema = "common", name = "nurse_doctor", joinColumns = @JoinColumn(name = "doctor_id"), inverseJoinColumns = @JoinColumn(name = "nurse_id"))
+	private List<Nurse> nurses;
 
 	@ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(schema = "common", name = "assistant_doctor", 
-               joinColumns = @JoinColumn(name = "doctor_id"), 
-               inverseJoinColumns = @JoinColumn(name = "assistant_id"))
-    private List<Assistant> assistants;
-	
+	@JoinTable(schema = "common", name = "assistant_doctor", joinColumns = @JoinColumn(name = "doctor_id"), inverseJoinColumns = @JoinColumn(name = "assistant_id"))
+	private List<Assistant> assistants;
+
 	public Doctor() {
 	}
 
@@ -72,6 +73,14 @@ public class Doctor extends BaseEntity {
 		this.professionalLicense = professionalLicense;
 	}
 
+	public EmbeddableSocial getSocial() {
+		return social;
+	}
+
+	public void setSocial(EmbeddableSocial social) {
+		this.social = social;
+	}
+
 	public boolean isActive() {
 		return active;
 	}
@@ -87,7 +96,7 @@ public class Doctor extends BaseEntity {
 	public void setUserProfile(UserProfile userProfile) {
 		this.userProfile = userProfile;
 	}
-	
+
 	public List<DoctorSpecialty> getDoctorSpecialties() {
 		if (doctorSpecialties == null) {
 			doctorSpecialties = new ArrayList<>();
@@ -124,7 +133,8 @@ public class Doctor extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		return "Doctor [id=" + id + ", professionalLicense=" + professionalLicense + ", active=" + active + "]";
+		return "Doctor [id=" + id + ", professionalLicense=" + professionalLicense + ", social=" + social + ", active="
+				+ active + "]";
 	}
 
 }

@@ -86,9 +86,6 @@ public class User extends BaseEntity {
 	private UserPreferences userPreferences;
 
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-	private Session session;
-
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	private UserLicense userLicense;
 	
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
@@ -277,14 +274,6 @@ public class User extends BaseEntity {
 	public void setUserPreferences(UserPreferences userPreferences) {
 		this.userPreferences = userPreferences;
 		this.userPreferences.setUser(this);
-	}
-
-	public Session getSession() {
-		return session;
-	}
-
-	public void setSession(Session session) {
-		this.session = session;
 	}
 
 	public UserLicense getUserLicense() {

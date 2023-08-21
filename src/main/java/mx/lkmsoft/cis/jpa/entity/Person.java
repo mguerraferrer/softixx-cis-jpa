@@ -3,7 +3,6 @@ package mx.lkmsoft.cis.jpa.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embedded;
@@ -12,7 +11,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
@@ -70,9 +68,6 @@ public class Person extends BaseEntity {
 	@Embedded
 	protected EmbeddableContact contact;
 	
-	@OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
-	private UserProfile userProfile;
-
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "person", targetEntity = PersonAddress.class)
 	private List<PersonAddress> addresses;
 
@@ -172,14 +167,6 @@ public class Person extends BaseEntity {
 		this.contact = contact;
 	}
 	
-	public UserProfile getUserProfile() {
-		return userProfile;
-	}
-
-	public void setUserProfile(UserProfile userProfile) {
-		this.userProfile = userProfile;
-	}
-
 	public List<PersonAddress> getAddresses() {
 		if (addresses == null) {
 			addresses = new ArrayList<>();

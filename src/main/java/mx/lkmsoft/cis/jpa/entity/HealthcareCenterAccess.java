@@ -1,9 +1,8 @@
 package mx.lkmsoft.cis.jpa.entity;
 
-import java.time.LocalTime;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -12,6 +11,7 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
+import mx.lkmsoft.cis.jpa.embeddable.EmbeddableAccess;
 
 /**
  * Persistent class for entity stored in table "participant"
@@ -33,28 +33,12 @@ public class HealthcareCenterAccess extends BaseEntity {
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private User user;
 
-	@Column(name = "working_day")
-	private String workingDay;
-
-	@Column(name = "working_days")
-	private String workingDays;
-
-	@Column(name = "start_time")
-	private LocalTime startTime;
-
-	@Column(name = "end_time")
-	private LocalTime endTime;
-
+	@Embedded
+	private EmbeddableAccess access;
+	
 	@Column(name = "ip")
+	@Convert(converter = AttributeEncryptor.class)
 	private String ip;
-
-	@Column(name = "ip_range_start")
-	@Convert(converter = AttributeEncryptor.class)
-	private String ipRangeStart;
-
-	@Column(name = "ip_range_end")
-	@Convert(converter = AttributeEncryptor.class)
-	private String ipRangeEnd;
 
 	@Column(name = "active")
 	private boolean active;
@@ -85,36 +69,12 @@ public class HealthcareCenterAccess extends BaseEntity {
 		this.user = user;
 	}
 
-	public String getWorkingDay() {
-		return workingDay;
+	public EmbeddableAccess getAccess() {
+		return access;
 	}
 
-	public void setWorkingDay(String workingDay) {
-		this.workingDay = workingDay;
-	}
-
-	public String getWorkingDays() {
-		return workingDays;
-	}
-
-	public void setWorkingDays(String workingDays) {
-		this.workingDays = workingDays;
-	}
-
-	public LocalTime getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(LocalTime startTime) {
-		this.startTime = startTime;
-	}
-
-	public LocalTime getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(LocalTime endTime) {
-		this.endTime = endTime;
+	public void setAccess(EmbeddableAccess access) {
+		this.access = access;
 	}
 
 	public String getIp() {
@@ -123,22 +83,6 @@ public class HealthcareCenterAccess extends BaseEntity {
 
 	public void setIp(String ip) {
 		this.ip = ip;
-	}
-
-	public String getIpRangeStart() {
-		return ipRangeStart;
-	}
-
-	public void setIpRangeStart(String ipRangeStart) {
-		this.ipRangeStart = ipRangeStart;
-	}
-
-	public String getIpRangeEnd() {
-		return ipRangeEnd;
-	}
-
-	public void setIpRangeEnd(String ipRangeEnd) {
-		this.ipRangeEnd = ipRangeEnd;
 	}
 
 	public boolean isActive() {
@@ -153,9 +97,7 @@ public class HealthcareCenterAccess extends BaseEntity {
 	@Override
 	public String toString() {
 		return "HealthcareCenterAccess [id=" + id + ", healthcareCenter=" + healthcareCenter + ", user=" + user
-				+ ", workingDay=" + workingDay + ", workingDays=" + workingDays + ", startTime=" + startTime
-				+ ", endTime=" + endTime + ", ip=" + ip + ", ipRangeStart=" + ipRangeStart + ", ipRangeEnd="
-				+ ipRangeEnd + ", active=" + active + "]";
+				+ ", access=" + access + ", ip=" + ip + ", active=" + active + "]";
 	}
 
 }

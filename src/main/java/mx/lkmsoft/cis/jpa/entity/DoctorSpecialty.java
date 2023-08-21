@@ -45,6 +45,9 @@ public class DoctorSpecialty extends BaseEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctorSpecialty", targetEntity = ConsultationProcedure.class)
 	private List<ConsultationProcedure> consultationProcedures;
 	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctorSpecialty", targetEntity = Planning.class)
+	private List<Planning> plannings;
+	
 	public DoctorSpecialty() {
 	}
 
@@ -97,6 +100,17 @@ public class DoctorSpecialty extends BaseEntity {
 
 	public void setConsultationProcedures(List<ConsultationProcedure> consultationProcedures) {
 		this.consultationProcedures = consultationProcedures;
+	}
+	
+	public List<Planning> getPlannings() {
+		if (plannings == null) {
+			plannings = new ArrayList<>();
+		}
+		return plannings;
+	}
+
+	public void setPlannings(List<Planning> plannings) {
+		this.plannings = plannings;
 	}
 
 	/* toString */

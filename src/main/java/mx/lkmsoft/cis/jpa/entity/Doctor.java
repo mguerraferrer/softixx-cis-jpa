@@ -55,6 +55,9 @@ public class Doctor extends BaseEntity {
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(schema = "common", name = "assistant_doctor", joinColumns = @JoinColumn(name = "doctor_id"), inverseJoinColumns = @JoinColumn(name = "assistant_id"))
 	private List<Assistant> assistants;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor", targetEntity = MedicalSchedule.class)
+	private List<MedicalSchedule> medicalSchedules;
 
 	public Doctor() {
 	}
@@ -128,6 +131,17 @@ public class Doctor extends BaseEntity {
 
 	public void setAssistants(List<Assistant> assistants) {
 		this.assistants = assistants;
+	}
+
+	public List<MedicalSchedule> getMedicalSchedules() {
+		if (medicalSchedules == null) {
+			medicalSchedules = new ArrayList<>();
+		}
+		return medicalSchedules;
+	}
+
+	public void setMedicalSchedules(List<MedicalSchedule> medicalSchedules) {
+		this.medicalSchedules = medicalSchedules;
 	}
 
 	/* toString */

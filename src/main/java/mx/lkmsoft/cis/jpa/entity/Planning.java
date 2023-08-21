@@ -31,12 +31,10 @@ public class Planning extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "medical_schedule_id", referencedColumnName = "id")
 	private MedicalSchedule medicalSchedule;
-
-	@Column(name = "doctor_healthcare_center_specialty_id")
-	private Long doctorHealthcareCenterSpecialtyId;
-
-	@Column(name = "doctor_specialty_id")
-	private Long doctorSpecialtyId;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "doctor_specialty_id", referencedColumnName = "id")
+	private DoctorSpecialty doctorSpecialty;
 
 	@Column(name = "agenda_visualization")
 	@Enumerated(EnumType.STRING)
@@ -47,20 +45,24 @@ public class Planning extends BaseEntity {
 
 	@Column(name = "appointment_duration")
 	private Integer appointmentDuration;
-	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "planning", targetEntity = PlanningDay.class, cascade = CascadeType.ALL, orphanRemoval = true)
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "planning", targetEntity = PlanningDay.class, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<PlanningDay> planningDays;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "planning", targetEntity = Appointment.class, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Appointment> appointments;
 
 	public Planning() {
 	}
-	
-	public Planning(MedicalSchedule medicalSchedule) {
+
+	public Planning(MedicalSchedule medicalSchedule, DoctorSpecialty doctorSpecialty, boolean fixedSchedule, Integer appointmentDuration) {
 		this.medicalSchedule = medicalSchedule;
+		this.doctorSpecialty = doctorSpecialty;
+		this.agendaVisualization = AgendaVisualization.AGENDA;
+		this.fixedSchedule = fixedSchedule;
+		this.appointmentDuration = appointmentDuration;
 	}
-	
+
 	/* Getters and Setters */
 	public MedicalSchedule getMedicalSchedule() {
 		return medicalSchedule;
@@ -69,21 +71,13 @@ public class Planning extends BaseEntity {
 	public void setMedicalSchedule(MedicalSchedule medicalSchedule) {
 		this.medicalSchedule = medicalSchedule;
 	}
-
-	public Long getDoctorHealthcareCenterSpecialtyId() {
-		return doctorHealthcareCenterSpecialtyId;
+	
+	public DoctorSpecialty getDoctorSpecialty() {
+		return doctorSpecialty;
 	}
 
-	public void setDoctorHealthcareCenterSpecialtyId(Long doctorHealthcareCenterSpecialtyId) {
-		this.doctorHealthcareCenterSpecialtyId = doctorHealthcareCenterSpecialtyId;
-	}
-
-	public Long getDoctorSpecialtyId() {
-		return doctorSpecialtyId;
-	}
-
-	public void setDoctorSpecialtyId(Long doctorSpecialtyId) {
-		this.doctorSpecialtyId = doctorSpecialtyId;
+	public void setDoctorSpecialty(DoctorSpecialty doctorSpecialty) {
+		this.doctorSpecialty = doctorSpecialty;
 	}
 
 	public AgendaVisualization getAgendaVisualization() {
@@ -120,7 +114,7 @@ public class Planning extends BaseEntity {
 	public void setPlanningDays(List<PlanningDay> planningDays) {
 		this.planningDays = planningDays;
 	}
-	
+
 	public void addPlanningDays(PlanningDay planningDay) {
 		if (planningDays == null) {
 			planningDays = new ArrayList<>();
@@ -128,20 +122,20 @@ public class Planning extends BaseEntity {
 		this.planningDays.add(new PlanningDay(this, planningDay.getDay(), planningDay.getStartTime(),
 				planningDay.getEndTime(), planningDay.getTotalPatients(), planningDay.getTotalExtraSlot()));
 	}
-	
+
 	public void addPlanningDays(List<PlanningDay> planningDays) {
 		if (this.planningDays != null) {
 			this.planningDays.clear();
 			this.planningDays.addAll(planningDays);
 		}
 	}
-	
+
 	public void clearPlanningDays() {
 		if (this.planningDays != null) {
 			this.planningDays.clear();
 		}
 	}
-	
+
 	public List<Appointment> getAppointments() {
 		if (appointments == null) {
 			appointments = new ArrayList<>();
@@ -156,10 +150,9 @@ public class Planning extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		return "Planning [id=" + id + ", medicalSchedule=" + medicalSchedule.getId() + ", doctorHealthcareCenterSpecialtyId="
-				+ doctorHealthcareCenterSpecialtyId + ", doctorSpecialtyId=" + doctorSpecialtyId
-				+ ", agendaVisualization=" + agendaVisualization + ", fixedSchedule=" + fixedSchedule
-				+ ", appointmentDuration=" + appointmentDuration + "]";
+		return "Planning [id=" + id + ", medicalSchedule=" + medicalSchedule.getId() + ", agendaVisualization="
+				+ agendaVisualization + ", fixedSchedule=" + fixedSchedule + ", appointmentDuration="
+				+ appointmentDuration + "]";
 	}
 
 }

@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 import mx.lkmsoft.cis.common.uuid.UuidGeneratorUtils;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
+import mx.lkmsoft.cis.jpa.embeddable.EmbeddableAccess;
 import mx.lkmsoft.cis.jpa.embeddable.EmbeddableContact;
 import mx.lkmsoft.cis.jpa.embeddable.EmbeddableSocial;
 
@@ -43,16 +44,11 @@ public class HealthcareCenter extends BaseEntity {
 	@Column(name = "code")
 	private String code;
 
-	@Column(name = "ip_range_start")
-	@Convert(converter = AttributeEncryptor.class)
-	private String ipRangeStart;
-
-	@Column(name = "ip_range_end")
-	@Convert(converter = AttributeEncryptor.class)
-	private String ipRangeEnd;
-
 	@Column(name = "pwd_expiration")
 	private Integer pwdExpiration;
+
+	@Embedded
+	private EmbeddableAccess access;
 
 	@Embedded
 	private EmbeddableSocial social;
@@ -77,6 +73,9 @@ public class HealthcareCenter extends BaseEntity {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "healthcareCenter", targetEntity = ConsultationProcedure.class)
 	private List<ConsultationProcedure> consultationProcedures;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "healthcareCenter", targetEntity = MedicalSchedule.class)
+	private List<MedicalSchedule> medicalSchedules;
 
 	public HealthcareCenter() {
 	}
@@ -122,28 +121,20 @@ public class HealthcareCenter extends BaseEntity {
 		this.code = code;
 	}
 
-	public String getIpRangeStart() {
-		return ipRangeStart;
-	}
-
-	public void setIpRangeStart(String ipRangeStart) {
-		this.ipRangeStart = ipRangeStart;
-	}
-
-	public String getIpRangeEnd() {
-		return ipRangeEnd;
-	}
-
-	public void setIpRangeEnd(String ipRangeEnd) {
-		this.ipRangeEnd = ipRangeEnd;
-	}
-
 	public Integer getPwdExpiration() {
 		return pwdExpiration;
 	}
 
 	public void setPwdExpiration(Integer pwdExpiration) {
 		this.pwdExpiration = pwdExpiration;
+	}
+
+	public EmbeddableAccess getAccess() {
+		return access;
+	}
+
+	public void setAccess(EmbeddableAccess access) {
+		this.access = access;
 	}
 
 	public EmbeddableSocial getSocial() {
@@ -225,13 +216,23 @@ public class HealthcareCenter extends BaseEntity {
 		this.consultationProcedures = consultationProcedures;
 	}
 
+	public List<MedicalSchedule> getMedicalSchedules() {
+		if (medicalSchedules == null) {
+			medicalSchedules = new ArrayList<>();
+		}
+		return medicalSchedules;
+	}
+
+	public void setMedicalSchedules(List<MedicalSchedule> medicalSchedules) {
+		this.medicalSchedules = medicalSchedules;
+	}
+
 	/* toString */
 	@Override
 	public String toString() {
 		return "HealthcareCenter [id=" + id + ", name=" + name + ", businessName=" + businessName + ", logo=" + logo
-				+ ", code=" + code + ", ipRangeStart=" + ipRangeStart + ", ipRangeEnd=" + ipRangeEnd
-				+ ", pwdExpiration=" + pwdExpiration + ", contact=" + contact + ", social=" + social + ", active="
-				+ active + "]";
+				+ ", code=" + code + ", access=" + access + ", pwdExpiration=" + pwdExpiration + ", contact=" + contact
+				+ ", social=" + social + ", active=" + active + "]";
 	}
 
 }

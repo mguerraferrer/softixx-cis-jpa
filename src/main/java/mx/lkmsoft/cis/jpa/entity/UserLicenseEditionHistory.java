@@ -20,7 +20,7 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 @Entity
 @Table(name = "user_license_edition_history", schema = "sales")
-@SequenceGenerator(name = "default_gen", sequenceName = "sales.user_license_edition_history_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "sales.user_license_edition_history_seq", allocationSize = 1)
 public class UserLicenseEditionHistory extends BaseEntity {
 
 	@Column(name = "date_time")

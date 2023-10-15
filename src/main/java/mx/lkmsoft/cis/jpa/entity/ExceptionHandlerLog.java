@@ -17,7 +17,7 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
  */
 @Entity
 @Table(name = "exception_handler_log", schema = "trace")
-@SequenceGenerator(name = "default_gen", sequenceName = "trace.exception_handler_log_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "trace.exception_handler_log_seq", allocationSize = 1)
 public class ExceptionHandlerLog extends BaseEntity {
 
 	@Column(name = "handler_method")
@@ -50,7 +50,7 @@ public class ExceptionHandlerLog extends BaseEntity {
 		this.exceptionMessage = exceptionMessage;
 		this.requestUrl = requestUrl;
 		this.logTime = LocalDateTime.now();
-		this.code = UuidGeneratorUtils.asStringCode();
+		this.code = UuidGeneratorUtils.asString();
 	}
 
 	public ExceptionHandlerLog(String handlerMethod, 

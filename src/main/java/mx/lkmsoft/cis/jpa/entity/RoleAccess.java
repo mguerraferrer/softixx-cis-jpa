@@ -21,7 +21,7 @@ import mx.lkmsoft.cis.jpa.enumtype.Role;
 
 @Entity
 @Table(name = "role_access", schema = "security")
-@SequenceGenerator(name = "default_gen", sequenceName = "security.role_access_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "security.role_access_seq", allocationSize = 1)
 public class RoleAccess extends BaseEntity {
 
 	@Column(name = "role")

@@ -18,6 +18,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
 import lombok.val;
 import mx.lkmsoft.cis.common.crypto.CryptoUtils;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
@@ -38,20 +39,16 @@ import mx.lkmsoft.cis.jpa.enumtype.Relationship;
 
 @Entity
 @Table(name = "appointment", schema = "agenda")
-@SequenceGenerator(name = "default_gen", sequenceName = "agenda.appointment_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "agenda.appointment_seq", allocationSize = 1)
 public class Appointment extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "medical_schedule_planning_id", referencedColumnName = "id")
+	@JoinColumn(name = "planning_id", referencedColumnName = "id")
 	private Planning planning;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "patient_id", referencedColumnName = "id")
 	private Patient patient;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "consultation_procedure_id", referencedColumnName = "id")
-	private ConsultationProcedure consultationProcedure;
 
 	@Column(name = "appointment_type")
 	@Enumerated(EnumType.STRING)
@@ -106,6 +103,9 @@ public class Appointment extends BaseEntity {
 	@Column(name = "additional_info")
 	private String additionalInfo;
 
+	@Version
+	private Long version;
+
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
 	private AppointmentReminder reminder;
 
@@ -119,10 +119,9 @@ public class Appointment extends BaseEntity {
 		this.folio = CryptoUtils.generateHash().toUpperCase();
 	}
 
-	public Appointment(Planning planning, ConsultationProcedure consultationProcedure, Patient patient,
-			LocalDate appointmentDate, LocalTime startTime, LocalTime endTime) {
+	public Appointment(Planning planning, Patient patient, LocalDate appointmentDate, LocalTime startTime,
+			LocalTime endTime) {
 		this.planning = planning;
-		this.consultationProcedure = consultationProcedure;
 		this.patient = patient;
 		this.appointmentDate = appointmentDate;
 		this.startTime = startTime;
@@ -134,8 +133,7 @@ public class Appointment extends BaseEntity {
 	public static Appointment clone(Appointment appointment, LocalDate appointmentDate, LocalTime startTime,
 			LocalTime endTime) {
 		if (appointment != null) {
-			val clone = new Appointment(appointment.getPlanning(), appointment.getConsultationProcedure(),
-					appointment.getPatient(), appointmentDate, startTime, endTime);
+			val clone = new Appointment(appointment.getPlanning(), appointment.getPatient(), appointmentDate, startTime, endTime);
 			clone.setOriginalAppointment(appointment);
 			clone.setType(appointment.getType());
 			clone.setOrigin(AppointmentOrigin.CLONED);
@@ -175,14 +173,6 @@ public class Appointment extends BaseEntity {
 
 	public void setPatient(Patient patient) {
 		this.patient = patient;
-	}
-
-	public ConsultationProcedure getConsultationProcedure() {
-		return consultationProcedure;
-	}
-
-	public void setConsultationProcedure(ConsultationProcedure consultationProcedure) {
-		this.consultationProcedure = consultationProcedure;
 	}
 
 	public AppointmentType getType() {
@@ -305,6 +295,14 @@ public class Appointment extends BaseEntity {
 		this.additionalInfo = additionalInfo;
 	}
 
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+
 	public AppointmentReminder getReminder() {
 		return reminder;
 	}
@@ -372,12 +370,12 @@ public class Appointment extends BaseEntity {
 		val originalAppointmentId = originalAppointment != null ? originalAppointment.getId() : null;
 
 		return "Appointment [id=" + id + ", patient=" + patient.getId() + ", planning=" + planning.getId()
-				+ ", consultationProcedure=" + consultationProcedure.getId() + ", type=" + type + ", origin=" + origin
+				+ ", type=" + type + ", origin=" + origin
 				+ ", status=" + status + ", confirmation=" + confirmation + ", cancelledBy=" + cancelledBy
 				+ ", rescheduledBy=" + rescheduledBy + ", anotherPersonName=" + anotherPersonName + ", relationship="
 				+ rel + ", originalAppointmentId=" + originalAppointmentId + ", appointmentDate=" + appointmentDate
 				+ ", startTime=" + startTime + ", endTime=" + endTime + ", folio=" + folio + ", month=" + month
-				+ ", additionalInfo=" + additionalInfo + "]";
+				+ ", additionalInfo=" + additionalInfo + ", version= " + version + "]";
 	}
 
 }

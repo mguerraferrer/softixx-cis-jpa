@@ -21,7 +21,7 @@ import mx.lkmsoft.cis.jpa.enumtype.PaymentMode;
 
 @Entity
 @Table(name = "license_config", schema = "sales")
-@SequenceGenerator(name = "default_gen", sequenceName = "sales.license_config_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "sales.license_config_seq", allocationSize = 1)
 public class LicenseConfig extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)

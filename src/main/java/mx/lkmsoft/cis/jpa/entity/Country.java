@@ -19,7 +19,7 @@ import mx.lkmsoft.cis.jpa.base.NomenclatorEntity;
 
 @Entity
 @Table(name = "country", schema = "nomenclators")
-@SequenceGenerator(name = "default_gen", sequenceName = "nomenclators.country_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "nomenclators.country_seq", allocationSize = 1)
 public class Country extends NomenclatorEntity {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "country", targetEntity = State.class)

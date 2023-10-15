@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 /**
- * Persistent class for entity stored in table "specialty"
+ * Persistent class for entity stored in table "specialties"
  *
  * @author Maikel Guerra Ferrer
  *
@@ -20,23 +20,17 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 @Entity
 @Table(name = "specialties", schema = "common")
-@SequenceGenerator(name = "default_gen", sequenceName = "common.specialty_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "common.specialty_seq", allocationSize = 1)
 public class Specialty extends BaseEntity {
 
 	@Column(name = "code")
 	private String code;
 
-	@Column(name = "icon")
-	private String icon;
-
-	@Column(name = "image")
-	private String image;
-
 	@Column(name = "value")
 	private String value;
 
-	@Column(name = "visible")
-	private boolean visible;
+	@Column(name = "default_procedure")
+	private String defaultProcedure;
 
 	@Column(name = "active")
 	private boolean active;
@@ -56,22 +50,6 @@ public class Specialty extends BaseEntity {
 		this.code = code;
 	}
 
-	public String getIcon() {
-		return icon;
-	}
-
-	public void setIcon(String icon) {
-		this.icon = icon;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-
 	public String getValue() {
 		return value;
 	}
@@ -80,12 +58,12 @@ public class Specialty extends BaseEntity {
 		this.value = value;
 	}
 
-	public boolean isVisible() {
-		return visible;
+	public String getDefaultProcedure() {
+		return defaultProcedure;
 	}
 
-	public void setVisible(boolean visible) {
-		this.visible = visible;
+	public void setDefaultProcedure(String defaultProcedure) {
+		this.defaultProcedure = defaultProcedure;
 	}
 
 	public boolean isActive() {
@@ -121,8 +99,8 @@ public class Specialty extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		return "Specialty [id=" + id + ", code=" + code + ", icon=" + icon + ", image=" + image + ", value=" + value
-				+ ", visible=" + visible + ", active=" + active + "]";
+		return "Specialty [id=" + id + ", code=" + code + ", value=" + value + ", defaultProcedure=" + defaultProcedure
+				+ ", active=" + active + "]";
 	}
 
 }

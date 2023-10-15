@@ -16,7 +16,7 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
  */
 @Entity
 @Table(name = "login_attempt_log", schema = "trace")
-@SequenceGenerator(name = "default_gen", sequenceName = "trace.login_attempt_log_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "trace.login_attempt_log_seq", allocationSize = 1)
 public class LoginAttemptLog extends BaseEntity {
 
 	@Column(name = "detail_message")

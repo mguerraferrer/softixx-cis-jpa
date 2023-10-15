@@ -21,7 +21,7 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 @Entity
 @Table(name = "license_direct_promo", schema = "sales")
-@SequenceGenerator(name = "default_gen", sequenceName = "sales.license_direct_promo_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "sales.license_direct_promo_seq", allocationSize = 1)
 public class LicenseDirectPromo extends BaseEntity {
 
 	@Column(name = "code")

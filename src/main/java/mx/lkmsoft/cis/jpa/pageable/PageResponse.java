@@ -103,10 +103,10 @@ public class PageResponse<T> {
 	 */
 	public PageResponse(PageDataRequest<T> pageDataRequest) {
 		val page = pageDataRequest.page();
-		Assert.notNull(page, PageableConstants.PAGEABLE_PAGE_REQUIRED);
+		Assert.notNull(page, "pageable.page.required");
 
 		val pageData = pageDataRequest.pageData();
-		Assert.notNull(pageData, PageableConstants.PAGEABLE_PAGE_DATA_REQUIRED);
+		Assert.notNull(pageData, "pageable.page.data.required");
 
 		this.totalElements = page.getTotalElements();
 		this.totalPages = page.getTotalPages();
@@ -140,14 +140,10 @@ public class PageResponse<T> {
 			}
 
 			if (this.totalElements <= this.pageSize) {
-				val text = paginateResultInfo(this.totalElements);
-				return new PageInfoResponse(text, null, null, this.totalElements);
+				return new PageInfoResponse("pageable.info.paginate.result", null, null, this.totalElements);
 			}
 
-			val text = PageableConstants.PAGEABLE_SHOWING_RECORDS.replace("{0}", String.valueOf(start))
-																 .replace("{1}", String.valueOf(end))
-																 .replace("{2}", String.valueOf(this.totalElements));
-			return new PageInfoResponse(text, start, end, this.totalElements);
+			return new PageInfoResponse("pageable.info.showing.records", start, end, this.totalElements);
 		} else {
 			return PageInfoResponse.empty();
 		}
@@ -195,22 +191,6 @@ public class PageResponse<T> {
 		} else {
 			return IntStream.rangeClosed(1, pagesToDisplay).boxed().toList();
 		}
-	}
-
-	/**
-	 * Constructs a paginate result info string based on the total number of
-	 * elements
-	 *
-	 * @param totalElements the total number of elements
-	 * @return a paginate result info string
-	 */
-	private String paginateResultInfo(Long totalElements) {
-		var records = "registros";
-		if (totalElements == 1) {
-			records = "registro";
-		}
-		return PageableConstants.PAGEABLE_PAGINATE_RESULT.replace("{0}", String.valueOf(totalElements))
-														 .replace("{1}", records);
 	}
 
 }

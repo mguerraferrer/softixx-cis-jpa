@@ -12,15 +12,15 @@ import jakarta.persistence.Table;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 /**
- * Persistent class for entity stored in table "medical_schedule_nwd"
+ * Persistent class for entity stored in table "non_working_day"
  *
  * @author Maikel Guerra Ferrer
  *
  */
 
 @Entity
-@Table(name = "medical_schedule_nwd", schema = "agenda")
-@SequenceGenerator(name = "default_gen", sequenceName = "agenda.medical_schedule_nwd_id_seq", allocationSize = 1)
+@Table(name = "non_working_day", schema = "agenda")
+@SequenceGenerator(name = "default_gen", sequenceName = "agenda.non_working_day_seq", allocationSize = 1)
 public class NonWorkingDay extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -30,31 +30,12 @@ public class NonWorkingDay extends BaseEntity {
 	@Column(name = "nwd")
 	private LocalDate nwd;
 
-	@Column(name = "year")
-	private Integer year;
-
-	@Column(name = "month")
-	private Integer month;
-
-	@Column(name = "day")
-	private Integer day;
-
-	public NonWorkingDay() {		
+	public NonWorkingDay() {
 	}
-	
+
 	public NonWorkingDay(MedicalSchedule medicalSchedule, LocalDate nwd) {
 		this.medicalSchedule = medicalSchedule;
 		this.nwd = nwd;
-		this.year = nwd.getYear();
-		this.month = nwd.getMonth().getValue();
-		this.day = nwd.getDayOfMonth();
-	}
-
-	public NonWorkingDay (LocalDate nwd) {
-		this.nwd = nwd;
-		this.year = nwd.getYear();
-		this.month = nwd.getMonth().getValue();
-		this.day = nwd.getDayOfMonth();
 	}
 
 	/* Getters and Setters */
@@ -74,35 +55,10 @@ public class NonWorkingDay extends BaseEntity {
 		this.nwd = nwd;
 	}
 
-	public Integer getYear() {
-		return year;
-	}
-
-	public void setYear(Integer year) {
-		this.year = year;
-	}
-
-	public Integer getMonth() {
-		return month;
-	}
-
-	public void setMonth(Integer month) {
-		this.month = month;
-	}
-
-	public Integer getDay() {
-		return day;
-	}
-
-	public void setDay(Integer day) {
-		this.day = day;
-	}
-
 	/* toString */
 	@Override
 	public String toString() {
-		return "NonWorkingDay [id=" + id + ", medicalSchedule=" + medicalSchedule.getId() + ", nwd=" + nwd + ", year="
-				+ year + ", month=" + month + ", day=" + day + "]";
+		return "NonWorkingDay [id=" + id + ", medicalSchedule=" + medicalSchedule.getId() + ", nwd=" + nwd + "]";
 	}
 
 }

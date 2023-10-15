@@ -24,7 +24,7 @@ public record PageableRequest(String key, PageRequest pageRequest) {
 	}
 	
 	public static PageableRequest of(String key, Pageable pageable) {
-		Assert.notNull(key, PageableConstants.KEY_PARAM_REQUIRED);
+		Assert.notNull(key, "pageable.page.key.requeired");
 		
 		val pageRequest = pageRequest(pageable);
 		return new PageableRequest(key.toLowerCase(), pageRequest);
@@ -41,14 +41,14 @@ public record PageableRequest(String key, PageRequest pageRequest) {
 	}
 	
 	public static PageableRequest of(String key, int pageNumber, Sort sort) {
-		Assert.notNull(key, PageableConstants.KEY_PARAM_REQUIRED);
+		Assert.notNull(key, "pageable.page.key.requeired");
 		
 		val pageRequest = pageRequest(pageNumber, PageableUtils.RECORDS_PER_PAGE, sort);
 		return new PageableRequest(key.toLowerCase(), pageRequest);
 	}
 	
 	public static PageableRequest of(String key, int pageNumber, int pageSize, Sort sort) {
-		Assert.notNull(key, PageableConstants.KEY_PARAM_REQUIRED);
+		Assert.notNull(key, "pageable.page.key.requeired");
 		
 		val pageRequest = pageRequest(pageNumber, pageSize, sort);
 		return new PageableRequest(key.toLowerCase(), pageRequest);
@@ -62,7 +62,7 @@ public record PageableRequest(String key, PageRequest pageRequest) {
 	}
 	
 	public static PageableRequest of(String key, SortRequest sortRequest) {
-		Assert.notNull(key, PageableConstants.KEY_PARAM_REQUIRED);
+		Assert.notNull(key, "pageable.page.key.requeired");
 
 		val sort = SortUtils.sort(sortRequest);
 		val pageRequest = pageRequest(PageableUtils.DEFAULT_PAGE, PageableUtils.RECORDS_PER_PAGE, sort);
@@ -77,15 +77,15 @@ public record PageableRequest(String key, PageRequest pageRequest) {
 	}
 	
 	public static PageableRequest of(String key, List<SortRequest> sortRequests) {
-		Assert.notNull(key, PageableConstants.KEY_PARAM_REQUIRED);
+		Assert.notNull(key, "pageable.page.key.requeired");
 		
 		val sort = SortUtils.sort(sortRequests);
 		val pageRequest = pageRequest(PageableUtils.DEFAULT_PAGE, PageableUtils.RECORDS_PER_PAGE, sort);
 		return new PageableRequest(key.toLowerCase(), pageRequest);
 	}
 	
-	private static PageRequest pageRequest(Pageable pageable) {
-		Assert.notNull(pageable, PageableConstants.PAGEABLE_PARAM_REQUIRED);
+	public static PageRequest pageRequest(Pageable pageable) {
+		Assert.notNull(pageable, "pageable.pageable.requeired");
 		
 		val pageNumber = PageableUtils.pageNumber(pageable.getPageNumber());
 		val recordsPerPage = PageableUtils.recordsPerPage(pageable.getPageSize());
@@ -94,9 +94,9 @@ public record PageableRequest(String key, PageRequest pageRequest) {
 		return PageRequest.of(pageNumber - 1, recordsPerPage, sort);
 	}
 	
-	private static PageRequest pageRequest(int pageNumber, int pageSize, Sort sort) {
-		Assert.state(pageNumber > 0, PageableConstants.PAGE_NUMBER_INVALID);
-		Assert.state(pageSize > 0, PageableConstants.PAGE_SIZE_INVALID);
+	public static PageRequest pageRequest(int pageNumber, int pageSize, Sort sort) {
+		Assert.state(pageNumber > 0, "pageable.page.number.invalid");
+		Assert.state(pageSize > 0, "pageable.page.size.invalid");
 		
 		pageNumber = PageableUtils.pageNumber(pageNumber);
 		pageSize = PageableUtils.recordsPerPage(pageSize);

@@ -2,39 +2,33 @@ package mx.lkmsoft.cis.jpa.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import mx.lkmsoft.cis.jpa.base.BaseEntity;
+import jakarta.persistence.Version;
+import mx.lkmsoft.cis.common.data.CodeGeneratorUtils;
+import mx.lkmsoft.cis.jpa.base.AuditableEntity;
 
 /**
- * Persistent class for entity stored in table
- * "private_practice_consultation_procedure"
+ * Persistent class for entity stored in table "consultation_procedure"
  *
  * @author Maikel Guerra Ferrer
  *
  */
 
 @Entity
-@Table(name = "consultation_procedure", schema = "common")
-@SequenceGenerator(name = "default_gen", sequenceName = "common.consultation_procedure_id_seq", allocationSize = 1)
-public class ConsultationProcedure extends BaseEntity {
+@Table(name = "consultation_procedure", schema = "agenda")
+@SequenceGenerator(name = "default_gen", sequenceName = "agenda.consultation_procedure_seq", allocationSize = 1)
+public class ConsultationProcedure extends AuditableEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "healthcare_center_id", referencedColumnName = "id")
-	private HealthcareCenter healthcareCenter;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "doctor_specialty_id", referencedColumnName = "id")
-	private DoctorSpecialty doctorSpecialty;
+	@JoinColumn(name = "planning_id", referencedColumnName = "id")
+	private Planning planning;
 
 	@Column(name = "code")
 	private String code;
@@ -42,14 +36,17 @@ public class ConsultationProcedure extends BaseEntity {
 	@Column(name = "description")
 	private String description;
 
+	@Column(name = "default_procedure")
+	private boolean defaultProcedure;
+
 	@Column(name = "subtotal")
 	private BigDecimal subtotal;
 
 	@Column(name = "tax")
-	private BigDecimal tax;
+	private boolean tax;
 
 	@Column(name = "discount")
-	private BigDecimal discount;
+	private Integer discount;
 
 	@Column(name = "total")
 	private BigDecimal total;
@@ -60,41 +57,49 @@ public class ConsultationProcedure extends BaseEntity {
 	@Column(name = "discount_due_date")
 	private LocalDateTime discountDueDate;
 
+	@Version
+	private Long version;
+
 	@Column(name = "active")
 	private boolean active;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "consultationProcedure", targetEntity = Appointment.class)
-	private List<Appointment> appointments;
 
 	public ConsultationProcedure() {
 	}
 
-	public ConsultationProcedure(HealthcareCenter healthcareCenter, DoctorSpecialty doctorSpecialty, String code,
-			String description, BigDecimal subtotal, BigDecimal total) {
-		this.healthcareCenter = healthcareCenter;
-		this.doctorSpecialty = doctorSpecialty;
-		this.code = code;
+	public ConsultationProcedure(Planning planning, String description, BigDecimal subtotal, BigDecimal total) {
+		this.planning = planning;
+		this.code = CodeGeneratorUtils.asString();
 		this.description = description;
+		this.defaultProcedure = true;
 		this.subtotal = subtotal;
 		this.total = total;
+		this.createOn = LocalDateTime.now(); // For cache purposes
+		this.updateOn = LocalDateTime.now(); // For cache purposes
+		this.active = true;
+	}
+
+	public ConsultationProcedure(Planning planning, String description, BigDecimal subtotal, boolean tax,
+			Integer discount, BigDecimal total) {
+		this.planning = planning;
+		this.code = CodeGeneratorUtils.asString();
+		this.description = description;
+		this.defaultProcedure = false;
+		this.subtotal = subtotal;
+		this.tax = tax;
+		this.discount = discount;
+		this.total = total;
+		this.createOn = LocalDateTime.now(); // For cache purposes
+		this.updateOn = LocalDateTime.now(); // For cache purposes
 		this.active = true;
 	}
 
 	/* Getters and Setters */
-	public HealthcareCenter getHealthcareCenter() {
-		return healthcareCenter;
+	public Planning getPlanning() {
+		return planning;
 	}
 
-	public void setHealthcareCenter(HealthcareCenter healthcareCenter) {
-		this.healthcareCenter = healthcareCenter;
-	}
-
-	public DoctorSpecialty getDoctorSpecialty() {
-		return doctorSpecialty;
-	}
-
-	public void setDoctorSpecialty(DoctorSpecialty doctorSpecialty) {
-		this.doctorSpecialty = doctorSpecialty;
+	public void setPlanning(Planning planning) {
+		this.planning = planning;
 	}
 
 	public String getCode() {
@@ -113,6 +118,14 @@ public class ConsultationProcedure extends BaseEntity {
 		this.description = description;
 	}
 
+	public boolean isDefaultProcedure() {
+		return defaultProcedure;
+	}
+
+	public void setDefaultProcedure(boolean defaultProcedure) {
+		this.defaultProcedure = defaultProcedure;
+	}
+
 	public BigDecimal getSubtotal() {
 		return subtotal;
 	}
@@ -121,19 +134,19 @@ public class ConsultationProcedure extends BaseEntity {
 		this.subtotal = subtotal;
 	}
 
-	public BigDecimal getTax() {
+	public boolean isTax() {
 		return tax;
 	}
 
-	public void setTax(BigDecimal tax) {
+	public void setTax(boolean tax) {
 		this.tax = tax;
 	}
 
-	public BigDecimal getDiscount() {
+	public Integer getDiscount() {
 		return discount;
 	}
 
-	public void setDiscount(BigDecimal discount) {
+	public void setDiscount(Integer discount) {
 		this.discount = discount;
 	}
 
@@ -161,6 +174,14 @@ public class ConsultationProcedure extends BaseEntity {
 		this.discountDueDate = discountDueDate;
 	}
 
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+
 	public boolean isActive() {
 		return active;
 	}
@@ -169,25 +190,14 @@ public class ConsultationProcedure extends BaseEntity {
 		this.active = active;
 	}
 
-	public List<Appointment> getAppointments() {
-		if (appointments == null) {
-			appointments = new ArrayList<>();
-		}
-		return appointments;
-	}
-
-	public void setAppointments(List<Appointment> appointments) {
-		this.appointments = appointments;
-	}
-
 	/* toString */
 	@Override
 	public String toString() {
-		return "ConsultationProcedure [id=" + id + ", healthcareCenter=" + healthcareCenter.getId()
-				+ ", doctorSpecialty=" + doctorSpecialty.getId() + ", code=" + code + ", description=" + description
-				+ ", subtotal=" + subtotal + ", tax=" + tax + ", discount=" + discount + ", total=" + total
-				+ ", discountStartDate=" + discountStartDate + ", discountDueDate=" + discountDueDate + ", active="
-				+ active + "]";
+		return "ConsultationProcedure [id=" + id + ", planning=" + planning.getId() + ", code=" + code
+				+ ", description=" + description + ", defaultProcedure=" + defaultProcedure + ", subtotal=" + subtotal
+				+ ", tax=" + tax + ", discount=" + discount + ", total=" + total + ", discountStartDate="
+				+ discountStartDate + ", discountDueDate=" + discountDueDate + ", version=" + version + ", creatOn="
+				+ createOn + ", updateOn=" + updateOn + ", active=" + active + "]";
 	}
 
 }

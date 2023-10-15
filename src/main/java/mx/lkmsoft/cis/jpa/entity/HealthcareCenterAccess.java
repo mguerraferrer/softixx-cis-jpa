@@ -22,7 +22,7 @@ import mx.lkmsoft.cis.jpa.embeddable.EmbeddableAccess;
 
 @Entity
 @Table(name = "healthcare_center_access", schema = "common")
-@SequenceGenerator(name = "default_gen", sequenceName = "common.healthcare_center_access_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "common.healthcare_center_access_seq", allocationSize = 1)
 public class HealthcareCenterAccess extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)

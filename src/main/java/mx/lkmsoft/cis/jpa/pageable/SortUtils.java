@@ -35,7 +35,7 @@ public final class SortUtils {
 	 * @return the generated Sort object
 	 */
 	public static Sort sort(SortRequest sortRequest) {
-		Assert.notNull(sortRequest, PageableConstants.SORT_REQUEST_ASSERT_MESSAGE);
+		Assert.notNull(sortRequest, "pageable.sort.request.required");
 		return sort(sortRequest.sortBy(), sortRequest.sortDir());
 	}
 
@@ -47,7 +47,7 @@ public final class SortUtils {
 	 * @return the generated Sort object
 	 */
 	public static Sort sort(String sortBy, String sortDir) {
-		Assert.notNull(sortBy, PageableConstants.SORT_BY_ASSERT_MESSAGE);
+		Assert.notNull(sortBy, "pageable.sort.by.required");
 
 		val direction = determineDirection(sortDir);
 		return Sort.by(direction, sortBy);
@@ -61,8 +61,8 @@ public final class SortUtils {
 	 * @return the generated Sort object
 	 */
 	public static Sort sort(List<SortRequest> sortRequests) {
-		Assert.notNull(sortRequests, PageableConstants.SORT_REQUEST_ASSERT_MESSAGE);
-		Assert.noNullElements(sortRequests, PageableConstants.SORT_REQUEST_LIST_ASSERT_MESSAGE);
+		Assert.notNull(sortRequests, "pageable.sort.request.required");
+		Assert.noNullElements(sortRequests, "pageable.sort.request.list.required");
 
 		val orders = sortRequests.stream().map(SortUtils::mapToOrder).filter(Objects::nonNull).toList();
 		if (!orders.isEmpty()) {

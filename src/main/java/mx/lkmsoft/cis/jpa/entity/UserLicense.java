@@ -15,6 +15,8 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import mx.lkmsoft.cis.common.datetime.LocalDateUtils;
 
 /**
  * Persistent class for entity stored in table "user_license"
@@ -26,10 +28,10 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "user_license", schema = "sales")
 public class UserLicense {
-	
+
 	@Id
 	private Long id;
-	
+
 	@OneToOne(fetch = FetchType.LAZY)
 	@MapsId
 	@JoinColumn(name = "id")
@@ -50,15 +52,6 @@ public class UserLicense {
 
 	@Column(name = "due_date")
 	private LocalDate dueDate;
-
-	@Column(name = "private_practice")
-	private boolean privatePractice;
-
-	@Column(name = "healthcare_center")
-	private boolean healthcareCenter;
-
-	@Column(name = "active")
-	private boolean active;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userLicense", targetEntity = UserLicensePaymentHistory.class)
 	private List<UserLicensePaymentHistory> userLicensePaymentHistories;
@@ -93,7 +86,7 @@ public class UserLicense {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public User getUser() {
 		return user;
 	}
@@ -142,28 +135,9 @@ public class UserLicense {
 		this.dueDate = dueDate;
 	}
 
-	public boolean isPrivatePractice() {
-		return privatePractice;
-	}
-
-	public void setPrivatePractice(boolean privatePractice) {
-		this.privatePractice = privatePractice;
-	}
-
-	public boolean isHealthcareCenter() {
-		return healthcareCenter;
-	}
-
-	public void setHealthcareCenter(boolean healthcareCenter) {
-		this.healthcareCenter = healthcareCenter;
-	}
-
+	@Transient
 	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
+		return LocalDateUtils.isFutureOrPresent(dueDate);
 	}
 
 	public List<UserLicensePaymentHistory> getUserLicensePaymentHistories() {
@@ -226,8 +200,7 @@ public class UserLicense {
 	public String toString() {
 		return "UserLicense [id=" + id + ", user=" + user.getId() + ", license=" + license.getId() + ", serie=" + serie
 				+ ", activationDate=" + activationDate + ", actualizationDate=" + actualizationDate + ", dueDate="
-				+ dueDate + ", privatePractice=" + privatePractice + ", healthcareCenter=" + healthcareCenter + ", active="
-				+ active + "]";
+				+ dueDate + ", active=" + isActive() + "]";
 	}
 
 }

@@ -27,7 +27,7 @@ import mx.lkmsoft.cis.jpa.enumtype.Gender;
 
 @Entity
 @Table(name = "person", schema = "common")
-@SequenceGenerator(name = "default_gen", sequenceName = "common.person_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "common.person_seq", allocationSize = 1)
 public class Person extends BaseEntity {
 
 	@Column(name = "name")

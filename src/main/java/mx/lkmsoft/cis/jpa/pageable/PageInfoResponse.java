@@ -33,7 +33,7 @@ public record PageInfoResponse (
      * @return An empty PageInfoResponse object.
      */
 	public static PageInfoResponse empty() {
-		return new PageInfoResponse(PageableConstants.PAGEABLE_NO_RECORDS, null, null, null);
+		return new PageInfoResponse("pageable.info.no.records", null, null, 0l);
 	}
 	
 }

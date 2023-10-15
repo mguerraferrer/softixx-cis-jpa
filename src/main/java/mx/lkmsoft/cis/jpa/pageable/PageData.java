@@ -14,7 +14,11 @@ import mx.lkmsoft.cis.common.pageable.PageableUtils;
  *
  */
 public record PageData(int recordsPerPage, int pagesToDisplay, List<Integer> recordsPerPages) {
-
+	
+	private static final String PAGINATE_PAGES_ASSERT_MESSAGE = "pageable.paginate.page.invalid";
+	private static final String RECORDS_PER_PAGE_ASSERT_MESSAGE = "pageable.records.per.page.invalid";
+	private static final String PAGEABLE_PAGINATE_PAGE_ASSERT_MESSAGE = "pageable.paginate.page.required";
+	
 	/**
 	 * <p>
 	 * Creates an instance of the <b>{@code PageData}</b> record with default values
@@ -45,7 +49,7 @@ public record PageData(int recordsPerPage, int pagesToDisplay, List<Integer> rec
 	 * @see {@link PageableUtils#PAGES_TO_DISPLAY}
 	 */
 	public static PageData of(Pageable pageable) {
-		Assert.notNull(pageable, "pageable.text.pageable.requeired");
+		Assert.notNull(pageable, "pageable.pageable.requeired");
 		return PageData.of(pageable.getPageSize(), PageableUtils.PAGES_TO_DISPLAY);
 	}
 	
@@ -64,10 +68,10 @@ public record PageData(int recordsPerPage, int pagesToDisplay, List<Integer> rec
 	 * @see {@link PageableUtils#PAGES_TO_DISPLAY}
 	 */
 	public static PageData of(Pageable pageable, Integer pagesToDisplay) {
-		Assert.notNull(pageable, "pageable.text.pageable.requeired");
+		Assert.notNull(pageable, "pageable.pageable.requeired");
 
 		if (pagesToDisplay != null) {
-			Assert.state(pagesToDisplay > 0, PageableConstants.PAGINATE_PAGES_ASSERT_MESSAGE);
+			Assert.state(pagesToDisplay > 0, PAGINATE_PAGES_ASSERT_MESSAGE);
 		} else {
 			pagesToDisplay = PageableUtils.PAGES_TO_DISPLAY;
 		}
@@ -91,17 +95,17 @@ public record PageData(int recordsPerPage, int pagesToDisplay, List<Integer> rec
 	 */
 	public static PageData of(Integer recordsPerPage, Integer pagesToDisplay) {
 		if (recordsPerPage == null && pagesToDisplay == null) {
-			throw new IllegalArgumentException("pageable.text.records.per.page.pages.to.display.invalid");
+			throw new IllegalArgumentException("pageable.records.per.page.pages.to.display.invalid");
 		}
 
 		if (recordsPerPage != null) {
-			Assert.state(recordsPerPage > 0, PageableConstants.RECORDS_PER_PAGE_ASSERT_MESSAGE);
+			Assert.state(recordsPerPage > 0, RECORDS_PER_PAGE_ASSERT_MESSAGE);
 		} else {
 			recordsPerPage = PageableUtils.RECORDS_PER_PAGE;
 		}
 
 		if (pagesToDisplay != null) {
-			Assert.state(pagesToDisplay > 0, PageableConstants.PAGINATE_PAGES_ASSERT_MESSAGE);
+			Assert.state(pagesToDisplay > 0, PAGINATE_PAGES_ASSERT_MESSAGE);
 		} else {
 			pagesToDisplay = PageableUtils.PAGES_TO_DISPLAY;
 		}
@@ -129,17 +133,17 @@ public record PageData(int recordsPerPage, int pagesToDisplay, List<Integer> rec
 	public static PageData of(Integer recordsPerPage, Integer pagesToDisplay, List<Integer> recordsPerPages) {
 		if (recordsPerPage == null && pagesToDisplay == null
 				&& (recordsPerPages == null || recordsPerPages.isEmpty())) {
-			throw new IllegalArgumentException("pageable.text.parameter.empty.value");
+			throw new IllegalArgumentException("pageable.parameter.empty.value");
 		}
 
 		if (recordsPerPage != null) {
-			Assert.state(recordsPerPage > 0, PageableConstants.RECORDS_PER_PAGE_ASSERT_MESSAGE);
+			Assert.state(recordsPerPage > 0, RECORDS_PER_PAGE_ASSERT_MESSAGE);
 		} else {
 			recordsPerPage = PageableUtils.RECORDS_PER_PAGE;
 		}
 
 		if (pagesToDisplay != null) {
-			Assert.state(pagesToDisplay > 0, PageableConstants.PAGINATE_PAGES_ASSERT_MESSAGE);
+			Assert.state(pagesToDisplay > 0, PAGINATE_PAGES_ASSERT_MESSAGE);
 		} else {
 			pagesToDisplay = PageableUtils.PAGES_TO_DISPLAY;
 		}
@@ -180,8 +184,8 @@ public record PageData(int recordsPerPage, int pagesToDisplay, List<Integer> rec
 	 * @see {@link PageableUtils#PAGES_TO_DISPLAY}
 	 */
 	public static PageData withRecordPerPage(Integer recordsPerPage) {
-		Assert.notNull(recordsPerPage, PageableConstants.PAGEABLE_PAGINATE_PAGE_ASSERT_MESSAGE);
-		Assert.state(recordsPerPage > 0, PageableConstants.RECORDS_PER_PAGE_ASSERT_MESSAGE);
+		Assert.notNull(recordsPerPage, PAGEABLE_PAGINATE_PAGE_ASSERT_MESSAGE);
+		Assert.state(recordsPerPage > 0, RECORDS_PER_PAGE_ASSERT_MESSAGE);
 
 		return new PageData(recordsPerPage, PageableUtils.PAGES_TO_DISPLAY, PageableUtils.RECORDS_PER_PAGE_LIST);
 	}
@@ -200,8 +204,8 @@ public record PageData(int recordsPerPage, int pagesToDisplay, List<Integer> rec
 	 * @see {@link PageableUtils#PAGES_TO_DISPLAY}
 	 */
 	public static PageData withRecordPerPage(Integer recordsPerPage, List<Integer> recordsPerPages) {
-		Assert.notNull(recordsPerPage, PageableConstants.PAGEABLE_PAGINATE_PAGE_ASSERT_MESSAGE);
-		Assert.state(recordsPerPage > 0, PageableConstants.RECORDS_PER_PAGE_ASSERT_MESSAGE);
+		Assert.notNull(recordsPerPage, PAGEABLE_PAGINATE_PAGE_ASSERT_MESSAGE);
+		Assert.state(recordsPerPage > 0, RECORDS_PER_PAGE_ASSERT_MESSAGE);
 
 		recordsPerPages = sanitizeRecordsPerPage(recordsPerPages);
 
@@ -221,8 +225,8 @@ public record PageData(int recordsPerPage, int pagesToDisplay, List<Integer> rec
 	 * @see {@link PageableUtils#RECORDS_PER_PAGES}
 	 */
 	public static PageData withPagesToDisplay(Integer pagesToDisplay) {
-		Assert.notNull(pagesToDisplay, PageableConstants.PAGEABLE_PAGINATE_PAGE_ASSERT_MESSAGE);
-		Assert.state(pagesToDisplay > 0, PageableConstants.PAGINATE_PAGES_ASSERT_MESSAGE);
+		Assert.notNull(pagesToDisplay, PAGEABLE_PAGINATE_PAGE_ASSERT_MESSAGE);
+		Assert.state(pagesToDisplay > 0, PAGINATE_PAGES_ASSERT_MESSAGE);
 
 		return new PageData(PageableUtils.RECORDS_PER_PAGE, pagesToDisplay, PageableUtils.RECORDS_PER_PAGE_LIST);
 	}
@@ -241,8 +245,8 @@ public record PageData(int recordsPerPage, int pagesToDisplay, List<Integer> rec
 	 * @see {@link PageableUtils#RECORDS_PER_PAGE}
 	 */
 	public static PageData withPagesToDisplay(Integer pagesToDisplay, List<Integer> recordsPerPages) {
-		Assert.notNull(pagesToDisplay, PageableConstants.PAGEABLE_PAGINATE_PAGE_ASSERT_MESSAGE);
-		Assert.state(pagesToDisplay > 0, PageableConstants.PAGINATE_PAGES_ASSERT_MESSAGE);
+		Assert.notNull(pagesToDisplay, PAGEABLE_PAGINATE_PAGE_ASSERT_MESSAGE);
+		Assert.state(pagesToDisplay > 0, PAGINATE_PAGES_ASSERT_MESSAGE);
 
 		recordsPerPages = sanitizeRecordsPerPage(recordsPerPages);
 
@@ -250,10 +254,10 @@ public record PageData(int recordsPerPage, int pagesToDisplay, List<Integer> rec
 	}
 
 	private static final List<Integer> sanitizeRecordsPerPage(List<Integer> recordsPerPages) {
-		Assert.notNull(recordsPerPages, "pageable.text.records.per.page.nullable.list");
+		Assert.notNull(recordsPerPages, "pageable.records.per.page.nullable.list");
 
 		recordsPerPages = recordsPerPages.stream().filter(i -> i > 0).distinct().sorted().toList();
-		Assert.state(!recordsPerPages.isEmpty(), "pageable.text.records.per.page.empty.list");
+		Assert.state(!recordsPerPages.isEmpty(), "pageable.records.per.page.empty.list");
 
 		return recordsPerPages;
 	}

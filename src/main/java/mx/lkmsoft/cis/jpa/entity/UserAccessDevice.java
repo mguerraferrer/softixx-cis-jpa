@@ -23,7 +23,7 @@ import mx.lkmsoft.cis.jpa.enumtype.DeviceType;
 
 @Entity
 @Table(name = "user_access_device", schema = "security")
-@SequenceGenerator(name = "default_gen", sequenceName = "security.user_access_device_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "security.user_access_device_seq", allocationSize = 1)
 public class UserAccessDevice extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)

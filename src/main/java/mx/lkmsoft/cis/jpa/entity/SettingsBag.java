@@ -15,7 +15,7 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 @Entity
 @Table(name = "settings_bag", schema = "config")
-@SequenceGenerator(name = "default_gen", sequenceName = "config.settings_bag_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "config.settings_bag_seq", allocationSize = 1)
 public class SettingsBag extends BaseEntity {
 
     @Column(name = "code")

@@ -18,7 +18,7 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 @Entity
 @Table(name = "healthcare_center_specialties", schema = "common")
-@SequenceGenerator(name = "default_gen", sequenceName = "common.healthcare_center_specialty_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "common.healthcare_center_specialty_seq", allocationSize = 1)
 public class HealthcareCenterSpecialty extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)

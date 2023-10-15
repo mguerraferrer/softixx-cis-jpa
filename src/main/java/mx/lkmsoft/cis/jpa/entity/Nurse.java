@@ -21,7 +21,7 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 @Entity
 @Table(name = "nurse", schema = "common")
-@SequenceGenerator(name = "default_gen", sequenceName = "common.nurse_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "common.nurse_seq", allocationSize = 1)
 public class Nurse extends BaseEntity {
 
 	@Column(name = "active")

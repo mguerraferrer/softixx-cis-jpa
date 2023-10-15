@@ -22,7 +22,7 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 @Entity
 @Table(name = "colony", schema = "address")
-@SequenceGenerator(name = "default_gen", sequenceName = "address.colony_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "address.colony_seq", allocationSize = 1)
 public class Colony extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)

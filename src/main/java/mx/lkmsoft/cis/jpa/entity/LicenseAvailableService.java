@@ -18,7 +18,7 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 @Entity
 @Table(name = "license_available_service", schema = "sales")
-@SequenceGenerator(name = "default_gen", sequenceName = "sales.license_available_service_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "sales.license_available_service_seq", allocationSize = 1)
 public class LicenseAvailableService extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -20,7 +20,7 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 @Entity
 @Table(name = "user_license_change_history", schema = "sales")
-@SequenceGenerator(name = "default_gen", sequenceName = "sales.user_license_change_history_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "sales.user_license_change_history_seq", allocationSize = 1)
 public class UserLicenseChangeHistory extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)

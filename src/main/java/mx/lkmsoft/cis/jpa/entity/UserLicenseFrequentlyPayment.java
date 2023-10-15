@@ -22,7 +22,7 @@ import mx.lkmsoft.cis.jpa.enumtype.PaymentMode;
 
 @Entity
 @Table(name = "user_license_payment_frequently", schema = "sales")
-@SequenceGenerator(name = "default_gen", sequenceName = "sales.user_license_payment_frequently_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "sales.user_license_payment_frequently_seq", allocationSize = 1)
 public class UserLicenseFrequentlyPayment extends BaseEntity {
 
 	@ManyToOne

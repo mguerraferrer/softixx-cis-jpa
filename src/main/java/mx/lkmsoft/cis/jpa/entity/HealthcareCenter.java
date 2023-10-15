@@ -11,7 +11,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import mx.lkmsoft.cis.common.uuid.UuidGeneratorUtils;
+import mx.lkmsoft.cis.common.data.CodeGeneratorUtils;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
 import mx.lkmsoft.cis.jpa.embeddable.EmbeddableAccess;
@@ -27,7 +27,7 @@ import mx.lkmsoft.cis.jpa.embeddable.EmbeddableSocial;
 
 @Entity
 @Table(name = "healthcare_center", schema = "common")
-@SequenceGenerator(name = "default_gen", sequenceName = "common.healthcare_center_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "common.healthcare_center_seq", allocationSize = 1)
 public class HealthcareCenter extends BaseEntity {
 
 	@Column(name = "name")
@@ -71,9 +71,6 @@ public class HealthcareCenter extends BaseEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "healthcareCenter", targetEntity = MasterAccount.class)
 	private List<MasterAccount> masterAccounts;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "healthcareCenter", targetEntity = ConsultationProcedure.class)
-	private List<ConsultationProcedure> consultationProcedures;
-
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "healthcareCenter", targetEntity = MedicalSchedule.class)
 	private List<MedicalSchedule> medicalSchedules;
 
@@ -84,7 +81,7 @@ public class HealthcareCenter extends BaseEntity {
 		this.name = name;
 		this.businessName = businessName;
 		this.logo = null;
-		this.code = UuidGeneratorUtils.asStringCode();
+		this.code = CodeGeneratorUtils.asString();
 		this.active = true;
 	}
 
@@ -203,17 +200,6 @@ public class HealthcareCenter extends BaseEntity {
 
 	public void setMasterAccounts(List<MasterAccount> masterAccounts) {
 		this.masterAccounts = masterAccounts;
-	}
-
-	public List<ConsultationProcedure> getConsultationProcedures() {
-		if (consultationProcedures == null) {
-			consultationProcedures = new ArrayList<>();
-		}
-		return consultationProcedures;
-	}
-
-	public void setConsultationProcedures(List<ConsultationProcedure> consultationProcedures) {
-		this.consultationProcedures = consultationProcedures;
 	}
 
 	public List<MedicalSchedule> getMedicalSchedules() {

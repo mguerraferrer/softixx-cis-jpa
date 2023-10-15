@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.0</version>
+		<version>3.1.4</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -15,7 +15,7 @@
 	<artifactId>lkmsoft-cis-jpa</artifactId>
 	<version>1.0.0</version>
 	<name>lkmsoft-cis-jpa</name>
-	<description>SoftIXX CIS JPA - Common JPA</description>
+	<description>Clinical Information System JPA Project</description>
 
 	<properties>
 		<java.version>17</java.version>

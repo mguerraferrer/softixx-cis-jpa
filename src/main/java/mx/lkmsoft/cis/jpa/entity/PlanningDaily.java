@@ -11,22 +11,23 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import mx.lkmsoft.cis.common.datetime.WeekDay;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 /**
- * Persistent class for entity stored in table "medical_schedule_planning_day"
+ * Persistent class for entity stored in table "planning_daily"
  *
  * @author Maikel Guerra Ferrer
  *
  */
 @Entity
-@Table(name = "medical_schedule_planning_day", schema = "agenda")
-@SequenceGenerator(name = "default_gen", sequenceName = "agenda.medical_schedule_planning_day_id_seq", allocationSize = 1)
-public class PlanningDay extends BaseEntity {
+@Table(name = "planning_daily", schema = "agenda")
+@SequenceGenerator(name = "default_gen", sequenceName = "agenda.planning_daily_seq", allocationSize = 1)
+public class PlanningDaily extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "medical_schedule_planning_id", referencedColumnName = "id")
+	@JoinColumn(name = "planning_id", referencedColumnName = "id")
 	private Planning planning;
 
 	@Column(name = "day")
@@ -44,11 +45,14 @@ public class PlanningDay extends BaseEntity {
 
 	@Column(name = "total_extra_slot")
 	private Integer totalExtraSlot;
+	
+	@Version
+	private Long version;
 
-	public PlanningDay() {
+	public PlanningDaily() {
 	}
 
-	public PlanningDay(WeekDay day, LocalTime startTime, LocalTime endTime, Integer totalPatients,
+	public PlanningDaily(WeekDay day, LocalTime startTime, LocalTime endTime, Integer totalPatients,
 			Integer totalExtraSlot) {
 		this.day = day;
 		this.startTime = startTime;
@@ -57,7 +61,7 @@ public class PlanningDay extends BaseEntity {
 		this.totalExtraSlot = totalExtraSlot;
 	}
 	
-	public PlanningDay(Planning planning, WeekDay day, LocalTime startTime, LocalTime endTime, Integer totalPatients,
+	public PlanningDaily(Planning planning, WeekDay day, LocalTime startTime, LocalTime endTime, Integer totalPatients,
 			Integer totalExtraSlot) {
 		this.planning = planning;
 		this.day = day;
@@ -116,11 +120,19 @@ public class PlanningDay extends BaseEntity {
 		this.totalExtraSlot = totalExtraSlot;
 	}
 
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+
 	@Override
 	public String toString() {
-		return "PlanningDay [id=" + id + ", planning=" + planning.getId() + ", day=" + day + ", startTime=" + startTime
+		return "PlanningDaily [id=" + id + ", planning=" + planning.getId() + ", day=" + day + ", startTime=" + startTime
 				+ ", endTime=" + endTime + ", totalPatients=" + totalPatients + ", totalExtraSlot=" + totalExtraSlot
-				+ "]";
+				+ ", version=" + version + "]";
 	}
 
 }

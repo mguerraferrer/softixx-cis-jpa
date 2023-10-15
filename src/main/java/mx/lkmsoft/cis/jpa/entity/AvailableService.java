@@ -20,7 +20,7 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 @Entity
 @Table(name = "available_service", schema = "sales")
-@SequenceGenerator(name = "default_gen", sequenceName = "sales.available_service_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "sales.available_service_seq", allocationSize = 1)
 public class AvailableService extends BaseEntity {
 
 	@Column(name = "code")

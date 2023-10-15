@@ -23,7 +23,7 @@ import mx.lkmsoft.cis.jpa.enumtype.AccessLevel;
 
 @Entity
 @Table(name = "user_access", schema = "security")
-@SequenceGenerator(name = "default_gen", sequenceName = "security.user_access_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "security.user_access_seq", allocationSize = 1)
 public class UserAccess extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)

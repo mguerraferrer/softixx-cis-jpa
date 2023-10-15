@@ -23,7 +23,7 @@ import mx.lkmsoft.cis.jpa.enumtype.LicenseType;
 
 @Entity
 @Table(name = "license", schema = "sales")
-@SequenceGenerator(name = "default_gen", sequenceName = "sales.license_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "sales.license_seq", allocationSize = 1)
 public class License extends BaseEntity {
 
 	@Column(name = "license_type")
@@ -54,8 +54,8 @@ public class License extends BaseEntity {
 	@Column(name = "level")
 	private Integer level;
 
-	@Column(name = "hash")
-	private String hash;
+	@Column(name = "code")
+	private String code;
 
 	@Column(name = "active")
 	private boolean active;
@@ -148,12 +148,12 @@ public class License extends BaseEntity {
 		this.level = level;
 	}
 
-	public String getHash() {
-		return hash;
+	public String getCode() {
+		return code;
 	}
 
-	public void setHash(String hash) {
-		this.hash = hash;
+	public void setHash(String code) {
+		this.code = code;
 	}
 
 	public boolean isActive() {
@@ -225,10 +225,7 @@ public class License extends BaseEntity {
 		return "License [id=" + id + ", licenseType=" + licenseType + ", totalSpecialties=" + totalSpecialties
 				+ ", totalDoctors=" + totalDoctors + ", totalAssistants=" + totalAssistants + ", totalNurses="
 				+ totalNurses + ", dailyConsultations=" + dailyConsultations + ", duration=" + duration
-				+ ", description=" + description + ", level=" + level + ", hash=" + hash + ", active=" + active
-				+ ", licenseConfigs=" + licenseConfigs + ", userLicenses=" + userLicenses
-				+ ", licenseAvailableServices=" + licenseAvailableServices + ", licensePrices=" + licensePrices
-				+ ", licensePromos=" + licensePromos + "]";
+				+ ", description=" + description + ", level=" + level + ", code=" + code + ", active=" + active + "]";
 	}
 
 }

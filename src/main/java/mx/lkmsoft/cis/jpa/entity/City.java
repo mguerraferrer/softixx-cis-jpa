@@ -22,7 +22,7 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 @Entity
 @Table(name = "city", schema = "address")
-@SequenceGenerator(name = "default_gen", sequenceName = "address.city_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "address.city_seq", allocationSize = 1)
 public class City extends BaseEntity {
 
 	@Column(name = "value")

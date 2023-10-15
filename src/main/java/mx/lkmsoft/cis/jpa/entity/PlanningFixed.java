@@ -1,6 +1,7 @@
 package mx.lkmsoft.cis.jpa.entity;
 
 import java.time.LocalTime;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,15 +11,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
+import mx.lkmsoft.cis.common.collection.ListUtils;
 
 /**
- * Persistent class for entity stored in table "medical_schedule_planning_fixed"
+ * Persistent class for entity stored in table "planning_fixed"
  *
  * @author Maikel Guerra Ferrer
  *
  */
 @Entity
-@Table(name = "medical_schedule_planning_fixed", schema = "agenda")
+@Table(name = "planning_fixed", schema = "agenda")
 public class PlanningFixed {
 	
 	@Id
@@ -43,12 +47,25 @@ public class PlanningFixed {
 
 	@Column(name = "days")
 	private String days;
+	
+	@Version
+	private Long version;
 
 	public PlanningFixed() {
 	}
 
-	public PlanningFixed(Planning planning) {
-		this.planning = planning;
+	public PlanningFixed(LocalTime startTime, LocalTime endTime, Integer totalPatients, Integer totalExtraSlot,
+			String days) {
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.totalPatients = totalPatients;
+		this.totalExtraSlot = totalExtraSlot;
+		this.days = days;
+	}
+	
+	public static PlanningFixed clone(PlanningFixed planningFixed) {
+		return new PlanningFixed(planningFixed.getStartTime(), planningFixed.getEndTime(),
+				planningFixed.getTotalPatients(), planningFixed.getTotalExtraSlot(), planningFixed.getDays());
 	}
 
 	/* Getters and Setters */
@@ -107,13 +124,31 @@ public class PlanningFixed {
 	public void setDays(String days) {
 		this.days = days;
 	}
+	
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+
+	@Transient
+	public boolean isAllWeek() {
+		return ListUtils.toList(days).size() == 7;
+	}
+	
+	@Transient
+	public List<String> weekDays() {
+		return ListUtils.toList(days);
+	}
 
 	/* toString */
 	@Override
 	public String toString() {
 		return "PlanningFixed [id=" + id + ", planning=" + planning.getId() + ", startTime=" + startTime + ", endTime="
 				+ endTime + ", totalPatients=" + totalPatients + ", totalExtraSlot=" + totalExtraSlot + ", days=" + days
-				+ "]";
+				+ ", version=" + version + "]";
 	}
 
 }

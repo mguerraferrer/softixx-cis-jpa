@@ -3,6 +3,7 @@ package mx.lkmsoft.cis.jpa.entity;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -13,8 +14,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import mx.lkmsoft.cis.common.datetime.LocalDateUtils;
+import jakarta.persistence.Version;
+import lombok.val;
+import mx.lkmsoft.cis.common.assertion.AssertUtils;
+import mx.lkmsoft.cis.common.collection.ListUtils;
+import mx.lkmsoft.cis.common.data.CodeGeneratorUtils;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 /**
@@ -26,13 +30,13 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 @Entity
 @Table(name = "medical_schedule", schema = "agenda")
-@SequenceGenerator(name = "default_gen", sequenceName = "agenda.medical_schedule_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "agenda.medical_schedule_seq", allocationSize = 1)
 public class MedicalSchedule extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "healthcare_center_id", referencedColumnName = "id")
 	private HealthcareCenter healthcareCenter;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "doctor_id", referencedColumnName = "id")
 	private Doctor doctor;
@@ -40,7 +44,16 @@ public class MedicalSchedule extends BaseEntity {
 	@Column(name = "end_date")
 	private LocalDate endDate;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medicalSchedule", targetEntity = Planning.class)
+	@Column(name = "code")
+	private String code;
+
+	@Version
+	private Long version;
+	
+	@Column(name = "active")
+	private boolean active;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medicalSchedule", targetEntity = Planning.class, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Planning> plannings;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medicalSchedule", targetEntity = NonWorkingDay.class, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -53,6 +66,8 @@ public class MedicalSchedule extends BaseEntity {
 		this.doctor = doctor;
 		this.healthcareCenter = healthcareCenter;
 		this.endDate = endDate;
+		this.code = CodeGeneratorUtils.asString();
+		this.active = true;
 	}
 
 	/* Getters and Setters */
@@ -64,14 +79,14 @@ public class MedicalSchedule extends BaseEntity {
 		this.healthcareCenter = healthcareCenter;
 	}
 
-	public Doctor getDoctorSpecialty() {
+	public Doctor getDoctor() {
 		return doctor;
 	}
 
-	public void setDoctorSpecialty(Doctor doctor) {
+	public void setDoctor(Doctor doctor) {
 		this.doctor = doctor;
 	}
-	
+
 	public LocalDate getEndDate() {
 		return endDate;
 	}
@@ -80,11 +95,30 @@ public class MedicalSchedule extends BaseEntity {
 		this.endDate = endDate;
 	}
 
-	@Transient
-	public boolean isActive() {
-		return LocalDateUtils.isFutureOrPresent(endDate);
+	public String getCode() {
+		return code;
 	}
 
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
 	public List<Planning> getPlannings() {
 		if (plannings == null) {
 			plannings = new ArrayList<>();
@@ -94,6 +128,28 @@ public class MedicalSchedule extends BaseEntity {
 
 	public void setPlannings(List<Planning> plannings) {
 		this.plannings = plannings;
+	}
+	
+	public void addPlanning(Planning planning) {
+		if (this.plannings == null) {
+			this.plannings = new ArrayList<>();
+		}
+		this.plannings.add(planning);
+	}
+	
+	public void addPlanning(List<Planning> plannings) {
+		if (this.plannings != null) {
+			this.plannings.clear();
+			this.plannings.addAll(plannings);
+		}
+	}
+	
+	public void updatePlanning(Planning planning) {
+		val planningList = getPlannings().stream()
+									  	 .filter(pl -> !pl.getCode().equals(planning.getCode()))
+									  	 .collect(Collectors.toList());
+		planningList.add(planning);
+		addPlanning(planningList);
 	}
 
 	public List<NonWorkingDay> getNonWorkingDays() {
@@ -115,17 +171,19 @@ public class MedicalSchedule extends BaseEntity {
 	}
 
 	public void addNonWorkingDays(List<NonWorkingDay> nonWorkingDays) {
-		if (this.nonWorkingDays != null) {
+		if (AssertUtils.nonNull(this.nonWorkingDays)) {
+			nonWorkingDays = ListUtils.merge(this.nonWorkingDays, nonWorkingDays);
 			this.nonWorkingDays.clear();
-			this.nonWorkingDays.addAll(nonWorkingDays);
 		}
+		getNonWorkingDays().addAll(nonWorkingDays);
 	}
 
 	/* toString */
 	@Override
 	public String toString() {
 		return "MedicalSchedule [id=" + id + ", doctor=" + doctor.getId() + ", healthcareCenter="
-				+ healthcareCenter.getId() + ", endDate=" + endDate + ", active=" + isActive() + "]";
+				+ healthcareCenter.getId() + ", endDate=" + endDate + ", code=" + code + ", version=" + version
+				+ ", active=" + active + "]";
 	}
 
 }

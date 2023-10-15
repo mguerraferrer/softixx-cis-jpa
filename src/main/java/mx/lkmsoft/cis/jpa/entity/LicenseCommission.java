@@ -25,7 +25,7 @@ import mx.lkmsoft.cis.jpa.enumtype.PaymentSource;
 
 @Entity
 @Table(name = "license_commission", schema = "sales")
-@SequenceGenerator(name = "default_gen", sequenceName = "sales.license_commission_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "sales.license_commission_seq", allocationSize = 1)
 public class LicenseCommission extends BaseEntity {
 
 	@Column(name = "online_payment")

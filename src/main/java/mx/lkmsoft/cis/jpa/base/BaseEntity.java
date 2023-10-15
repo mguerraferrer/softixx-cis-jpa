@@ -17,7 +17,7 @@ public class BaseEntity {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "default_gen")
 	@Column(name = "id")
 	protected Long id;
-
+	
 	/* Getters and Setters */
 	public Long getId() {
 		return id;

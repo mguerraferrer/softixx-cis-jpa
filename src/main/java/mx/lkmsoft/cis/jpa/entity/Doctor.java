@@ -29,7 +29,7 @@ import mx.lkmsoft.cis.jpa.embeddable.EmbeddableSocial;
 
 @Entity
 @Table(name = "doctor", schema = "common")
-@SequenceGenerator(name = "default_gen", sequenceName = "common.doctor_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "common.doctor_seq", allocationSize = 1)
 public class Doctor extends BaseEntity {
 
 	@Column(name = "professional_license")

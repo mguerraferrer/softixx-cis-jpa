@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import mx.lkmsoft.cis.common.collection.ListUtils;
 import mx.lkmsoft.cis.jpa.enumtype.NotificationType;
 
@@ -28,7 +29,7 @@ public class AppointmentReminder {
 
 	@Id
 	private Long id;
-	
+
 	@OneToOne(fetch = FetchType.LAZY)
 	@MapsId
 	@JoinColumn(name = "id")
@@ -46,6 +47,9 @@ public class AppointmentReminder {
 	@Column(name = "reminder_date")
 	private LocalDateTime reminderDate;
 
+	@Version
+	private Long version;
+
 	public AppointmentReminder() {
 	}
 
@@ -57,7 +61,7 @@ public class AppointmentReminder {
 		this.mobilesToNotify = mobilesToNotify;
 		this.reminderDate = reminderDate;
 	}
-	
+
 	public AppointmentReminder(Appointment appointment, List<NotificationType> notificationTypes,
 			List<String> notifiedEmails, List<String> notifiedMobiles, LocalDateTime reminderDate) {
 		this.appointment = appointment;
@@ -75,7 +79,7 @@ public class AppointmentReminder {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public Appointment getAppointment() {
 		return appointment;
 	}
@@ -91,14 +95,14 @@ public class AppointmentReminder {
 	public void setNotificationType(String notificationType) {
 		this.notificationType = notificationType;
 	}
-	
+
 	public List<NotificationType> getNotificationTypes() {
 		if (this.notificationType != null) {
 			return ListUtils.toList(this.notificationType).stream().map(NotificationType::valueOf).toList();
 		}
 		return Collections.emptyList();
 	}
-	
+
 	public void setNotificationType(List<NotificationType> notificationTypes) {
 		if (notificationTypes != null) {
 			this.notificationType = ListUtils.toString(notificationTypes.stream().map(NotificationType::name).toList());
@@ -129,12 +133,20 @@ public class AppointmentReminder {
 		this.reminderDate = reminderDate;
 	}
 
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+
 	/* toString */
 	@Override
 	public String toString() {
 		return "AppointmentReminder [id=" + id + ", appointment=" + appointment.getId() + ", notificationType="
 				+ notificationType + ", mailsToNotify=" + mailsToNotify + ", mobilesToNotify=" + mobilesToNotify
-				+ ", reminderDate=" + reminderDate + "]";
+				+ ", reminderDate=" + reminderDate + ", version= " + version + "]";
 	}
 
 }

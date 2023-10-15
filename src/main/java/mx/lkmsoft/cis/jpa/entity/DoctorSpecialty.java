@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import mx.lkmsoft.cis.common.data.CodeGeneratorUtils;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
 
@@ -24,7 +25,7 @@ import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
 
 @Entity
 @Table(name = "doctor_specialties", schema = "common")
-@SequenceGenerator(name = "default_gen", sequenceName = "common.doctor_specialty_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "common.doctor_specialty_seq", allocationSize = 1)
 public class DoctorSpecialty extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -39,15 +40,15 @@ public class DoctorSpecialty extends BaseEntity {
 	@Convert(converter = AttributeEncryptor.class)
 	private String professionalLicense;
 
+	@Column(name = "code")
+	private String code;
+
 	@Column(name = "active")
 	private boolean active;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctorSpecialty", targetEntity = ConsultationProcedure.class)
-	private List<ConsultationProcedure> consultationProcedures;
-	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctorSpecialty", targetEntity = Planning.class)
 	private List<Planning> plannings;
-	
+
 	public DoctorSpecialty() {
 	}
 
@@ -55,26 +56,11 @@ public class DoctorSpecialty extends BaseEntity {
 		this.doctor = doctor;
 		this.specialty = specialty;
 		this.professionalLicense = professionalLicense;
+		this.code = CodeGeneratorUtils.asString();
 		this.active = true;
 	}
 
 	/* Getters and Setters */
-	public String getProfessionalLicense() {
-		return professionalLicense;
-	}
-
-	public void setProfessionalLicense(String professionalLicense) {
-		this.professionalLicense = professionalLicense;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
 	public Doctor getDoctor() {
 		return doctor;
 	}
@@ -91,17 +77,30 @@ public class DoctorSpecialty extends BaseEntity {
 		this.specialty = specialty;
 	}
 
-	public List<ConsultationProcedure> getConsultationProcedures() {
-		if (consultationProcedures == null) {
-			consultationProcedures = new ArrayList<>();
-		}
-		return consultationProcedures;
+	public String getProfessionalLicense() {
+		return professionalLicense;
 	}
 
-	public void setConsultationProcedures(List<ConsultationProcedure> consultationProcedures) {
-		this.consultationProcedures = consultationProcedures;
+	public void setProfessionalLicense(String professionalLicense) {
+		this.professionalLicense = professionalLicense;
 	}
-	
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
 	public List<Planning> getPlannings() {
 		if (plannings == null) {
 			plannings = new ArrayList<>();
@@ -117,7 +116,7 @@ public class DoctorSpecialty extends BaseEntity {
 	@Override
 	public String toString() {
 		return "DoctorSpecialty [id=" + id + ", doctor=" + doctor.getId() + ", specialty=" + specialty.getId()
-				+ ", professionalLicense=" + professionalLicense + ", active=" + active + "]";
+				+ ", professionalLicense=" + professionalLicense + ", code=" + code + ", active=" + active + "]";
 	}
 
 }

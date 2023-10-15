@@ -22,7 +22,7 @@ import mx.lkmsoft.cis.jpa.enumtype.Role;
 
 @Entity
 @Table(name = "users", schema = "security")
-@SequenceGenerator(name = "default_gen", sequenceName = "security.user_seq_id", allocationSize = 1)
+@SequenceGenerator(name = "default_gen", sequenceName = "security.user_seq", allocationSize = 1)
 public class User extends BaseEntity {
 
 	@Column(name = "email")

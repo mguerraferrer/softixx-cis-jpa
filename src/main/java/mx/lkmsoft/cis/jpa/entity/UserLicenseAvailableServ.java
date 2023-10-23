@@ -33,11 +33,11 @@ public class UserLicenseAvailableServ extends BaseEntity {
 	@JoinColumn(name = "user_license_id", referencedColumnName = "id")
 	private UserLicense userLicense;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userLicenseAvailableServ", targetEntity = UserLicenseAvailableServHistory.class)
-	private List<UserLicenseAvailableServHistory> userLicenseServiceHistories;
-
 	@Column(name = "active")
 	private boolean active;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userLicenseAvailableServ", targetEntity = UserLicenseAvailableServHistory.class)
+	private List<UserLicenseAvailableServHistory> userLicenseServiceHistories;
 
 	/* Getters and Setters */
 	public AvailableService getAvailableService() {

@@ -247,6 +247,15 @@ public class Planning extends AuditableEntity {
 		this.appointments = appointments;
 	}
 
+	public void addAppointments(List<Appointment> appointments) {
+		if (this.appointments == null) {
+			this.appointments = new ArrayList<>();
+		} else {
+			this.appointments.clear();
+		}
+		this.appointments.addAll(appointments);
+	}
+
 	public List<ConsultationProcedure> getConsultationProcedures() {
 		if (consultationProcedures == null) {
 			consultationProcedures = new ArrayList<>();
@@ -283,7 +292,7 @@ public class Planning extends AuditableEntity {
 
 	public void updateConsultationProcedure(ConsultationProcedure consultationProcedure) {
 		val procedureList = getConsultationProcedures().stream()
-				.filter(cp -> !cp.getCode().equals(consultationProcedure.getCode())).collect(Collectors.toList());
+				                                       .filter(cp -> !cp.getCode().equals(consultationProcedure.getCode())).collect(Collectors.toList());
 		procedureList.add(consultationProcedure);
 		addConsultationProcedure(procedureList);
 	}

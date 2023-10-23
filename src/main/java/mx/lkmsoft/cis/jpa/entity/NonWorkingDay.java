@@ -27,15 +27,15 @@ public class NonWorkingDay extends BaseEntity {
 	@JoinColumn(name = "medical_schedule_id", referencedColumnName = "id")
 	private MedicalSchedule medicalSchedule;
 
-	@Column(name = "nwd")
-	private LocalDate nwd;
+	@Column(name = "nw_date")
+	private LocalDate date;
 
 	public NonWorkingDay() {
 	}
 
-	public NonWorkingDay(MedicalSchedule medicalSchedule, LocalDate nwd) {
+	public NonWorkingDay(MedicalSchedule medicalSchedule, LocalDate date) {
 		this.medicalSchedule = medicalSchedule;
-		this.nwd = nwd;
+		this.date = date;
 	}
 
 	/* Getters and Setters */
@@ -47,18 +47,18 @@ public class NonWorkingDay extends BaseEntity {
 		this.medicalSchedule = medicalSchedule;
 	}
 
-	public LocalDate getNwd() {
-		return nwd;
+	public LocalDate getDate() {
+		return date;
 	}
 
-	public void setNwd(LocalDate nwd) {
-		this.nwd = nwd;
+	public void setDate(LocalDate date) {
+		this.date = date;
 	}
 
 	/* toString */
 	@Override
 	public String toString() {
-		return "NonWorkingDay [id=" + id + ", medicalSchedule=" + medicalSchedule.getId() + ", nwd=" + nwd + "]";
+		return "NonWorkingDay [id=" + id + ", medicalSchedule=" + medicalSchedule.getId() + ", date=" + date + "]";
 	}
 
 }

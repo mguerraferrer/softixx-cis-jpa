@@ -86,7 +86,7 @@ public class Appointment extends BaseEntity {
 	private Appointment originalAppointment;
 
 	@Column(name = "appointment_date")
-	private LocalDate appointmentDate;
+	private LocalDate date;
 
 	@Column(name = "start_time")
 	private LocalTime startTime;
@@ -119,21 +119,21 @@ public class Appointment extends BaseEntity {
 		this.folio = CryptoUtils.generateHash().toUpperCase();
 	}
 
-	public Appointment(Planning planning, Patient patient, LocalDate appointmentDate, LocalTime startTime,
+	public Appointment(Planning planning, Patient patient, LocalDate date, LocalTime startTime,
 			LocalTime endTime) {
 		this.planning = planning;
 		this.patient = patient;
-		this.appointmentDate = appointmentDate;
+		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.folio = CryptoUtils.generateHash().toUpperCase();
-		this.month = appointmentDate.getMonthValue();
+		this.month = date.getMonthValue();
 	}
 
-	public static Appointment clone(Appointment appointment, LocalDate appointmentDate, LocalTime startTime,
+	public static Appointment clone(Appointment appointment, LocalDate date, LocalTime startTime,
 			LocalTime endTime) {
 		if (appointment != null) {
-			val clone = new Appointment(appointment.getPlanning(), appointment.getPatient(), appointmentDate, startTime, endTime);
+			val clone = new Appointment(appointment.getPlanning(), appointment.getPatient(), date, startTime, endTime);
 			clone.setOriginalAppointment(appointment);
 			clone.setType(appointment.getType());
 			clone.setOrigin(AppointmentOrigin.CLONED);
@@ -144,9 +144,9 @@ public class Appointment extends BaseEntity {
 		return null;
 	}
 
-	public Appointment reschedule(Appointment appointment, LocalDate appointmentDate, LocalTime startTime,
+	public Appointment reschedule(Appointment appointment, LocalDate date, LocalTime startTime,
 			LocalTime endTime) {
-		val reschedule = clone(appointment, appointmentDate, startTime, endTime);
+		val reschedule = clone(appointment, date, startTime, endTime);
 		if (reschedule != null) {
 			reschedule.setOriginalAppointment(appointment);
 			reschedule.setType(appointment.getType());
@@ -247,12 +247,12 @@ public class Appointment extends BaseEntity {
 		this.originalAppointment = originalAppointment;
 	}
 
-	public LocalDate getAppointmentDate() {
-		return appointmentDate;
+	public LocalDate getDate() {
+		return date;
 	}
 
-	public void setAppointmentDate(LocalDate appointmentDate) {
-		this.appointmentDate = appointmentDate;
+	public void setDate(LocalDate date) {
+		this.date = date;
 	}
 
 	public LocalTime getStartTime() {
@@ -373,7 +373,7 @@ public class Appointment extends BaseEntity {
 				+ ", type=" + type + ", origin=" + origin
 				+ ", status=" + status + ", confirmation=" + confirmation + ", cancelledBy=" + cancelledBy
 				+ ", rescheduledBy=" + rescheduledBy + ", anotherPersonName=" + anotherPersonName + ", relationship="
-				+ rel + ", originalAppointmentId=" + originalAppointmentId + ", appointmentDate=" + appointmentDate
+				+ rel + ", originalAppointmentId=" + originalAppointmentId + ", date=" + date
 				+ ", startTime=" + startTime + ", endTime=" + endTime + ", folio=" + folio + ", month=" + month
 				+ ", additionalInfo=" + additionalInfo + ", version= " + version + "]";
 	}

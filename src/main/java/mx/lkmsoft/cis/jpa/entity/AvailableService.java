@@ -38,17 +38,11 @@ public class AvailableService extends BaseEntity {
 	@Column(name = "order")
 	private Integer order;
 
-	@Column(name = "hash")
-	private String hash;
-
 	@Column(name = "description")
 	private String description;
 
 	@Column(name = "price")
 	private Double price;
-
-	@Column(name = "price_usd")
-	private Double priceUsd;
 
 	@Column(name = "active")
 	private boolean active;
@@ -98,14 +92,6 @@ public class AvailableService extends BaseEntity {
 
 	public void setOrder(Integer order) {
 		this.order = order;
-	}
-
-	public String getHash() {
-		return hash;
-	}
-
-	public void setHash(String hash) {
-		this.hash = hash;
 	}
 
 	public String getDescription() {
@@ -158,7 +144,7 @@ public class AvailableService extends BaseEntity {
 	@Override
 	public String toString() {
 		return "AvailableService [id=" + id + ", code=" + code + ", value=" + value + ", image=" + image
-				+ ", frequentlyPayment=" + frequentlyPayment + ", order=" + order + ", hash=" + hash + ", description="
+				+ ", frequentlyPayment=" + frequentlyPayment + ", order=" + order + ", description="
 				+ description + ", price=" + price + ", active=" + active + "]";
 	}
 

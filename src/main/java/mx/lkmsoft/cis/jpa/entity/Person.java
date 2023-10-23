@@ -183,8 +183,7 @@ public class Person extends BaseEntity {
 	public String toString() {
 		return "Person [id=" + id + ", name=" + name + ", paternalSurname=" + paternalSurname + ", maternalSurname="
 				+ maternalSurname + ", identity=" + identity + ", gender=" + gender + ", photo=" + photo + ", mobile1="
-				+ mobile1 + ", mobile2=" + mobile2 + ", mobile3=" + mobile3 + ", addresses=" + addresses + ", contact="
-				+ contact + "]";
+				+ mobile1 + ", mobile2=" + mobile2 + ", mobile3=" + mobile3 + ", contact=" + contact + "]";
 	}
 
 }

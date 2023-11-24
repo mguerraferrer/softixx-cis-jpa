@@ -16,8 +16,8 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
  *
  */
 @Entity
-@Table(name = "exception_handler_log", schema = "trace")
-@SequenceGenerator(name = "default_gen", sequenceName = "trace.exception_handler_log_seq", allocationSize = 1)
+@Table(name = "exception_handler_log", schema = "errors")
+@SequenceGenerator(name = "default_gen", sequenceName = "errors.exception_handler_log_seq", allocationSize = 1)
 public class ExceptionHandlerLog extends BaseEntity {
 
 	@Column(name = "handler_method")

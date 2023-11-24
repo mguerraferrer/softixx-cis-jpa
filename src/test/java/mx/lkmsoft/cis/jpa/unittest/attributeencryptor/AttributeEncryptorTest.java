@@ -54,7 +54,12 @@ class AttributeEncryptorTest {
 	
 	@ParameterizedTest
 	@CsvSource({
-		"Lorem, Ipsum, Dolor, Lorem Ipsum Dolor"
+		"Vivamus, Aliquam, Euismod, Vivamus Aliquam Euismod",
+		", , , ",
+		", , , ",
+		", , , ",
+		", , , ",
+		", , , ",
 	})
 	void testEncryptionThenDecryption(String text1, String text2, String text3, String text4) {
 		val text1Encrypted = attributeEncryptor.convertToDatabaseColumn(text1);

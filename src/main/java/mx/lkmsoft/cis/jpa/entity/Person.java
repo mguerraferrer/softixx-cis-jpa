@@ -1,22 +1,19 @@
 package mx.lkmsoft.cis.jpa.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
-import mx.lkmsoft.cis.jpa.base.BaseEntity;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.val;
+import mx.lkmsoft.cis.common.data.StringUtils;
+import mx.lkmsoft.cis.jpa.base.AuditableEntity;
 import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
 import mx.lkmsoft.cis.jpa.embeddable.EmbeddableContact;
 import mx.lkmsoft.cis.jpa.enumtype.Gender;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Persistent class for entity stored in table "person"
@@ -28,23 +25,24 @@ import mx.lkmsoft.cis.jpa.enumtype.Gender;
 @Entity
 @Table(name = "person", schema = "common")
 @SequenceGenerator(name = "default_gen", sequenceName = "common.person_seq", allocationSize = 1)
-public class Person extends BaseEntity {
+@Getter
+@Setter
+public class Person extends AuditableEntity {
 
 	@Column(name = "name")
-	@Convert(converter = AttributeEncryptor.class)
 	private String name;
 
 	@Column(name = "paternal_surname")
-	@Convert(converter = AttributeEncryptor.class)
 	private String paternalSurname;
 
 	@Column(name = "maternal_surname")
-	@Convert(converter = AttributeEncryptor.class)
 	private String maternalSurname;
 
 	@Column(name = "identity")
-	@Convert(converter = AttributeEncryptor.class)
 	private String identity;
+
+	@Column(name = "dob")
+	private LocalDate dob;
 
 	@Column(name = "gender")
 	@Enumerated(EnumType.STRING)
@@ -52,6 +50,21 @@ public class Person extends BaseEntity {
 
 	@Column(name = "photo")
 	private String photo;
+
+	@ManyToOne
+	@JoinColumn(name = "country_id", referencedColumnName = "id")
+	private Country country;
+
+	@Column(name = "nationality")
+	private String nationality;
+
+	@Column(name = "rfc")
+	@Convert(converter = AttributeEncryptor.class)
+	private String rfc;
+
+	@Column(name = "curp")
+	@Convert(converter = AttributeEncryptor.class)
+	private String curp;
 
 	@Column(name = "mobile1")
 	@Convert(converter = AttributeEncryptor.class)
@@ -67,106 +80,37 @@ public class Person extends BaseEntity {
 
 	@Embedded
 	protected EmbeddableContact contact;
-	
+
+	@Version
+	private Long version;
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "person", targetEntity = PersonAddress.class)
+	@Getter(AccessLevel.NONE)
 	private List<PersonAddress> addresses;
 
 	public Person() {
 	}
 
-	public Person(String name, String paternalSurname, String maternalSurname, Gender gender) {
+	public Person(String name, String paternalSurname, String maternalSurname, Gender gender, LocalDate dob,
+				  Country country, String nationality) {
 		this.name = name;
 		this.paternalSurname = paternalSurname != null ? paternalSurname.trim() : "";
 		this.maternalSurname = maternalSurname != null ? maternalSurname.trim() : "";
 		this.identity = identity(this.name, this.paternalSurname, this.maternalSurname);
 		this.gender = gender;
+		this.dob = dob;
+		this.country = country;
+		this.nationality = nationality;
+	}
+
+	public void identity() {
+		this.identity = String.format("%s %s %s", this.name.trim(), this.paternalSurname.trim(), this.maternalSurname.trim());
 	}
 
 	private String identity(final String name, final String paternalSurname, final String maternalSurname) {
 		return String.format("%s %s %s", name.trim(), paternalSurname.trim(), maternalSurname.trim());
 	}
 
-	/* Getters and Setters */
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getPaternalSurname() {
-		return paternalSurname;
-	}
-
-	public void setPaternalSurname(String paternalSurname) {
-		this.paternalSurname = paternalSurname;
-	}
-
-	public String getMaternalSurname() {
-		return maternalSurname;
-	}
-
-	public void setMaternalSurname(String maternalSurname) {
-		this.maternalSurname = maternalSurname;
-	}
-
-	public String getIdentity() {
-		return identity;
-	}
-
-	public void setIdentity(String identity) {
-		this.identity = identity;
-	}
-
-	public Gender getGender() {
-		return gender;
-	}
-
-	public void setGender(Gender gender) {
-		this.gender = gender;
-	}
-
-	public String getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
-
-	public String getMobile1() {
-		return mobile1;
-	}
-
-	public void setMobile1(String mobile1) {
-		this.mobile1 = mobile1;
-	}
-
-	public String getMobile2() {
-		return mobile2;
-	}
-
-	public void setMobile2(String mobile2) {
-		this.mobile2 = mobile2;
-	}
-
-	public String getMobile3() {
-		return mobile3;
-	}
-
-	public void setMobile3(String mobile3) {
-		this.mobile3 = mobile3;
-	}
-
-	public EmbeddableContact getContact() {
-		return contact;
-	}
-
-	public void setContact(EmbeddableContact contact) {
-		this.contact = contact;
-	}
-	
 	public List<PersonAddress> getAddresses() {
 		if (addresses == null) {
 			addresses = new ArrayList<>();
@@ -174,16 +118,57 @@ public class Person extends BaseEntity {
 		return addresses;
 	}
 
-	public void setAddresses(List<PersonAddress> addresses) {
-		this.addresses = addresses;
+	public String getMobiles() {
+		if (StringUtils.hasValue(mobile1)) {
+			var mobileBuilder = new StringBuilder(mobile1);
+			if (StringUtils.hasValue(mobile2)) {
+				mobileBuilder.append(", ").append(mobile2);
+			}
+			if (StringUtils.hasValue(mobile3)) {
+				mobileBuilder.append(", ").append(mobile3);
+			}
+			return mobileBuilder.toString();
+		}
+		return null;
+	}
+
+	public String getPhones() {
+		if (this.contact != null && StringUtils.hasValue(this.contact.getPhone1())) {
+			var phoneBuilder = new StringBuilder(this.contact.getPhone1());
+			if (StringUtils.hasValue(this.contact.getPhone2())) {
+				phoneBuilder.append(", ").append(this.contact.getPhone2());
+			}
+			if (StringUtils.hasValue(this.contact.getPhone3())) {
+				phoneBuilder.append(", ").append(this.contact.getPhone3());
+			}
+			return phoneBuilder.toString();
+		}
+		return null;
+	}
+
+	public String getEmails() {
+		if (this.contact != null && StringUtils.hasValue(this.contact.getEmail1())) {
+			var emailBuilder = new StringBuilder(this.contact.getEmail1());
+			if (StringUtils.hasValue(this.contact.getEmail2())) {
+				emailBuilder.append(", ").append(this.contact.getEmail2());
+			}
+			if (StringUtils.hasValue(this.contact.getEmail3())) {
+				emailBuilder.append(", ").append(this.contact.getEmail3());
+			}
+			return emailBuilder.toString();
+		}
+		return null;
 	}
 
 	/* toString */
 	@Override
 	public String toString() {
+		val countryId = country != null ? country.getId() : null;
 		return "Person [id=" + id + ", name=" + name + ", paternalSurname=" + paternalSurname + ", maternalSurname="
-				+ maternalSurname + ", identity=" + identity + ", gender=" + gender + ", photo=" + photo + ", mobile1="
-				+ mobile1 + ", mobile2=" + mobile2 + ", mobile3=" + mobile3 + ", contact=" + contact + "]";
+				+ maternalSurname + ", identity=" + identity + ", dob=" + dob + ", gender=" + gender + ", photo=" + photo
+				+ ", country= " + countryId + ", nationality=" + nationality + ", rfc= " + rfc + ", curp=" + curp
+				+ ", mobile1=" + mobile1 + ", mobile2=" + mobile2 + ", mobile3=" + mobile3
+				+ ", contact=" + contact + ", createOn=" + createOn + ", updateOn=" + updateOn + "]";
 	}
 
 }

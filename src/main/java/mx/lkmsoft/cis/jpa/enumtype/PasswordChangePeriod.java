@@ -5,6 +5,10 @@ import org.apache.commons.lang3.EnumUtils;
 import mx.lkmsoft.cis.common.data.IntegerUtils;
 import mx.lkmsoft.cis.common.data.StringUtils;
 
+/**
+ * @author Maikel Guerra Ferrer
+ *
+ */
 public enum PasswordChangePeriod {
 	P1, P3, P6;
 	

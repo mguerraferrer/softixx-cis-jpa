@@ -6,4 +6,5 @@ package mx.lkmsoft.cis.jpa.enumtype;
  */
 public enum AppointmentStatus {
 	CREATED, CONFIRMED, COMPLETED, CANCELLED, RESCHEDULED
+
 }

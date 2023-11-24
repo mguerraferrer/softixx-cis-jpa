@@ -303,7 +303,7 @@ public class Planning extends AuditableEntity {
 		return "Planning [id=" + id + ", medicalSchedule=" + medicalSchedule.getId() + ", agendaVisualization="
 				+ agendaVisualization + ", fixedSchedule=" + fixedSchedule + ", appointmentDuration="
 				+ appointmentDuration + ", code=" + code + ", version=" + version + ", createOn=" + createOn
-				+ ", updateOn=" + updateOn + ", active= " + active + "]";
+				+ ", updateOn=" + updateOn + ", version=" + version + ", active= " + active + "]";
 	}
 
 }

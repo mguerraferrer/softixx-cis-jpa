@@ -12,4 +12,5 @@ public enum NotificationMethod {
 	public static boolean isValid(String notificationMethod) {
 		return EnumUtils.isValidEnum(NotificationMethod.class, notificationMethod);
 	}
+
 }

@@ -1,32 +1,28 @@
 package mx.lkmsoft.cis.jpa.entity;
 
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import mx.lkmsoft.cis.jpa.base.BaseEntity;
+import mx.lkmsoft.cis.jpa.enumtype.Role;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import mx.lkmsoft.cis.jpa.base.BaseEntity;
-import mx.lkmsoft.cis.jpa.enumtype.Role;
-
 @Entity
 @Table(name = "users", schema = "security")
 @SequenceGenerator(name = "default_gen", sequenceName = "security.user_seq", allocationSize = 1)
+@Getter
+@Setter
 public class User extends BaseEntity {
 
 	@Column(name = "email")
 	private String email;
+
+	@Column(name = "code")
+	private String code;
 
 	@Column(name = "photo")
 	private String photo;
@@ -55,14 +51,14 @@ public class User extends BaseEntity {
 	@Column(name = "activation_code", length = 128)
 	private String activationCode;
 
-	@Column(name = "activation_code_duedate")
-	private LocalDateTime activationCodeDuedate;
+	@Column(name = "activation_code_due_date")
+	private LocalDateTime activationCodeDueDate;
 
 	@Column(name = "change_passwd_code", length = 128)
 	private String changePasswdCode;
 
-	@Column(name = "change_passwd_code_duedate")
-	private LocalDateTime changePasswdCodeDuedate;
+	@Column(name = "change_passwd_code_due_date")
+	private LocalDateTime changePasswdCodeDueDate;
 
 	@Column(name = "failed_attempts")
 	private Integer failedAttempts;
@@ -76,164 +72,44 @@ public class User extends BaseEntity {
 	@ElementCollection(targetClass = Role.class)
 	@Enumerated(EnumType.STRING)
 	@CollectionTable(schema = "security", name = "users_roles")
+	@Getter(AccessLevel.NONE)
 	@Column(name = "role")
 	private List<Role> roles;
 
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	@Setter(AccessLevel.NONE)
 	private UserProfile userProfile;
 
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	@Setter(AccessLevel.NONE)
 	private UserPreferences userPreferences;
 
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	@Setter(AccessLevel.NONE)
 	private UserLicense userLicense;
 	
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	private MasterAccount masterAccount;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = HealthcareCenterAccess.class)
+	@Getter(AccessLevel.NONE)
 	private List<HealthcareCenterAccess> healthcareCenterAccesses;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = UserAccess.class)
+	@Getter(AccessLevel.NONE)
 	private List<UserAccess> userAccesses;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = AuthErrorLog.class)
+	@Getter(AccessLevel.NONE)
 	private List<AuthErrorLog> authErrorLogs;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = AuthErrorLog.class)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = UserAccessDevice.class)
+	@Getter(AccessLevel.NONE)
 	private List<UserAccessDevice> userAccessDevices;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = AuthErrorLog.class)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = ErrorLog.class)
+	@Getter(AccessLevel.NONE)
 	private List<ErrorLog> errorLogs;
-
-	/* Getters and Setters */
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public LocalDateTime getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(LocalDateTime creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public LocalDateTime getActivationDate() {
-		return activationDate;
-	}
-
-	public void setActivationDate(LocalDateTime activationDate) {
-		this.activationDate = activationDate;
-	}
-
-	public LocalDateTime getLastAccess() {
-		return lastAccess;
-	}
-
-	public void setLastAccess(LocalDateTime lastAccess) {
-		this.lastAccess = lastAccess;
-	}
-
-	public boolean isFirstVisit() {
-		return firstVisit;
-	}
-
-	public void setFirstVisit(boolean firstVisit) {
-		this.firstVisit = firstVisit;
-	}
-
-	public boolean isInitialConfigCompleted() {
-		return initialConfigCompleted;
-	}
-
-	public void setInitialConfigCompleted(boolean initialConfigCompleted) {
-		this.initialConfigCompleted = initialConfigCompleted;
-	}
-
-	public boolean isForcePasswdChange() {
-		return forcePasswdChange;
-	}
-
-	public void setForcePasswdChange(boolean forcePasswdChange) {
-		this.forcePasswdChange = forcePasswdChange;
-	}
-
-	public String getActivationCode() {
-		return activationCode;
-	}
-
-	public void setActivationCode(String activationCode) {
-		this.activationCode = activationCode;
-	}
-
-	public LocalDateTime getActivationCodeDuedate() {
-		return activationCodeDuedate;
-	}
-
-	public void setActivationCodeDuedate(LocalDateTime activationCodeDuedate) {
-		this.activationCodeDuedate = activationCodeDuedate;
-	}
-
-	public String getChangePasswdCode() {
-		return changePasswdCode;
-	}
-
-	public void setChangePasswdCode(String changePasswdCode) {
-		this.changePasswdCode = changePasswdCode;
-	}
-
-	public LocalDateTime getChangePasswdCodeDuedate() {
-		return changePasswdCodeDuedate;
-	}
-
-	public void setChangePasswdCodeDuedate(LocalDateTime changePasswdCodeDuedate) {
-		this.changePasswdCodeDuedate = changePasswdCodeDuedate;
-	}
-
-	public Integer getFailedAttempts() {
-		return failedAttempts;
-	}
-
-	public void setFailedAttempts(Integer failedAttempts) {
-		this.failedAttempts = failedAttempts;
-	}
-
-	public boolean isBlockedAccess() {
-		return blockedAccess;
-	}
-
-	public void setBlockedAccess(boolean blockedAccess) {
-		this.blockedAccess = blockedAccess;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
 
 	public List<Role> getRoles() {
 		if (roles == null) {
@@ -242,10 +118,7 @@ public class User extends BaseEntity {
 		return roles;
 	}
 
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
-	}
-
+	@Transient
 	public void addRole(Role role) {
 		if (this.roles == null) {
 			this.roles = new ArrayList<>();
@@ -258,17 +131,9 @@ public class User extends BaseEntity {
 		return roles.stream().anyMatch(role -> role.name().equalsIgnoreCase(roleCode));
 	}
 
-	public UserProfile getUserProfile() {
-		return userProfile;
-	}
-
 	public void setUserProfile(UserProfile userProfile) {
 		this.userProfile = userProfile;
 		this.userProfile.setUser(this);
-	}
-
-	public UserPreferences getUserPreferences() {
-		return userPreferences;
 	}
 
 	public void setUserPreferences(UserPreferences userPreferences) {
@@ -276,32 +141,16 @@ public class User extends BaseEntity {
 		this.userPreferences.setUser(this);
 	}
 
-	public UserLicense getUserLicense() {
-		return userLicense;
-	}
-
 	public void setUserLicense(UserLicense userLicense) {
 		this.userLicense = userLicense;
 		this.userLicense.setUser(this);
 	}
 
-	public MasterAccount getMasterAccount() {
-		return masterAccount;
-	}
-
-	public void setMasterAccount(MasterAccount masterAccount) {
-		this.masterAccount = masterAccount;
-	}
-	
 	public List<HealthcareCenterAccess> getHealthcareCenterAccesses() {
 		if (healthcareCenterAccesses == null) {
 			healthcareCenterAccesses = new ArrayList<>();
 		}
 		return healthcareCenterAccesses;
-	}
-
-	public void setHealthcareCenterAccesses(List<HealthcareCenterAccess> healthcareCenterAccesses) {
-		this.healthcareCenterAccesses = healthcareCenterAccesses;
 	}
 
 	public List<UserAccess> getUserAccesses() {
@@ -311,19 +160,11 @@ public class User extends BaseEntity {
 		return userAccesses;
 	}
 
-	public void setUserAccesses(List<UserAccess> userAccesses) {
-		this.userAccesses = userAccesses;
-	}
-
 	public List<AuthErrorLog> getAuthErrorLogs() {
 		if (authErrorLogs == null) {
 			authErrorLogs = new ArrayList<>();
 		}
 		return authErrorLogs;
-	}
-
-	public void setAuthErrorLogs(List<AuthErrorLog> authErrorLogs) {
-		this.authErrorLogs = authErrorLogs;
 	}
 
 	public List<UserAccessDevice> getUserAccessDevices() {
@@ -333,10 +174,6 @@ public class User extends BaseEntity {
 		return userAccessDevices;
 	}
 
-	public void setUserAccessDevices(List<UserAccessDevice> userAccessDevices) {
-		this.userAccessDevices = userAccessDevices;
-	}
-
 	public List<ErrorLog> getErrorLogs() {
 		if (errorLogs == null) {
 			errorLogs = new ArrayList<>();
@@ -344,14 +181,9 @@ public class User extends BaseEntity {
 		return errorLogs;
 	}
 
-	public void setErrorLogs(List<ErrorLog> errorLogs) {
-		this.errorLogs = errorLogs;
-	}
-	
 	/**
 	 * Update user data on successful authentication
 	 * 
-	 * @param user The User who successfully authenticated
 	 */
 	@Transient
 	public void updateOnSuccessfulAuth() {
@@ -367,7 +199,6 @@ public class User extends BaseEntity {
 	/**
 	 * Update user data on log out
 	 * 
-	 * @param user The User who log out
 	 */
 	@Transient
 	public void updateOnLogout() {
@@ -377,12 +208,12 @@ public class User extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", email=" + email + ", photo=" + photo + ", password=" + null + ", roles=" + roles
+		return "User [id=" + id + ", email=" + email + ", code=" + code +", photo=" + photo + ", password=" + null + ", roles=" + roles
 				+ ",creationDate=" + creationDate + ", activationDate=" + activationDate + ", lastAccess=" + lastAccess
 				+ ", firstVisit=" + firstVisit + ", initialConfigCompleted=" + initialConfigCompleted
 				+ ", forcePasswdChange=" + forcePasswdChange + ", activationCode=" + activationCode
-				+ ", activationCodeDuedate=" + activationCodeDuedate + ", changePasswdCode=" + changePasswdCode
-				+ ", changePasswdCodeDuedate=" + changePasswdCodeDuedate + ", failedAttempts=" + failedAttempts
+				+ ", activationCodeDueDate=" + activationCodeDueDate + ", changePasswdCode=" + changePasswdCode
+				+ ", changePasswdCodeDueDate=" + changePasswdCodeDueDate + ", failedAttempts=" + failedAttempts
 				+ ", blockedAccess=" + blockedAccess + ", active=" + active + "]";
 	}
 

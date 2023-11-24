@@ -18,8 +18,8 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
  *
  */
 @Entity
-@Table(name = "error_log", schema = "trace")
-@SequenceGenerator(name = "default_gen", sequenceName = "trace.error_log_seq", allocationSize = 1)
+@Table(name = "error_log", schema = "errors")
+@SequenceGenerator(name = "default_gen", sequenceName = "errors.error_log_seq", allocationSize = 1)
 public class ErrorLog extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)

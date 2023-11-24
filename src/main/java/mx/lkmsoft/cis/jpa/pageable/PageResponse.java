@@ -99,7 +99,6 @@ public class PageResponse<T> {
 	 * and the request mapping
 	 *
 	 * @param pageDataRequest the page data request
-	 * @param requestMapping  the request mapping
 	 */
 	public PageResponse(PageDataRequest<T> pageDataRequest) {
 		val page = pageDataRequest.page();

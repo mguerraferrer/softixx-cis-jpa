@@ -107,5 +107,12 @@ public record PageableRequest(String key, PageRequest pageRequest) {
 		
 		return PageRequest.of(pageNumber - 1, pageSize, sort);
 	}
-	
+
+	public static PageRequest pageRequest(Sort sort) {
+		if (sort == null) {
+			sort = Sort.unsorted();
+		}
+		return PageRequest.of(0, PageableUtils.RECORDS_PER_PAGE, sort);
+	}
+
 }

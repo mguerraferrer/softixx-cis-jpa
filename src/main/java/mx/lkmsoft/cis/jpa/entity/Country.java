@@ -1,14 +1,10 @@
 package mx.lkmsoft.cis.jpa.entity;
 
+import jakarta.persistence.*;
+import mx.lkmsoft.cis.jpa.base.BaseEntity;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
-import mx.lkmsoft.cis.jpa.base.NomenclatorEntity;
 
 /**
  * Persistent class for entity stored in table "country"
@@ -18,15 +14,37 @@ import mx.lkmsoft.cis.jpa.base.NomenclatorEntity;
  */
 
 @Entity
-@Table(name = "country", schema = "nomenclators")
-@SequenceGenerator(name = "default_gen", sequenceName = "nomenclators.country_seq", allocationSize = 1)
-public class Country extends NomenclatorEntity {
+@Table(name = "country", schema = "address")
+@SequenceGenerator(name = "default_gen", sequenceName = "address.country_seq", allocationSize = 1)
+public class Country extends BaseEntity {
+
+	@Column(name = "value")
+	protected String value;
+
+	@Column(name = "active")
+	protected boolean active;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "country", targetEntity = State.class)
 	private List<State> states;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "country", targetEntity = Patient.class)
-	private List<Patient> patients;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "country", targetEntity = Person.class)
+	private List<Person> persons;
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 
 	/* Getters and Setters */
 	public List<State> getStates() {
@@ -40,21 +58,21 @@ public class Country extends NomenclatorEntity {
 		this.states = states;
 	}
 	
-	public List<Patient> getPatients() {
-		if (patients == null) {
-			patients = new ArrayList<>();
+	public List<Person> getPersons() {
+		if (persons == null) {
+			persons = new ArrayList<>();
 		}
-		return patients;
+		return persons;
 	}
 
-	public void setPatients(List<Patient> patients) {
-		this.patients = patients;
+	public void setPatients(List<Person> persons) {
+		this.persons = persons;
 	}
 
 	/* toString */
 	@Override
 	public String toString() {
-		return "Country [id=" + id + ", code=" + code + ", value=" + value + ", active=" + active + ", states=" + states
+		return "Country [id=" + id + ", value=" + value + ", active=" + active + ", states=" + states
 				+ "]";
 	}
 

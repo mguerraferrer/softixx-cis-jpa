@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -21,6 +22,7 @@ import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
 import lombok.val;
 import mx.lkmsoft.cis.common.crypto.CryptoUtils;
+import mx.lkmsoft.cis.common.data.CodeGeneratorUtils;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.enumtype.AppointmentCancelled;
 import mx.lkmsoft.cis.jpa.enumtype.AppointmentConfirmation;
@@ -29,6 +31,7 @@ import mx.lkmsoft.cis.jpa.enumtype.AppointmentReschedule;
 import mx.lkmsoft.cis.jpa.enumtype.AppointmentStatus;
 import mx.lkmsoft.cis.jpa.enumtype.AppointmentType;
 import mx.lkmsoft.cis.jpa.enumtype.Relationship;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * Persistent class for entity stored in table "appointment"
@@ -116,7 +119,7 @@ public class Appointment extends BaseEntity {
 	private List<Appointment> appointments;
 
 	public Appointment() {
-		this.folio = CryptoUtils.generateHash().toUpperCase();
+		this.folio = CodeGeneratorUtils.alphanumeric().toUpperCase();
 	}
 
 	public Appointment(Planning planning, Patient patient, LocalDate date, LocalTime startTime,
@@ -126,7 +129,7 @@ public class Appointment extends BaseEntity {
 		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.folio = CryptoUtils.generateHash().toUpperCase();
+		this.folio = CodeGeneratorUtils.alphanumeric().toUpperCase();
 		this.month = date.getMonthValue();
 	}
 
@@ -378,4 +381,25 @@ public class Appointment extends BaseEntity {
 				+ ", additionalInfo=" + additionalInfo + ", version= " + version + "]";
 	}
 
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		Appointment that = (Appointment) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
+	}
 }

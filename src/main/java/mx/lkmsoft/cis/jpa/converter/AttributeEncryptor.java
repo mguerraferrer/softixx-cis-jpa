@@ -11,6 +11,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
+import jakarta.persistence.Converter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,7 @@ import mx.lkmsoft.cis.common.data.StringUtils;
  *
  */
 @Component
+@Converter
 public class AttributeEncryptor implements AttributeConverter<String, String> {
 
 	private final Key key;

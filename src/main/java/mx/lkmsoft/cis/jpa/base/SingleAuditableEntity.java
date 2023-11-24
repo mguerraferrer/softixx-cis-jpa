@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @Getter
 @Setter
-public class AuditableEntity extends BaseEntity {
+public class SingleAuditableEntity {
 
 	@Column(name = "create_on", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", nullable = false, updatable = false)
 	@CreationTimestamp

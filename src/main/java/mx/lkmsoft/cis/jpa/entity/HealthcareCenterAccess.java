@@ -9,9 +9,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
 import mx.lkmsoft.cis.jpa.embeddable.EmbeddableAccess;
+import org.hibernate.proxy.HibernateProxy;
+
+import java.util.Objects;
 
 /**
  * Persistent class for entity stored in table "participant"
@@ -23,6 +28,8 @@ import mx.lkmsoft.cis.jpa.embeddable.EmbeddableAccess;
 @Entity
 @Table(name = "healthcare_center_access", schema = "common")
 @SequenceGenerator(name = "default_gen", sequenceName = "common.healthcare_center_access_seq", allocationSize = 1)
+@Getter
+@Setter
 public class HealthcareCenterAccess extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -52,47 +59,6 @@ public class HealthcareCenterAccess extends BaseEntity {
 		this.active = true;
 	}
 
-	/* Getters and Setters */
-	public HealthcareCenter getHealthcareCenter() {
-		return healthcareCenter;
-	}
-
-	public void setHealthcareCenter(HealthcareCenter healthcareCenter) {
-		this.healthcareCenter = healthcareCenter;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public EmbeddableAccess getAccess() {
-		return access;
-	}
-
-	public void setAccess(EmbeddableAccess access) {
-		this.access = access;
-	}
-
-	public String getIp() {
-		return ip;
-	}
-
-	public void setIp(String ip) {
-		this.ip = ip;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
 	/* toString */
 	@Override
 	public String toString() {
@@ -100,4 +66,25 @@ public class HealthcareCenterAccess extends BaseEntity {
 				+ ", access=" + access + ", ip=" + ip + ", active=" + active + "]";
 	}
 
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		HealthcareCenterAccess that = (HealthcareCenterAccess) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
+	}
 }

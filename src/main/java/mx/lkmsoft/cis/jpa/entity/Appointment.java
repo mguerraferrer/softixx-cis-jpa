@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.proxy.HibernateProxy;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,7 +26,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
 import lombok.val;
-import mx.lkmsoft.cis.common.crypto.CryptoUtils;
 import mx.lkmsoft.cis.common.data.CodeGeneratorUtils;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.enumtype.AppointmentCancelled;
@@ -31,7 +35,6 @@ import mx.lkmsoft.cis.jpa.enumtype.AppointmentReschedule;
 import mx.lkmsoft.cis.jpa.enumtype.AppointmentStatus;
 import mx.lkmsoft.cis.jpa.enumtype.AppointmentType;
 import mx.lkmsoft.cis.jpa.enumtype.Relationship;
-import org.hibernate.proxy.HibernateProxy;
 
 /**
  * Persistent class for entity stored in table "appointment"
@@ -43,6 +46,8 @@ import org.hibernate.proxy.HibernateProxy;
 @Entity
 @Table(name = "appointment", schema = "agenda")
 @SequenceGenerator(name = "default_gen", sequenceName = "agenda.appointment_seq", allocationSize = 1)
+@Getter
+@Setter
 public class Appointment extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -109,13 +114,15 @@ public class Appointment extends BaseEntity {
 	@Version
 	private Long version;
 
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
 	private AppointmentReminder reminder;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "appointment", targetEntity = AppointmentNotification.class, cascade = CascadeType.ALL, orphanRemoval = true)
+	@Getter(AccessLevel.NONE)
 	private List<AppointmentNotification> appointmentNotifications;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "originalAppointment", targetEntity = Appointment.class)
+	@Getter(AccessLevel.NONE)
 	private List<Appointment> appointments;
 
 	public Appointment() {
@@ -161,159 +168,6 @@ public class Appointment extends BaseEntity {
 		return null;
 	}
 
-	/* Getters and Setters */
-	public Planning getPlanning() {
-		return planning;
-	}
-
-	public void setPlanning(Planning planning) {
-		this.planning = planning;
-	}
-
-	public Patient getPatient() {
-		return patient;
-	}
-
-	public void setPatient(Patient patient) {
-		this.patient = patient;
-	}
-
-	public AppointmentType getType() {
-		return type;
-	}
-
-	public void setType(AppointmentType type) {
-		this.type = type;
-	}
-
-	public AppointmentOrigin getOrigin() {
-		return origin;
-	}
-
-	public void setOrigin(AppointmentOrigin origin) {
-		this.origin = origin;
-	}
-
-	public AppointmentStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(AppointmentStatus status) {
-		this.status = status;
-	}
-
-	public AppointmentConfirmation getConfirmation() {
-		return confirmation;
-	}
-
-	public void setConfirmation(AppointmentConfirmation confirmation) {
-		this.confirmation = confirmation;
-	}
-
-	public AppointmentCancelled getCancelledBy() {
-		return cancelledBy;
-	}
-
-	public void setCancelledBy(AppointmentCancelled cancelledBy) {
-		this.cancelledBy = cancelledBy;
-	}
-
-	public AppointmentReschedule getRescheduledBy() {
-		return rescheduledBy;
-	}
-
-	public void setRescheduledBy(AppointmentReschedule rescheduledBy) {
-		this.rescheduledBy = rescheduledBy;
-	}
-
-	public String getAnotherPersonName() {
-		return anotherPersonName;
-	}
-
-	public void setAnotherPersonName(String anotherPersonName) {
-		this.anotherPersonName = anotherPersonName;
-	}
-
-	public Relationship getRelationship() {
-		return relationship;
-	}
-
-	public void setRelationship(Relationship relationship) {
-		this.relationship = relationship;
-	}
-
-	public Appointment getOriginalAppointment() {
-		return originalAppointment;
-	}
-
-	public void setOriginalAppointment(Appointment originalAppointment) {
-		this.originalAppointment = originalAppointment;
-	}
-
-	public LocalDate getDate() {
-		return date;
-	}
-
-	public void setDate(LocalDate date) {
-		this.date = date;
-	}
-
-	public LocalTime getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(LocalTime startTime) {
-		this.startTime = startTime;
-	}
-
-	public LocalTime getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(LocalTime endTime) {
-		this.endTime = endTime;
-	}
-
-	public String getFolio() {
-		return folio;
-	}
-
-	public void setFolio(String folio) {
-		this.folio = folio;
-	}
-
-	public Integer getMonth() {
-		return month;
-	}
-
-	public void setMonth(Integer month) {
-		this.month = month;
-	}
-
-	public String getAdditionalInfo() {
-		return additionalInfo;
-	}
-
-	public void setAdditionalInfo(String additionalInfo) {
-		this.additionalInfo = additionalInfo;
-	}
-
-	public Long getVersion() {
-		return version;
-	}
-
-	public void setVersion(Long version) {
-		this.version = version;
-	}
-
-	public AppointmentReminder getReminder() {
-		return reminder;
-	}
-
-	public void setReminder(AppointmentReminder reminder) {
-		this.reminder = reminder;
-	}
-
 	public List<AppointmentNotification> getAppointmentNotifications() {
 		if (appointmentNotifications == null) {
 			appointmentNotifications = new ArrayList<>();
@@ -321,17 +175,12 @@ public class Appointment extends BaseEntity {
 		return appointmentNotifications;
 	}
 
-	public void setAppointmentNotifications(List<AppointmentNotification> appointmentNotifications) {
-		this.appointmentNotifications = appointmentNotifications;
-	}
-
 	public void addNotifications(AppointmentNotification appointmentNotification) {
 		if (appointmentNotifications == null) {
 			appointmentNotifications = new ArrayList<>();
 		}
-		this.appointmentNotifications
-				.add(new AppointmentNotification(this, appointmentNotification.getNotificationType(),
-						appointmentNotification.getNotifiedEmails(), appointmentNotification.getNotifiedMobiles()));
+		this.appointmentNotifications.add(new AppointmentNotification(this, appointmentNotification.getNotificationType(),
+			appointmentNotification.getNotifiedEmails(), appointmentNotification.getNotifiedMobiles()));
 	}
 
 	public void addNotifications(List<AppointmentNotification> appointmentNotifications) {
@@ -352,10 +201,6 @@ public class Appointment extends BaseEntity {
 			appointments = new ArrayList<>();
 		}
 		return appointments;
-	}
-
-	public void setAppointments(List<Appointment> appointments) {
-		this.appointments = appointments;
 	}
 
 	@Transient
@@ -402,4 +247,5 @@ public class Appointment extends BaseEntity {
 			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
 			: getClass().hashCode();
 	}
+
 }

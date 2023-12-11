@@ -1,13 +1,17 @@
 package mx.lkmsoft.cis.jpa.entity;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 import mx.lkmsoft.cis.common.uuid.UuidGeneratorUtils;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * Persistent class for entity stored in table "exception_handler_log"
@@ -18,6 +22,8 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 @Entity
 @Table(name = "exception_handler_log", schema = "errors")
 @SequenceGenerator(name = "default_gen", sequenceName = "errors.exception_handler_log_seq", allocationSize = 1)
+@Getter
+@Setter
 public class ExceptionHandlerLog extends BaseEntity {
 
 	@Column(name = "handler_method")
@@ -66,60 +72,33 @@ public class ExceptionHandlerLog extends BaseEntity {
 		this.code = code;
 	}
 
-	/* Getters and Setters */
-	public String getHandlerMethod() {
-		return handlerMethod;
-	}
-
-	public void setHandlerMethod(String handlerMethod) {
-		this.handlerMethod = handlerMethod;
-	}
-
-	public String getExceptionClass() {
-		return exceptionClass;
-	}
-
-	public void setExceptionClass(String exceptionClass) {
-		this.exceptionClass = exceptionClass;
-	}
-
-	public String getExceptionMessage() {
-		return exceptionMessage;
-	}
-
-	public void setExceptionMessage(String exceptionMessage) {
-		this.exceptionMessage = exceptionMessage;
-	}
-
-	public String getRequestUrl() {
-		return requestUrl;
-	}
-
-	public void setRequestUrl(String requestUrl) {
-		this.requestUrl = requestUrl;
-	}
-
-	public LocalDateTime getLogTime() {
-		return logTime;
-	}
-
-	public void setLogTime(LocalDateTime logTime) {
-		this.logTime = logTime;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
 	@Override
 	public String toString() {
 		return "AuthErrorLog [id=" + id + ", handlerMethod=" + handlerMethod + ", exceptionClass=" + exceptionClass
 				+ ", exceptionMessage=" + exceptionMessage + ", requestUrl=" + requestUrl + ", logTime=" + logTime
 				+ ", code=" + code + "]";
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		ExceptionHandlerLog that = (ExceptionHandlerLog) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
 	}
 
 }

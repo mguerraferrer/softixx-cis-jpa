@@ -3,6 +3,7 @@ package mx.lkmsoft.cis.jpa.entity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import jakarta.persistence.CascadeType;
@@ -18,10 +19,14 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 import mx.lkmsoft.cis.common.data.CodeGeneratorUtils;
 import mx.lkmsoft.cis.jpa.base.AuditableEntity;
 import mx.lkmsoft.cis.jpa.enumtype.AgendaVisualization;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * Persistent class for entity stored in table "planning"
@@ -32,6 +37,8 @@ import mx.lkmsoft.cis.jpa.enumtype.AgendaVisualization;
 @Entity
 @Table(name = "planning", schema = "agenda")
 @SequenceGenerator(name = "default_gen", sequenceName = "agenda.planning_seq", allocationSize = 1)
+@Getter
+@Setter
 public class Planning extends AuditableEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -62,15 +69,19 @@ public class Planning extends AuditableEntity {
 	private boolean active;
 
 	@OneToOne(mappedBy = "planning", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Setter(AccessLevel.NONE)
 	private PlanningFixed planningFixed;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "planning", targetEntity = PlanningDaily.class, cascade = CascadeType.ALL, orphanRemoval = true)
+	@Getter(AccessLevel.NONE)
 	private List<PlanningDaily> planningDailies;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "planning", targetEntity = Appointment.class, cascade = CascadeType.ALL, orphanRemoval = true)
+	@Getter(AccessLevel.NONE)
 	private List<Appointment> appointments;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "planning", targetEntity = ConsultationProcedure.class, cascade = CascadeType.ALL, orphanRemoval = true)
+	@Getter(AccessLevel.NONE)
 	private List<ConsultationProcedure> consultationProcedures;
 
 	public Planning() {
@@ -84,8 +95,6 @@ public class Planning extends AuditableEntity {
 		this.fixedSchedule = fixedSchedule;
 		this.appointmentDuration = appointmentDuration;
 		this.code = CodeGeneratorUtils.asString();
-		this.createOn = LocalDateTime.now(); // For cache purposes
-		this.updateOn = LocalDateTime.now(); // For cache purposes
 		this.active = true;
 	}
 
@@ -103,75 +112,6 @@ public class Planning extends AuditableEntity {
 	public static Planning clone(Planning planning) {
 		return new Planning(planning.getMedicalSchedule(), planning.getDoctorSpecialty(), planning.isFixedSchedule(),
 				planning.getAppointmentDuration(), planning.getCode(), planning.isActive());
-	}
-
-	/* Getters and Setters */
-	public MedicalSchedule getMedicalSchedule() {
-		return medicalSchedule;
-	}
-
-	public void setMedicalSchedule(MedicalSchedule medicalSchedule) {
-		this.medicalSchedule = medicalSchedule;
-	}
-
-	public DoctorSpecialty getDoctorSpecialty() {
-		return doctorSpecialty;
-	}
-
-	public void setDoctorSpecialty(DoctorSpecialty doctorSpecialty) {
-		this.doctorSpecialty = doctorSpecialty;
-	}
-
-	public AgendaVisualization getAgendaVisualization() {
-		return agendaVisualization;
-	}
-
-	public void setAgendaVisualization(AgendaVisualization agendaVisualization) {
-		this.agendaVisualization = agendaVisualization;
-	}
-
-	public boolean isFixedSchedule() {
-		return fixedSchedule;
-	}
-
-	public void setFixedSchedule(boolean fixedSchedule) {
-		this.fixedSchedule = fixedSchedule;
-	}
-
-	public Integer getAppointmentDuration() {
-		return appointmentDuration;
-	}
-
-	public void setAppointmentDuration(Integer appointmentDuration) {
-		this.appointmentDuration = appointmentDuration;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public Long getVersion() {
-		return version;
-	}
-
-	public void setVersion(Long version) {
-		this.version = version;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
-	public PlanningFixed getPlanningFixed() {
-		return planningFixed;
 	}
 
 	public void setPlanningFixed(PlanningFixed planningFixed) {
@@ -201,10 +141,6 @@ public class Planning extends AuditableEntity {
 			planningDailies = new ArrayList<>();
 		}
 		return planningDailies;
-	}
-
-	public void setPlanningDailies(List<PlanningDaily> planningDailies) {
-		this.planningDailies = planningDailies;
 	}
 
 	public void addPlanningDaily(PlanningDaily planningDaily) {
@@ -243,10 +179,6 @@ public class Planning extends AuditableEntity {
 		return appointments;
 	}
 
-	public void setAppointments(List<Appointment> appointments) {
-		this.appointments = appointments;
-	}
-
 	public void addAppointments(List<Appointment> appointments) {
 		if (this.appointments == null) {
 			this.appointments = new ArrayList<>();
@@ -261,10 +193,6 @@ public class Planning extends AuditableEntity {
 			consultationProcedures = new ArrayList<>();
 		}
 		return consultationProcedures;
-	}
-
-	public void setConsultationProcedures(List<ConsultationProcedure> consultationProcedures) {
-		this.consultationProcedures = consultationProcedures;
 	}
 
 	public void addConsultationProcedure(ConsultationProcedure consultationProcedure) {
@@ -304,6 +232,28 @@ public class Planning extends AuditableEntity {
 				+ agendaVisualization + ", fixedSchedule=" + fixedSchedule + ", appointmentDuration="
 				+ appointmentDuration + ", code=" + code + ", version=" + version + ", createOn=" + createOn
 				+ ", updateOn=" + updateOn + ", version=" + version + ", active= " + active + "]";
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		Planning planning = (Planning) o;
+		return getId() != null && Objects.equals(getId(), planning.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
 	}
 
 }

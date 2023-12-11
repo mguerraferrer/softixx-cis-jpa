@@ -7,6 +7,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.proxy.HibernateProxy;
+
+import java.util.Objects;
 
 /**
  * Persistent class for entity stored in table "profile"
@@ -17,6 +22,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "user_profile", schema = "security")
+@Getter
+@Setter
 public class UserProfile {
 
 	@Id
@@ -64,55 +71,6 @@ public class UserProfile {
 		this.assistant = assistant;
 	}
 
-	/* Getters and Setters */
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Doctor getDoctor() {
-		return doctor;
-	}
-
-	public void setDoctor(Doctor doctor) {
-		this.doctor = doctor;
-	}
-
-	public Assistant getAssistant() {
-		return assistant;
-	}
-
-	public void setAssistant(Assistant assistant) {
-		this.assistant = assistant;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public Nurse getNurse() {
-		return nurse;
-	}
-
-	public void setNurse(Nurse nurse) {
-		this.nurse = nurse;
-	}
-
-	public Person getPerson() {
-		return person;
-	}
-
-	public void setPerson(Person person) {
-		this.person = person;
-	}
-
 	/* toString */
 	@Override
 	public String toString() {
@@ -121,6 +79,28 @@ public class UserProfile {
 		long nurseId = nurse != null ? nurse.getId() : null;
 
 		return "UserProfile [user=" + user.getId() + ", doctor=" + doctorId + ", assistant=" + assistantId + ", nurse=" + nurseId + ", person=" + person.getId() + "]";
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		UserProfile that = (UserProfile) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
 	}
 
 }

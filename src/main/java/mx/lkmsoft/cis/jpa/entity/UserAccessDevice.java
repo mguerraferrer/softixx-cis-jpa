@@ -1,6 +1,7 @@
 package mx.lkmsoft.cis.jpa.entity;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,8 +12,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.enumtype.DeviceType;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * Persistent class for entity stored in table "user_access_device"
@@ -24,6 +28,8 @@ import mx.lkmsoft.cis.jpa.enumtype.DeviceType;
 @Entity
 @Table(name = "user_access_device", schema = "security")
 @SequenceGenerator(name = "default_gen", sequenceName = "security.user_access_device_seq", allocationSize = 1)
+@Getter
+@Setter
 public class UserAccessDevice extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -54,52 +60,33 @@ public class UserAccessDevice extends BaseEntity {
 		this.lastAccess = LocalDateTime.now();
 	}
 
-	/* Getters and Setters */
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public DeviceType getDeviceType() {
-		return deviceType;
-	}
-
-	public void setDeviceType(DeviceType deviceType) {
-		this.deviceType = deviceType;
-	}
-
-	public String getDetails() {
-		return details;
-	}
-
-	public void setDetails(String details) {
-		this.details = details;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-	public LocalDateTime getLastAccess() {
-		return lastAccess;
-	}
-
-	public void setLastAccess(LocalDateTime lastAccess) {
-		this.lastAccess = lastAccess;
-	}
-
 	/* toString */
 	@Override
 	public String toString() {
 		return "UserAccessDevice [id=" + id + ", user=" + user.getId() + ", deviceType=" + deviceType
 				+ ", details=" + details + ", location=" + location + ", lastAccess=" + lastAccess + "]";
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		UserAccessDevice that = (UserAccessDevice) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
 	}
 
 }

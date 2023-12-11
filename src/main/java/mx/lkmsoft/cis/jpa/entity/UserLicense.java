@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,7 +17,11 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import mx.lkmsoft.cis.common.datetime.LocalDateUtils;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * Persistent class for entity stored in table "user_license"
@@ -27,6 +32,8 @@ import mx.lkmsoft.cis.common.datetime.LocalDateUtils;
 
 @Entity
 @Table(name = "user_license", schema = "sales")
+@Getter
+@Setter
 public class UserLicense {
 
 	@Id
@@ -54,18 +61,23 @@ public class UserLicense {
 	private LocalDate dueDate;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userLicense", targetEntity = UserLicensePaymentHistory.class)
+	@Getter(AccessLevel.NONE)
 	private List<UserLicensePaymentHistory> userLicensePaymentHistories;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userLicense", targetEntity = UserLicenseAvailableServ.class)
-	private List<UserLicenseAvailableServ> userLicenseServices;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userLicense", targetEntity = UserLicenseAvailableItem.class)
+	@Getter(AccessLevel.NONE)
+	private List<UserLicenseAvailableItem> userLicenseServices;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userLicense", targetEntity = UserLicenseChangeHistory.class)
+	@Getter(AccessLevel.NONE)
 	private List<UserLicenseChangeHistory> userLicenseChangeHistories;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userLicense", targetEntity = UserLicenseFrequentlyPayment.class)
+	@Getter(AccessLevel.NONE)
 	private List<UserLicenseFrequentlyPayment> userLicenseFrequentlyPayments;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userLicense", targetEntity = UserLicenseEditionHistory.class)
+	@Getter(AccessLevel.NONE)
 	private List<UserLicenseEditionHistory> userLicenseEditionHistories;
 
 	public UserLicense() {
@@ -75,63 +87,6 @@ public class UserLicense {
 		this.user = user;
 		this.license = license;
 		this.serie = serie;
-		this.dueDate = dueDate;
-	}
-
-	/* Getters and Setters */
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public License getLicense() {
-		return license;
-	}
-
-	public void setLicense(License license) {
-		this.license = license;
-	}
-
-	public String getSerie() {
-		return serie;
-	}
-
-	public void setSerie(String serie) {
-		this.serie = serie;
-	}
-
-	public LocalDateTime getActivationDate() {
-		return activationDate;
-	}
-
-	public void setActivationDate(LocalDateTime activationDate) {
-		this.activationDate = activationDate;
-	}
-
-	public LocalDateTime getActualizationDate() {
-		return actualizationDate;
-	}
-
-	public void setActualizationDate(LocalDateTime actualizationDate) {
-		this.actualizationDate = actualizationDate;
-	}
-
-	public LocalDate getDueDate() {
-		return dueDate;
-	}
-
-	public void setDueDate(LocalDate dueDate) {
 		this.dueDate = dueDate;
 	}
 
@@ -147,19 +102,11 @@ public class UserLicense {
 		return userLicensePaymentHistories;
 	}
 
-	public void setUserLicensePaymentHistories(List<UserLicensePaymentHistory> userLicensePaymentHistories) {
-		this.userLicensePaymentHistories = userLicensePaymentHistories;
-	}
-
-	public List<UserLicenseAvailableServ> getUserLicenseServices() {
+	public List<UserLicenseAvailableItem> getUserLicenseServices() {
 		if (userLicenseServices == null) {
 			userLicenseServices = new ArrayList<>();
 		}
 		return userLicenseServices;
-	}
-
-	public void setUserLicenseServices(List<UserLicenseAvailableServ> userLicenseServices) {
-		this.userLicenseServices = userLicenseServices;
 	}
 
 	public List<UserLicenseChangeHistory> getUserLicenseChangeHistories() {
@@ -169,19 +116,11 @@ public class UserLicense {
 		return userLicenseChangeHistories;
 	}
 
-	public void setUserLicenseChangeHistories(List<UserLicenseChangeHistory> userLicenseChangeHistories) {
-		this.userLicenseChangeHistories = userLicenseChangeHistories;
-	}
-
 	public List<UserLicenseFrequentlyPayment> getUserLicenseFrequentlyPayments() {
 		if (userLicenseFrequentlyPayments == null) {
 			userLicenseFrequentlyPayments = new ArrayList<>();
 		}
 		return userLicenseFrequentlyPayments;
-	}
-
-	public void setUserLicenseFrequentlyPayments(List<UserLicenseFrequentlyPayment> userLicenseFrequentlyPayments) {
-		this.userLicenseFrequentlyPayments = userLicenseFrequentlyPayments;
 	}
 
 	public List<UserLicenseEditionHistory> getUserLicenseEditionHistories() {
@@ -191,16 +130,34 @@ public class UserLicense {
 		return userLicenseEditionHistories;
 	}
 
-	public void setUserLicenseEditionHistories(List<UserLicenseEditionHistory> userLicenseEditionHistories) {
-		this.userLicenseEditionHistories = userLicenseEditionHistories;
-	}
-
 	/* toString */
 	@Override
 	public String toString() {
 		return "UserLicense [id=" + id + ", user=" + user.getId() + ", license=" + license.getId() + ", serie=" + serie
 				+ ", activationDate=" + activationDate + ", actualizationDate=" + actualizationDate + ", dueDate="
 				+ dueDate + ", active=" + isActive() + "]";
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		UserLicense that = (UserLicense) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
 	}
 
 }

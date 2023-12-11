@@ -3,6 +3,7 @@ package mx.lkmsoft.cis.jpa.entity;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,9 +13,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
+import lombok.Getter;
+import lombok.Setter;
 import mx.lkmsoft.cis.common.collection.ListUtils;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.enumtype.NotificationType;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * Persistent class for entity stored in table "appointment_notification"
@@ -26,6 +30,8 @@ import mx.lkmsoft.cis.jpa.enumtype.NotificationType;
 @Entity
 @Table(name = "appointment_notification", schema = "agenda")
 @SequenceGenerator(name = "default_gen", sequenceName = "agenda.appointment_notification_seq", allocationSize = 1)
+@Getter
+@Setter
 public class AppointmentNotification extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -68,23 +74,6 @@ public class AppointmentNotification extends BaseEntity {
 		this.notificationDate = LocalDateTime.now();
 	}
 
-	/* Getters and Setters */
-	public Appointment getAppointment() {
-		return appointment;
-	}
-
-	public void setAppointment(Appointment appointment) {
-		this.appointment = appointment;
-	}
-
-	public String getNotificationType() {
-		return notificationType;
-	}
-
-	public void setNotificationType(String notificationType) {
-		this.notificationType = notificationType;
-	}
-
 	public List<NotificationType> getNotificationTypes() {
 		if (this.notificationType != null) {
 			return ListUtils.toList(this.notificationType).stream().map(NotificationType::valueOf).toList();
@@ -98,38 +87,6 @@ public class AppointmentNotification extends BaseEntity {
 		}
 	}
 
-	public String getNotifiedEmails() {
-		return notifiedEmails;
-	}
-
-	public void setNotifiedEmails(String notifiedEmails) {
-		this.notifiedEmails = notifiedEmails;
-	}
-
-	public String getNotifiedMobiles() {
-		return notifiedMobiles;
-	}
-
-	public void setNotifiedMobiles(String notifiedMobiles) {
-		this.notifiedMobiles = notifiedMobiles;
-	}
-
-	public LocalDateTime getNotificationDate() {
-		return notificationDate;
-	}
-
-	public void setNotificationDate(LocalDateTime notificationDate) {
-		this.notificationDate = notificationDate;
-	}
-
-	public Long getVersion() {
-		return version;
-	}
-
-	public void setVersion(Long version) {
-		this.version = version;
-	}
-
 	/* toString */
 	@Override
 	public String toString() {
@@ -138,4 +95,25 @@ public class AppointmentNotification extends BaseEntity {
 				+ ", notificationDate=" + notificationDate + ", version= " + version + "]";
 	}
 
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+				? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+				: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+				? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+				: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		AppointmentNotification that = (AppointmentNotification) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+				? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode() :
+				getClass().hashCode();
+	}
 }

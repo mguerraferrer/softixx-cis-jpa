@@ -1,6 +1,7 @@
 package mx.lkmsoft.cis.jpa.entity;
 
 import java.time.LocalTime;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,8 +13,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
+import lombok.Getter;
+import lombok.Setter;
 import mx.lkmsoft.cis.common.datetime.WeekDay;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * Persistent class for entity stored in table "planning_daily"
@@ -24,6 +28,8 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 @Entity
 @Table(name = "planning_daily", schema = "agenda")
 @SequenceGenerator(name = "default_gen", sequenceName = "agenda.planning_daily_seq", allocationSize = 1)
+@Getter
+@Setter
 public class PlanningDaily extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -71,68 +77,33 @@ public class PlanningDaily extends BaseEntity {
 		this.totalExtraSlot = totalExtraSlot;
 	}
 
-	/* Getters and Setters */
-	public Planning getPlanning() {
-		return planning;
-	}
-
-	public void setPlanning(Planning planning) {
-		this.planning = planning;
-	}
-
-	public WeekDay getDay() {
-		return day;
-	}
-
-	public void setDay(WeekDay day) {
-		this.day = day;
-	}
-
-	public LocalTime getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(LocalTime startTime) {
-		this.startTime = startTime;
-	}
-
-	public LocalTime getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(LocalTime endTime) {
-		this.endTime = endTime;
-	}
-
-	public Integer getTotalPatients() {
-		return totalPatients;
-	}
-
-	public void setTotalPatients(Integer totalPatients) {
-		this.totalPatients = totalPatients;
-	}
-
-	public Integer getTotalExtraSlot() {
-		return totalExtraSlot;
-	}
-
-	public void setTotalExtraSlot(Integer totalExtraSlot) {
-		this.totalExtraSlot = totalExtraSlot;
-	}
-
-	public Long getVersion() {
-		return version;
-	}
-
-	public void setVersion(Long version) {
-		this.version = version;
-	}
-
 	@Override
 	public String toString() {
 		return "PlanningDaily [id=" + id + ", planning=" + planning.getId() + ", day=" + day + ", startTime=" + startTime
 				+ ", endTime=" + endTime + ", totalPatients=" + totalPatients + ", totalExtraSlot=" + totalExtraSlot
 				+ ", version=" + version + "]";
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		PlanningDaily that = (PlanningDaily) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
 	}
 
 }

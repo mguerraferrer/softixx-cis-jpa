@@ -2,6 +2,7 @@ package mx.lkmsoft.cis.jpa.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -12,9 +13,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import mx.lkmsoft.cis.common.data.CodeGeneratorUtils;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * Persistent class for entity stored in table "doctor_specialties"
@@ -26,6 +31,8 @@ import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
 @Entity
 @Table(name = "doctor_specialties", schema = "common")
 @SequenceGenerator(name = "default_gen", sequenceName = "common.doctor_specialty_seq", allocationSize = 1)
+@Getter
+@Setter
 public class DoctorSpecialty extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -47,6 +54,7 @@ public class DoctorSpecialty extends BaseEntity {
 	private boolean active;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "doctorSpecialty", targetEntity = Planning.class)
+	@Getter(AccessLevel.NONE)
 	private List<Planning> plannings;
 
 	public DoctorSpecialty() {
@@ -60,56 +68,11 @@ public class DoctorSpecialty extends BaseEntity {
 		this.active = true;
 	}
 
-	/* Getters and Setters */
-	public Doctor getDoctor() {
-		return doctor;
-	}
-
-	public void setDoctor(Doctor doctor) {
-		this.doctor = doctor;
-	}
-
-	public Specialty getSpecialty() {
-		return specialty;
-	}
-
-	public void setSpecialty(Specialty specialty) {
-		this.specialty = specialty;
-	}
-
-	public String getProfessionalLicense() {
-		return professionalLicense;
-	}
-
-	public void setProfessionalLicense(String professionalLicense) {
-		this.professionalLicense = professionalLicense;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
 	public List<Planning> getPlannings() {
 		if (plannings == null) {
 			plannings = new ArrayList<>();
 		}
 		return plannings;
-	}
-
-	public void setPlannings(List<Planning> plannings) {
-		this.plannings = plannings;
 	}
 
 	/* toString */
@@ -119,4 +82,25 @@ public class DoctorSpecialty extends BaseEntity {
 				+ ", professionalLicense=" + professionalLicense + ", code=" + code + ", active=" + active + "]";
 	}
 
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		DoctorSpecialty that = (DoctorSpecialty) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
+	}
 }

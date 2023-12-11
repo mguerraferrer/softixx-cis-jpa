@@ -1,6 +1,7 @@
 package mx.lkmsoft.cis.jpa.entity;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,11 +14,14 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import lombok.Getter;
+import lombok.Setter;
 import mx.lkmsoft.cis.jpa.enumtype.LocaleCode;
 import mx.lkmsoft.cis.jpa.enumtype.NotificationMethod;
 import mx.lkmsoft.cis.jpa.enumtype.Pagination;
 import mx.lkmsoft.cis.jpa.enumtype.PasswordChangePeriod;
 import mx.lkmsoft.cis.jpa.enumtype.Theme;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * Persistent class for entity stored in table "preferences"
@@ -28,6 +32,8 @@ import mx.lkmsoft.cis.jpa.enumtype.Theme;
 
 @Entity
 @Table(name = "preferences", schema = "security")
+@Getter
+@Setter
 public class UserPreferences {
 
 	@Id
@@ -92,114 +98,9 @@ public class UserPreferences {
 		this.active = true;
 	}
 
-	/* Getters and Setters */
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public NotificationMethod getNotificationMethod() {
-		return notificationMethod;
-	}
-
-	public void setNotificationMethod(NotificationMethod notificationMethod) {
-		this.notificationMethod = notificationMethod;
-	}
-
-	public LocaleCode getLanguage() {
-		return language;
-	}
-
-	public void setLanguage(LocaleCode language) {
-		this.language = language;
-	}
-
-	public Theme getTheme() {
-		return theme;
-	}
-
-	public void setTheme(Theme theme) {
-		this.theme = theme;
-	}
-
-	public Pagination getPagination() {
-		return pagination;
-	}
-
-	public void setPagination(Pagination pagination) {
-		this.pagination = pagination;
-	}
-
-	public boolean isNotifications() {
-		return notifications;
-	}
-
-	public void setNotifications(boolean notifications) {
-		this.notifications = notifications;
-	}
-
-	public boolean isAlerts() {
-		return alerts;
-	}
-
-	public void setAlerts(boolean alerts) {
-		this.alerts = alerts;
-	}
-
-	public boolean isPasswordChange() {
-		return passwordChange;
-	}
-
-	public void setPasswordChange(boolean passwordChange) {
-		this.passwordChange = passwordChange;
-	}
-
-	public PasswordChangePeriod getPasswordChangePeriod() {
-		return passwordChangePeriod;
-	}
-
-	public void setPasswordChangePeriod(PasswordChangePeriod passwordChangePeriod) {
-		this.passwordChangePeriod = passwordChangePeriod;
-	}
-
 	@Transient
 	public Integer getPeriod(PasswordChangePeriod passwordChangePeriod) {
 		return PasswordChangePeriod.getValue(this.passwordChangePeriod);
-	}
-
-	public LocalDate getLastPasswordChange() {
-		return lastPasswordChange;
-	}
-
-	public void setLastPasswordChange(LocalDate lastPasswordChange) {
-		this.lastPasswordChange = lastPasswordChange;
-	}
-
-	public LocalDate getNextPasswordChange() {
-		return nextPasswordChange;
-	}
-
-	public void setNextPasswordChange(LocalDate nextPasswordChange) {
-		this.nextPasswordChange = nextPasswordChange;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
 	}
 
 	/* toString */
@@ -210,6 +111,28 @@ public class UserPreferences {
 				+ notifications + ", alerts=" + alerts + ", passwordChange=" + passwordChange
 				+ ", passwordChangePeriod=" + passwordChangePeriod + ", lastPasswordChange=" + lastPasswordChange
 				+ ", nextPasswordChange=" + nextPasswordChange + "]";
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		UserPreferences that = (UserPreferences) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
 	}
 
 }

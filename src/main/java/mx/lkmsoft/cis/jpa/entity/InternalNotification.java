@@ -4,12 +4,16 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import mx.lkmsoft.cis.common.datetime.YearMonthUtils;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.enumtype.InternalNotificationType;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Persistent class for entity stored in table "internal_notifications"
@@ -38,6 +42,9 @@ public class InternalNotification extends BaseEntity {
 	@Column(name = "notification_date")
 	private LocalDateTime datetime;
 
+	@Column(name = "month")
+	private Integer month;
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "internalNotification", targetEntity = InternalNotificationDetail.class, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Getter(AccessLevel.NONE)
 	private List<InternalNotificationDetail> notificationDetails;
@@ -50,6 +57,7 @@ public class InternalNotification extends BaseEntity {
 		this.notificationType = notificationType;
 		this.notificationData = notificationData;
 		this.datetime = LocalDateTime.now();
+		this.month = YearMonthUtils.currentMonthValue();
 	}
 
 	public List<InternalNotificationDetail> getNotificationDetails() {
@@ -81,6 +89,28 @@ public class InternalNotification extends BaseEntity {
 	public String toString() {
 		return "InternalNotification [id=" + id + ", sender=" + sender + ", notificationType=" + notificationType
 				+ ", notificationData=" + notificationData + ", datetime=" + datetime + "]";
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		InternalNotification that = (InternalNotification) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
 	}
 
 }

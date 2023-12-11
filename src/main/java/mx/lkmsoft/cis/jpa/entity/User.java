@@ -4,19 +4,22 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import mx.lkmsoft.cis.jpa.base.AuditableEntity;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.enumtype.Role;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users", schema = "security")
 @SequenceGenerator(name = "default_gen", sequenceName = "security.user_seq", allocationSize = 1)
 @Getter
 @Setter
-public class User extends BaseEntity {
+public class User extends AuditableEntity {
 
 	@Column(name = "email")
 	private String email;
@@ -29,12 +32,6 @@ public class User extends BaseEntity {
 
 	@Column(name = "password")
 	private String password;
-
-	@Column(name = "creation_date")
-	private LocalDateTime creationDate;
-
-	@Column(name = "activation_date")
-	private LocalDateTime activationDate;
 
 	@Column(name = "last_access")
 	private LocalDateTime lastAccess;
@@ -65,6 +62,12 @@ public class User extends BaseEntity {
 
 	@Column(name = "blocked_access")
 	private boolean blockedAccess;
+
+	@Column(name = "activate_on")
+	private LocalDateTime activateOn;
+
+	@Version
+	private Long version;
 
 	@Column(name = "active")
 	private boolean active;
@@ -209,12 +212,34 @@ public class User extends BaseEntity {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", email=" + email + ", code=" + code +", photo=" + photo + ", password=" + null + ", roles=" + roles
-				+ ",creationDate=" + creationDate + ", activationDate=" + activationDate + ", lastAccess=" + lastAccess
-				+ ", firstVisit=" + firstVisit + ", initialConfigCompleted=" + initialConfigCompleted
-				+ ", forcePasswdChange=" + forcePasswdChange + ", activationCode=" + activationCode
-				+ ", activationCodeDueDate=" + activationCodeDueDate + ", changePasswdCode=" + changePasswdCode
-				+ ", changePasswdCodeDueDate=" + changePasswdCodeDueDate + ", failedAttempts=" + failedAttempts
-				+ ", blockedAccess=" + blockedAccess + ", active=" + active + "]";
+				+ ", activateOn=" + activateOn + ", lastAccess=" + lastAccess + ", firstVisit=" + firstVisit
+				+ ", initialConfigCompleted=" + initialConfigCompleted + ", forcePasswdChange=" + forcePasswdChange
+				+ ", activationCode=" + activationCode + ", activationCodeDueDate=" + activationCodeDueDate
+				+ ", changePasswdCode=" + changePasswdCode + ", changePasswdCodeDueDate=" + changePasswdCodeDueDate
+				+ ", failedAttempts=" + failedAttempts + ", blockedAccess=" + blockedAccess + ", createOon=" + createOn
+				+ ", updateOn=" + updateOn + ", version=" + version + ", active=" + active + "]";
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		User user = (User) o;
+		return getId() != null && Objects.equals(getId(), user.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
 	}
 
 }

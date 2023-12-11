@@ -5,6 +5,8 @@ import java.time.LocalTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
+import lombok.Getter;
+import lombok.Setter;
 import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
 
 /**
@@ -12,6 +14,8 @@ import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
  *
  */
 @Embeddable
+@Getter
+@Setter
 public class EmbeddableAccess {
 	
 	@Column(name = "working_days")
@@ -30,46 +34,5 @@ public class EmbeddableAccess {
 	@Column(name = "ip_range_end")
 	@Convert(converter = AttributeEncryptor.class)
 	private String ipRangeEnd;
-
-	/* Getters and Setters */
-	public String getWorkingDays() {
-		return workingDays;
-	}
-
-	public void setWorkingDays(String workingDays) {
-		this.workingDays = workingDays;
-	}
-
-	public LocalTime getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(LocalTime startTime) {
-		this.startTime = startTime;
-	}
-
-	public LocalTime getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(LocalTime endTime) {
-		this.endTime = endTime;
-	}
-	
-	public String getIpRangeStart() {
-		return ipRangeStart;
-	}
-
-	public void setIpRangeStart(String ipRangeStart) {
-		this.ipRangeStart = ipRangeStart;
-	}
-
-	public String getIpRangeEnd() {
-		return ipRangeEnd;
-	}
-
-	public void setIpRangeEnd(String ipRangeEnd) {
-		this.ipRangeEnd = ipRangeEnd;
-	}
 	
 }

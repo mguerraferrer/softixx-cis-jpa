@@ -4,10 +4,15 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
+import org.hibernate.proxy.HibernateProxy;
+
+import java.util.Objects;
 
 /**
- * Persistent class for entity stored in table "webapp_config"
+ * Persistent class for entity stored in table "settings_bag"
  *
  * @author Maikel Guerra Ferrer
  *
@@ -16,6 +21,8 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 @Entity
 @Table(name = "settings_bag", schema = "config")
 @SequenceGenerator(name = "default_gen", sequenceName = "config.settings_bag_seq", allocationSize = 1)
+@Getter
+@Setter
 public class SettingsBag extends BaseEntity {
 
     @Column(name = "code")
@@ -36,35 +43,32 @@ public class SettingsBag extends BaseEntity {
 		this.active = true;
 	}
 
-	/* Getters and Setters */
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
 	/* toString */
 	@Override
 	public String toString() {
 		return "SettingsBag [id=" + id + ", code=" + code + ", value=" + value + ", active=" + active + "]";
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		SettingsBag that = (SettingsBag) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
 	}
 
 }

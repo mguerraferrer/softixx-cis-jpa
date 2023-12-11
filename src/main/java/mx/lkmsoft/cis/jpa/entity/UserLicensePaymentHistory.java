@@ -1,6 +1,7 @@
 package mx.lkmsoft.cis.jpa.entity;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,9 +12,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.enumtype.PaymentMode;
 import mx.lkmsoft.cis.jpa.enumtype.PaymentSource;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * Persistent class for entity stored in table "user_license_payment_history"
@@ -25,6 +29,8 @@ import mx.lkmsoft.cis.jpa.enumtype.PaymentSource;
 @Entity
 @Table(name = "user_license_payment_history", schema = "sales")
 @SequenceGenerator(name = "default_gen", sequenceName = "sales.user_license_payment_history_seq", allocationSize = 1)
+@Getter
+@Setter
 public class UserLicensePaymentHistory extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -51,7 +57,7 @@ public class UserLicensePaymentHistory extends BaseEntity {
 	private LicenseDirectPromo licenseDirectPromo;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "license_comission_id", referencedColumnName = "id")
+	@JoinColumn(name = "license_commission_id", referencedColumnName = "id")
 	private LicenseCommission licenseCommission;
 
 	@Column(name = "payment_day")
@@ -75,151 +81,14 @@ public class UserLicensePaymentHistory extends BaseEntity {
 	@Column(name = "discount")
 	private Double discount;
 
-	@Column(name = "total_comission")
-	private Double totalComission;
+	@Column(name = "total_commission")
+	private Double totalCommission;
 
 	@Column(name = "total_services")
 	private Double totalServices;
 
 	@Column(name = "total")
 	private Double total;
-
-	/* Getters and Setters */
-	public UserLicense getUserLicense() {
-		return userLicense;
-	}
-
-	public void setUserLicense(UserLicense userLicense) {
-		this.userLicense = userLicense;
-	}
-
-	public String getTransactionId() {
-		return transactionId;
-	}
-
-	public void setTransactionId(String transactionId) {
-		this.transactionId = transactionId;
-	}
-
-	public PaymentMode getPaymentMode() {
-		return paymentMode;
-	}
-
-	public void setPaymentMode(PaymentMode paymentMode) {
-		this.paymentMode = paymentMode;
-	}
-
-	public PaymentSource getPaymentSource() {
-		return paymentSource;
-	}
-
-	public void setPaymentSource(PaymentSource paymentSource) {
-		this.paymentSource = paymentSource;
-	}
-
-	public LicensePromo getLicensePromo() {
-		return licensePromo;
-	}
-
-	public void setLicensePromo(LicensePromo licensePromo) {
-		this.licensePromo = licensePromo;
-	}
-
-	public LicenseDirectPromo getLicenseDirectPromo() {
-		return licenseDirectPromo;
-	}
-
-	public void setLicenseDirectPromo(LicenseDirectPromo licenseDirectPromo) {
-		this.licenseDirectPromo = licenseDirectPromo;
-	}
-
-	public LicenseCommission getLicenseCommission() {
-		return licenseCommission;
-	}
-
-	public void setLicenseCommission(LicenseCommission licenseCommission) {
-		this.licenseCommission = licenseCommission;
-	}
-
-	public LocalDateTime getPaymentDate() {
-		return paymentDate;
-	}
-
-	public void setPaymentDate(LocalDateTime paymentDate) {
-		this.paymentDate = paymentDate;
-	}
-
-	public String getReference() {
-		return reference;
-	}
-
-	public void setReference(String reference) {
-		this.reference = reference;
-	}
-
-	public String getCurrency() {
-		return currency;
-	}
-
-	public void setCurrency(String currency) {
-		this.currency = currency;
-	}
-
-	public String getDiscountCode() {
-		return discountCode;
-	}
-
-	public void setDiscountCode(String discountCode) {
-		this.discountCode = discountCode;
-	}
-
-	public Double getSubtotal() {
-		return subtotal;
-	}
-
-	public void setSubtotal(Double subtotal) {
-		this.subtotal = subtotal;
-	}
-
-	public Double getTax() {
-		return tax;
-	}
-
-	public void setTax(Double tax) {
-		this.tax = tax;
-	}
-
-	public Double getDiscount() {
-		return discount;
-	}
-
-	public void setDiscount(Double discount) {
-		this.discount = discount;
-	}
-
-	public Double getTotalComission() {
-		return totalComission;
-	}
-
-	public void setTotalComission(Double totalComission) {
-		this.totalComission = totalComission;
-	}
-
-	public Double getTotalServices() {
-		return totalServices;
-	}
-
-	public void setTotalServices(Double totalServices) {
-		this.totalServices = totalServices;
-	}
-
-	public Double getTotal() {
-		return total;
-	}
-
-	public void setTotal(Double total) {
-		this.total = total;
-	}
 
 	/* toString */
 	@Override
@@ -233,8 +102,30 @@ public class UserLicensePaymentHistory extends BaseEntity {
 				+ ", licensePromo=" + licensePromoId + ", licenseDirectPromo=" + licenseDirectPromoId
 				+ ", licenseCommission=" + licenseCommissionId + ", paymentDate=" + paymentDate + ", reference="
 				+ reference + ", currency=" + currency + ", discountCode=" + discountCode + ", subtotal=" + subtotal
-				+ ", tax=" + tax + ", discount=" + discount + ", totalComission=" + totalComission + ", totalServices="
+				+ ", tax=" + tax + ", discount=" + discount + ", totalCommission=" + totalCommission + ", totalServices="
 				+ totalServices + ", total=" + total + "]";
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		UserLicensePaymentHistory that = (UserLicensePaymentHistory) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
 	}
 
 }

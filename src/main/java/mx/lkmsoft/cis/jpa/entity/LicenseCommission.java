@@ -3,6 +3,7 @@ package mx.lkmsoft.cis.jpa.entity;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,9 +13,13 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.enumtype.OnlinePayment;
 import mx.lkmsoft.cis.jpa.enumtype.PaymentSource;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * Persistent class for entity stored in table "license_commission"
@@ -26,6 +31,8 @@ import mx.lkmsoft.cis.jpa.enumtype.PaymentSource;
 @Entity
 @Table(name = "license_commission", schema = "sales")
 @SequenceGenerator(name = "default_gen", sequenceName = "sales.license_commission_seq", allocationSize = 1)
+@Getter
+@Setter
 public class LicenseCommission extends BaseEntity {
 
 	@Column(name = "online_payment")
@@ -36,11 +43,11 @@ public class LicenseCommission extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private PaymentSource paymentSource;
 
-	@Column(name = "comission_percentage")
-	private BigDecimal comissionPercentage;
+	@Column(name = "commission_percentage")
+	private BigDecimal commissionPercentage;
 
-	@Column(name = "comission")
-	private BigDecimal comission;
+	@Column(name = "commission")
+	private BigDecimal commission;
 
 	@Column(name = "tax")
 	private boolean tax;
@@ -52,64 +59,8 @@ public class LicenseCommission extends BaseEntity {
 	private boolean active;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "licenseCommission", targetEntity = UserLicensePaymentHistory.class)
+	@Getter(AccessLevel.NONE)
 	private List<UserLicensePaymentHistory> userLicensePaymentHistories;
-
-	/* Getters and Setters */
-	public OnlinePayment getOnlinePayment() {
-		return onlinePayment;
-	}
-
-	public void setOnlinePayment(OnlinePayment onlinePayment) {
-		this.onlinePayment = onlinePayment;
-	}
-
-	public PaymentSource getPaymentSource() {
-		return paymentSource;
-	}
-
-	public void setPaymentSource(PaymentSource paymentSource) {
-		this.paymentSource = paymentSource;
-	}
-
-	public BigDecimal getComissionPercentage() {
-		return comissionPercentage;
-	}
-
-	public void setComissionPercentage(BigDecimal comissionPercentage) {
-		this.comissionPercentage = comissionPercentage;
-	}
-
-	public BigDecimal getComission() {
-		return comission;
-	}
-
-	public void setComission(BigDecimal comission) {
-		this.comission = comission;
-	}
-
-	public boolean isTax() {
-		return tax;
-	}
-
-	public void setTax(boolean tax) {
-		this.tax = tax;
-	}
-
-	public BigDecimal getTaxPercentage() {
-		return taxPercentage;
-	}
-
-	public void setTaxPercentage(BigDecimal taxPercentage) {
-		this.taxPercentage = taxPercentage;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
 
 	public List<UserLicensePaymentHistory> getUserLicensePaymentHistories() {
 		if (userLicensePaymentHistories == null) {
@@ -118,16 +69,34 @@ public class LicenseCommission extends BaseEntity {
 		return userLicensePaymentHistories;
 	}
 
-	public void setUserLicensePaymentHistories(List<UserLicensePaymentHistory> userLicensePaymentHistories) {
-		this.userLicensePaymentHistories = userLicensePaymentHistories;
-	}
-
 	/* toString */
 	@Override
 	public String toString() {
 		return "LicenseCommission [id=" + id + ", onlinePayment=" + onlinePayment + ", paymentSource="
-				+ paymentSource + ", comissionPercentage=" + comissionPercentage + ", comission=" + comission
+				+ paymentSource + ", commissionPercentage=" + commissionPercentage + ", commission=" + commission
 				+ ", tax=" + tax + ", taxPercentage=" + taxPercentage + ", active=" + active + "]";
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		LicenseCommission that = (LicenseCommission) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
 	}
 
 }

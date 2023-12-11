@@ -2,6 +2,7 @@ package mx.lkmsoft.cis.jpa.entity;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,7 +14,10 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
+import lombok.Getter;
+import lombok.Setter;
 import mx.lkmsoft.cis.common.collection.ListUtils;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * Persistent class for entity stored in table "planning_fixed"
@@ -23,6 +27,8 @@ import mx.lkmsoft.cis.common.collection.ListUtils;
  */
 @Entity
 @Table(name = "planning_fixed", schema = "agenda")
+@Getter
+@Setter
 public class PlanningFixed {
 	
 	@Id
@@ -68,71 +74,6 @@ public class PlanningFixed {
 				planningFixed.getTotalPatients(), planningFixed.getTotalExtraSlot(), planningFixed.getDays());
 	}
 
-	/* Getters and Setters */
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	public Planning getPlanning() {
-		return planning;
-	}
-
-	public void setPlanning(Planning planning) {
-		this.planning = planning;
-	}
-
-	public LocalTime getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(LocalTime startTime) {
-		this.startTime = startTime;
-	}
-
-	public LocalTime getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(LocalTime endTime) {
-		this.endTime = endTime;
-	}
-
-	public Integer getTotalPatients() {
-		return totalPatients;
-	}
-
-	public void setTotalPatients(Integer totalPatients) {
-		this.totalPatients = totalPatients;
-	}
-
-	public Integer getTotalExtraSlot() {
-		return totalExtraSlot;
-	}
-
-	public void setTotalExtraSlot(Integer totalExtraSlot) {
-		this.totalExtraSlot = totalExtraSlot;
-	}
-
-	public String getDays() {
-		return days;
-	}
-
-	public void setDays(String days) {
-		this.days = days;
-	}
-	
-	public Long getVersion() {
-		return version;
-	}
-
-	public void setVersion(Long version) {
-		this.version = version;
-	}
-
 	@Transient
 	public boolean isAllWeek() {
 		return ListUtils.toList(days).size() == 7;
@@ -149,6 +90,28 @@ public class PlanningFixed {
 		return "PlanningFixed [id=" + id + ", planning=" + planning.getId() + ", startTime=" + startTime + ", endTime="
 				+ endTime + ", totalPatients=" + totalPatients + ", totalExtraSlot=" + totalExtraSlot + ", days=" + days
 				+ ", version=" + version + "]";
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		PlanningFixed that = (PlanningFixed) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
 	}
 
 }

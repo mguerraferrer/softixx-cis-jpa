@@ -10,6 +10,9 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 
 /**
@@ -22,43 +25,25 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 @Entity
 @Table(name = "assistant", schema = "common")
 @SequenceGenerator(name = "default_gen", sequenceName = "common.assistant_seq", allocationSize = 1)
+@Getter
+@Setter
 public class Assistant extends BaseEntity {
-
-	@Column(name = "active")
-	private boolean active;
 
 	@OneToOne(mappedBy = "assistant", cascade = CascadeType.ALL)
 	private UserProfile userProfile;
 
+	@Column(name = "active")
+	private boolean active;
+
 	@ManyToMany(mappedBy = "assistants")
+	@Getter(AccessLevel.NONE)
 	private List<Doctor> doctors;
-
-	/* Getters and Setters */
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
-	public UserProfile getUserProfile() {
-		return userProfile;
-	}
-
-	public void setUserProfile(UserProfile userProfile) {
-		this.userProfile = userProfile;
-	}
 
 	public List<Doctor> getDoctors() {
 		if (doctors == null) {
 			doctors = new ArrayList<>();
 		}
 		return doctors;
-	}
-
-	public void setDoctors(List<Doctor> doctors) {
-		this.doctors = doctors;
 	}
 
 	/* toString */

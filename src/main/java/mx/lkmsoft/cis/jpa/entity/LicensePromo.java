@@ -3,6 +3,7 @@ package mx.lkmsoft.cis.jpa.entity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,8 +15,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.enumtype.PaymentMode;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * Persistent class for entity stored in table "license_promo"
@@ -27,6 +32,8 @@ import mx.lkmsoft.cis.jpa.enumtype.PaymentMode;
 @Entity
 @Table(name = "license_promo", schema = "sales")
 @SequenceGenerator(name = "default_gen", sequenceName = "sales.license_promo_seq", allocationSize = 1)
+@Getter
+@Setter
 public class LicensePromo extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -53,64 +60,8 @@ public class LicensePromo extends BaseEntity {
 	private boolean active;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "licensePromo", targetEntity = UserLicensePaymentHistory.class)
+	@Getter(AccessLevel.NONE)
 	private List<UserLicensePaymentHistory> userLicensePaymentHistories;
-
-	/* Getters and Setters */
-	public License getLicense() {
-		return license;
-	}
-
-	public void setLicense(License license) {
-		this.license = license;
-	}
-
-	public PaymentMode getPaymentMode() {
-		return paymentMode;
-	}
-
-	public void setPaymentMode(PaymentMode paymentMode) {
-		this.paymentMode = paymentMode;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public Integer getDiscount() {
-		return discount;
-	}
-
-	public void setDiscount(Integer discount) {
-		this.discount = discount;
-	}
-
-	public LocalDateTime getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(LocalDateTime startDate) {
-		this.startDate = startDate;
-	}
-
-	public LocalDateTime getDueDate() {
-		return dueDate;
-	}
-
-	public void setDueDate(LocalDateTime dueDate) {
-		this.dueDate = dueDate;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
 
 	public List<UserLicensePaymentHistory> getUserLicensePaymentHistories() {
 		if (userLicensePaymentHistories == null) {
@@ -119,16 +70,34 @@ public class LicensePromo extends BaseEntity {
 		return userLicensePaymentHistories;
 	}
 
-	public void setUserLicensePaymentHistories(List<UserLicensePaymentHistory> userLicensePaymentHistories) {
-		this.userLicensePaymentHistories = userLicensePaymentHistories;
-	}
-
 	/* toString */
 	@Override
 	public String toString() {
 		return "LicensePromo [id=" + id + ", license=" + license.getId() + ", paymentMode=" + paymentMode + ", code="
 				+ code + ", discount=" + discount + ", startDate=" + startDate + ", dueDate=" + dueDate + ", active="
 				+ active + "]";
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		LicensePromo that = (LicensePromo) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
 	}
 
 }

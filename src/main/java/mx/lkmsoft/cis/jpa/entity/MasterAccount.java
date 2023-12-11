@@ -9,6 +9,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.proxy.HibernateProxy;
+
+import java.util.Objects;
 
 /**
  * Persistent class for entity stored in table "master_account"
@@ -19,6 +24,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "master_account", schema = "security")
+@Getter
+@Setter
 public class MasterAccount {
 
 	@Id
@@ -45,44 +52,33 @@ public class MasterAccount {
 		this.active = true;
 	}
 
-	/* Getters and Setters */
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public HealthcareCenter getHealthcareCenter() {
-		return healthcareCenter;
-	}
-
-	public void setHealthcareCenter(HealthcareCenter healthcareCenter) {
-		this.healthcareCenter = healthcareCenter;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
 	/* toString */
 	@Override
 	public String toString() {
 		return "MasterAccount [id=" + id + ", user=" + user + ", healthcareCenter=" + healthcareCenter + ", active="
 				+ active + "]";
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		MasterAccount that = (MasterAccount) o;
+		return id != null && Objects.equals(id, that.id);
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
 	}
 
 }

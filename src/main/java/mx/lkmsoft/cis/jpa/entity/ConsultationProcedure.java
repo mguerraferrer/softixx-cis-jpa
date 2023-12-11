@@ -2,6 +2,7 @@ package mx.lkmsoft.cis.jpa.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,8 +12,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
+import lombok.Getter;
+import lombok.Setter;
 import mx.lkmsoft.cis.common.data.CodeGeneratorUtils;
 import mx.lkmsoft.cis.jpa.base.AuditableEntity;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * Persistent class for entity stored in table "consultation_procedure"
@@ -24,6 +28,8 @@ import mx.lkmsoft.cis.jpa.base.AuditableEntity;
 @Entity
 @Table(name = "consultation_procedure", schema = "agenda")
 @SequenceGenerator(name = "default_gen", sequenceName = "agenda.consultation_procedure_seq", allocationSize = 1)
+@Getter
+@Setter
 public class ConsultationProcedure extends AuditableEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -73,8 +79,8 @@ public class ConsultationProcedure extends AuditableEntity {
 		this.defaultProcedure = true;
 		this.subtotal = subtotal;
 		this.total = total;
-		this.createOn = LocalDateTime.now(); // For cache purposes
-		this.updateOn = LocalDateTime.now(); // For cache purposes
+		this.createOn = LocalDateTime.now();
+		this.updateOn = LocalDateTime.now();
 		this.active = true;
 	}
 
@@ -88,106 +94,9 @@ public class ConsultationProcedure extends AuditableEntity {
 		this.tax = tax;
 		this.discount = discount;
 		this.total = total;
-		this.createOn = LocalDateTime.now(); // For cache purposes
-		this.updateOn = LocalDateTime.now(); // For cache purposes
+		this.createOn = LocalDateTime.now();
+		this.updateOn = LocalDateTime.now();
 		this.active = true;
-	}
-
-	/* Getters and Setters */
-	public Planning getPlanning() {
-		return planning;
-	}
-
-	public void setPlanning(Planning planning) {
-		this.planning = planning;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public boolean isDefaultProcedure() {
-		return defaultProcedure;
-	}
-
-	public void setDefaultProcedure(boolean defaultProcedure) {
-		this.defaultProcedure = defaultProcedure;
-	}
-
-	public BigDecimal getSubtotal() {
-		return subtotal;
-	}
-
-	public void setSubtotal(BigDecimal subtotal) {
-		this.subtotal = subtotal;
-	}
-
-	public boolean isTax() {
-		return tax;
-	}
-
-	public void setTax(boolean tax) {
-		this.tax = tax;
-	}
-
-	public Integer getDiscount() {
-		return discount;
-	}
-
-	public void setDiscount(Integer discount) {
-		this.discount = discount;
-	}
-
-	public BigDecimal getTotal() {
-		return total;
-	}
-
-	public void setTotal(BigDecimal total) {
-		this.total = total;
-	}
-
-	public LocalDateTime getDiscountStartDate() {
-		return discountStartDate;
-	}
-
-	public void setDiscountStartDate(LocalDateTime discountStartDate) {
-		this.discountStartDate = discountStartDate;
-	}
-
-	public LocalDateTime getDiscountDueDate() {
-		return discountDueDate;
-	}
-
-	public void setDiscountDueDate(LocalDateTime discountDueDate) {
-		this.discountDueDate = discountDueDate;
-	}
-
-	public Long getVersion() {
-		return version;
-	}
-
-	public void setVersion(Long version) {
-		this.version = version;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
 	}
 
 	/* toString */
@@ -200,4 +109,25 @@ public class ConsultationProcedure extends AuditableEntity {
 				+ createOn + ", updateOn=" + updateOn + ", active=" + active + "]";
 	}
 
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		ConsultationProcedure that = (ConsultationProcedure) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
+	}
 }

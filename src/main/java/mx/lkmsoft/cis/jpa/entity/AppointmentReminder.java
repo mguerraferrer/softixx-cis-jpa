@@ -3,6 +3,7 @@ package mx.lkmsoft.cis.jpa.entity;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,8 +14,11 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
+import lombok.Getter;
+import lombok.Setter;
 import mx.lkmsoft.cis.common.collection.ListUtils;
 import mx.lkmsoft.cis.jpa.enumtype.NotificationType;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * Persistent class for entity stored in table "appointment_reminder"
@@ -25,6 +29,8 @@ import mx.lkmsoft.cis.jpa.enumtype.NotificationType;
 
 @Entity
 @Table(name = "appointment_reminder", schema = "agenda")
+@Getter
+@Setter
 public class AppointmentReminder {
 
 	@Id
@@ -71,31 +77,6 @@ public class AppointmentReminder {
 		this.reminderDate = reminderDate;
 	}
 
-	/* Getters and Setters */
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Appointment getAppointment() {
-		return appointment;
-	}
-
-	public void setAppointment(Appointment appointment) {
-		this.appointment = appointment;
-	}
-
-	public String getNotificationType() {
-		return notificationType;
-	}
-
-	public void setNotificationType(String notificationType) {
-		this.notificationType = notificationType;
-	}
-
 	public List<NotificationType> getNotificationTypes() {
 		if (this.notificationType != null) {
 			return ListUtils.toList(this.notificationType).stream().map(NotificationType::valueOf).toList();
@@ -109,44 +90,34 @@ public class AppointmentReminder {
 		}
 	}
 
-	public String getMailsToNotify() {
-		return mailsToNotify;
-	}
-
-	public void setMailsToNotify(String mailsToNotify) {
-		this.mailsToNotify = mailsToNotify;
-	}
-
-	public String getMobilesToNotify() {
-		return mobilesToNotify;
-	}
-
-	public void setMobilesToNotify(String mobilesToNotify) {
-		this.mobilesToNotify = mobilesToNotify;
-	}
-
-	public LocalDateTime getReminderDate() {
-		return reminderDate;
-	}
-
-	public void setReminderDate(LocalDateTime reminderDate) {
-		this.reminderDate = reminderDate;
-	}
-
-	public Long getVersion() {
-		return version;
-	}
-
-	public void setVersion(Long version) {
-		this.version = version;
-	}
-
 	/* toString */
 	@Override
 	public String toString() {
 		return "AppointmentReminder [id=" + id + ", appointment=" + appointment.getId() + ", notificationType="
 				+ notificationType + ", mailsToNotify=" + mailsToNotify + ", mobilesToNotify=" + mobilesToNotify
 				+ ", reminderDate=" + reminderDate + ", version= " + version + "]";
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+				? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+				: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+				? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+				: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		AppointmentReminder that = (AppointmentReminder) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+				? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+				: getClass().hashCode();
 	}
 
 }

@@ -16,47 +16,34 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import org.hibernate.proxy.HibernateProxy;
 
 /**
- * Persistent class for entity stored in table "user_license_change_history"
+ * Persistent class for entity stored in table "user_license_available_item_history"
  *
  * @author Maikel Guerra Ferrer
  *
  */
 
 @Entity
-@Table(name = "user_license_change_history", schema = "sales")
-@SequenceGenerator(name = "default_gen", sequenceName = "sales.user_license_change_history_seq", allocationSize = 1)
+@Table(name = "user_license_available_item_history", schema = "sales")
+@SequenceGenerator(name = "default_gen", sequenceName = "sales.user_license_available_item_history_seq", allocationSize = 1)
 @Getter
 @Setter
-public class UserLicenseChangeHistory extends BaseEntity {
+public class UserLicenseAvailableItemHistory extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_license_id", referencedColumnName = "id")
-	private UserLicense userLicense;
+	@JoinColumn(name = "user_license_service_id", referencedColumnName = "id")
+	private UserLicenseAvailableItem userLicenseAvailableItem;
 
-	@Column(name = "old_license_hash")
-	private String oldLicenseHash;
+	@Column(name = "entry_date")
+	private LocalDateTime entryDate;
 
-	@Column(name = "current_license_hash")
-	private String currentLicenseHash;
-
-	@Column(name = "date_time")
-	private LocalDateTime dateTime;
-
-	public UserLicenseChangeHistory() {
-	}
-
-	public UserLicenseChangeHistory(UserLicense userLicense, String oldLicenseHash, String currentLicenseHash) {
-		this.userLicense = userLicense;
-		this.oldLicenseHash = oldLicenseHash;
-		this.currentLicenseHash = currentLicenseHash;
-		this.dateTime = LocalDateTime.now();
-	}
+	@Column(name = "end_date")
+	private LocalDateTime endDate;
 
 	/* toString */
 	@Override
 	public String toString() {
-		return "UserLicenseChangeHistory [id=" + id + ", userLicense=" + userLicense.getId() + ", oldLicenseHash="
-				+ oldLicenseHash + ", currentLicenseHash=" + currentLicenseHash + ", dateTime=" + dateTime + "]";
+		return "UserLicenseAvailableItemHistory [id=" + id + ", userLicenseAvailableItem="
+				+ userLicenseAvailableItem.getId() + ", entryDate=" + entryDate + ", endDate=" + endDate + "]";
 	}
 
 	@Override
@@ -70,7 +57,7 @@ public class UserLicenseChangeHistory extends BaseEntity {
 			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
 			: this.getClass();
 		if (thisEffectiveClass != oEffectiveClass) return false;
-		UserLicenseChangeHistory that = (UserLicenseChangeHistory) o;
+		UserLicenseAvailableItemHistory that = (UserLicenseAvailableItemHistory) o;
 		return getId() != null && Objects.equals(getId(), that.getId());
 	}
 

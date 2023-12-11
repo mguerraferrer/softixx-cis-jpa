@@ -2,6 +2,7 @@ package mx.lkmsoft.cis.jpa.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,8 +12,12 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.enumtype.LicenseType;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * Persistent class for entity stored in table "license"
@@ -24,6 +29,8 @@ import mx.lkmsoft.cis.jpa.enumtype.LicenseType;
 @Entity
 @Table(name = "license", schema = "sales")
 @SequenceGenerator(name = "default_gen", sequenceName = "sales.license_seq", allocationSize = 1)
+@Getter
+@Setter
 public class License extends BaseEntity {
 
 	@Column(name = "license_type")
@@ -61,118 +68,30 @@ public class License extends BaseEntity {
 	private boolean active;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "license", targetEntity = LicenseConfig.class)
+	@Getter(AccessLevel.NONE)
 	private List<LicenseConfig> licenseConfigs;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "license", targetEntity = UserLicense.class)
+	@Getter(AccessLevel.NONE)
 	private List<UserLicense> userLicenses;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "license", targetEntity = LicenseAvailableService.class)
-	private List<LicenseAvailableService> licenseAvailableServices;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "license", targetEntity = LicenseAvailableItem.class)
+	@Getter(AccessLevel.NONE)
+	private List<LicenseAvailableItem> licenseAvailableItems;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "license", targetEntity = LicensePrice.class)
+	@Getter(AccessLevel.NONE)
 	private List<LicensePrice> licensePrices;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "license", targetEntity = LicensePromo.class)
+	@Getter(AccessLevel.NONE)
 	private List<LicensePromo> licensePromos;
-
-	/* Getters and Setters */
-	public LicenseType getLicenseType() {
-		return licenseType;
-	}
-
-	public void setLicenseType(LicenseType licenseType) {
-		this.licenseType = licenseType;
-	}
-
-	public Integer getTotalSpecialties() {
-		return totalSpecialties;
-	}
-
-	public void setTotalSpecialties(Integer totalSpecialties) {
-		this.totalSpecialties = totalSpecialties;
-	}
-
-	public Integer getTotalDoctors() {
-		return totalDoctors;
-	}
-
-	public void setTotalDoctors(Integer totalDoctors) {
-		this.totalDoctors = totalDoctors;
-	}
-
-	public Integer getTotalAssistants() {
-		return totalAssistants;
-	}
-
-	public void setTotalAssistants(Integer totalAssistants) {
-		this.totalAssistants = totalAssistants;
-	}
-
-	public Integer getTotalNurses() {
-		return totalNurses;
-	}
-
-	public void setTotalNurses(Integer totalNurses) {
-		this.totalNurses = totalNurses;
-	}
-
-	public Integer getDailyConsultations() {
-		return dailyConsultations;
-	}
-
-	public void setDailyConsultations(Integer dailyConsultations) {
-		this.dailyConsultations = dailyConsultations;
-	}
-
-	public Integer getDuration() {
-		return duration;
-	}
-
-	public void setDuration(Integer duration) {
-		this.duration = duration;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Integer getLevel() {
-		return level;
-	}
-
-	public void setLevel(Integer level) {
-		this.level = level;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setHash(String code) {
-		this.code = code;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
 
 	public List<LicenseConfig> getLicenseConfigs() {
 		if (licenseConfigs == null) {
 			licenseConfigs = new ArrayList<>();
 		}
 		return licenseConfigs;
-	}
-
-	public void setLicenseConfigs(List<LicenseConfig> licenseConfigs) {
-		this.licenseConfigs = licenseConfigs;
 	}
 
 	public List<UserLicense> getUserLicenses() {
@@ -182,19 +101,11 @@ public class License extends BaseEntity {
 		return userLicenses;
 	}
 
-	public void setUserLicenses(List<UserLicense> userLicenses) {
-		this.userLicenses = userLicenses;
-	}
-
-	public List<LicenseAvailableService> getLicenseAvailableServices() {
-		if (licenseAvailableServices == null) {
-			licenseAvailableServices = new ArrayList<>();
+	public List<LicenseAvailableItem> getLicenseAvailableItems() {
+		if (licenseAvailableItems == null) {
+			licenseAvailableItems = new ArrayList<>();
 		}
-		return licenseAvailableServices;
-	}
-
-	public void setLicenseAvailableServices(List<LicenseAvailableService> licenseAvailableServices) {
-		this.licenseAvailableServices = licenseAvailableServices;
+		return licenseAvailableItems;
 	}
 
 	public List<LicensePrice> getLicensePrices() {
@@ -204,19 +115,11 @@ public class License extends BaseEntity {
 		return licensePrices;
 	}
 
-	public void setLicensePrices(List<LicensePrice> licensePrices) {
-		this.licensePrices = licensePrices;
-	}
-
 	public List<LicensePromo> getLicensePromos() {
 		if (licensePromos == null) {
 			licensePromos = new ArrayList<>();
 		}
 		return licensePromos;
-	}
-
-	public void setLicensePromos(List<LicensePromo> licensePromos) {
-		this.licensePromos = licensePromos;
 	}
 
 	/* toString */
@@ -226,6 +129,28 @@ public class License extends BaseEntity {
 				+ ", totalDoctors=" + totalDoctors + ", totalAssistants=" + totalAssistants + ", totalNurses="
 				+ totalNurses + ", dailyConsultations=" + dailyConsultations + ", duration=" + duration
 				+ ", description=" + description + ", level=" + level + ", code=" + code + ", active=" + active + "]";
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		License license = (License) o;
+		return getId() != null && Objects.equals(getId(), license.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
 	}
 
 }

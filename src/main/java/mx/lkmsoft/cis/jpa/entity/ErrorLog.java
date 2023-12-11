@@ -1,6 +1,7 @@
 package mx.lkmsoft.cis.jpa.entity;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,7 +10,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * Persistent class for entity stored in table "error_log"
@@ -20,6 +24,8 @@ import mx.lkmsoft.cis.jpa.base.BaseEntity;
 @Entity
 @Table(name = "error_log", schema = "errors")
 @SequenceGenerator(name = "default_gen", sequenceName = "errors.error_log_seq", allocationSize = 1)
+@Getter
+@Setter
 public class ErrorLog extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -67,77 +73,34 @@ public class ErrorLog extends BaseEntity {
 		this.logTime = LocalDateTime.now();
 	}
 
-	/* Getters and Setters */
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public String getException() {
-		return exception;
-	}
-
-	public void setException(String exception) {
-		this.exception = exception;
-	}
-
-	public String getExceptionType() {
-		return exceptionType;
-	}
-
-	public void setExceptionType(String exceptionType) {
-		this.exceptionType = exceptionType;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public String getRequestUri() {
-		return requestUri;
-	}
-
-	public void setRequestUri(String requestUri) {
-		this.requestUri = requestUri;
-	}
-
-	public String getServletName() {
-		return servletName;
-	}
-
-	public void setServletName(String servletName) {
-		this.servletName = servletName;
-	}
-
-	public String getStatusCode() {
-		return statusCode;
-	}
-
-	public void setStatusCode(String statusCode) {
-		this.statusCode = statusCode;
-	}
-
-	public LocalDateTime getLogTime() {
-		return logTime;
-	}
-
-	public void setLogTime(LocalDateTime logTime) {
-		this.logTime = logTime;
-	}
-
 	/* toString */
 	@Override
 	public String toString() {
 		return "ErrorLog [id=" + id + ", user=" + user + ", exception=" + exception + ", exceptionType=" + exceptionType
 				+ ", message=" + message + ", requestUri=" + requestUri + ", servletName=" + servletName
 				+ ", statusCode=" + statusCode + ", logTime=" + logTime + "]";
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		ErrorLog errorLog = (ErrorLog) o;
+		return getId() != null && Objects.equals(getId(), errorLog.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
 	}
 
 }

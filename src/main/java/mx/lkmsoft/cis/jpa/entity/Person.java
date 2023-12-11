@@ -10,10 +10,12 @@ import mx.lkmsoft.cis.jpa.base.AuditableEntity;
 import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
 import mx.lkmsoft.cis.jpa.embeddable.EmbeddableContact;
 import mx.lkmsoft.cis.jpa.enumtype.Gender;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Persistent class for entity stored in table "person"
@@ -169,6 +171,28 @@ public class Person extends AuditableEntity {
 				+ ", country= " + countryId + ", nationality=" + nationality + ", rfc= " + rfc + ", curp=" + curp
 				+ ", mobile1=" + mobile1 + ", mobile2=" + mobile2 + ", mobile3=" + mobile3
 				+ ", contact=" + contact + ", createOn=" + createOn + ", updateOn=" + updateOn + "]";
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+			: this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		Person person = (Person) o;
+		return getId() != null && Objects.equals(getId(), person.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy hibernateProxy
+			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+			: getClass().hashCode();
 	}
 
 }

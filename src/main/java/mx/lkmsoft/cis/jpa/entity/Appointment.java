@@ -210,6 +210,11 @@ public class Appointment extends BaseEntity {
 		}
 		return null;
 	}
+	
+	public boolean hasValidStatus() {
+		return !AppointmentStatus.CANCELLED.equals(this.status)
+				&& !AppointmentStatus.RESCHEDULED.equals(this.status);
+	}
 
 	/* toString */
 	@Override

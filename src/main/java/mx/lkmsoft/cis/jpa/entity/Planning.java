@@ -1,10 +1,11 @@
 package mx.lkmsoft.cis.jpa.entity;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import org.hibernate.proxy.HibernateProxy;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -26,7 +27,6 @@ import lombok.val;
 import mx.lkmsoft.cis.common.data.CodeGeneratorUtils;
 import mx.lkmsoft.cis.jpa.base.AuditableEntity;
 import mx.lkmsoft.cis.jpa.enumtype.AgendaVisualization;
-import org.hibernate.proxy.HibernateProxy;
 
 /**
  * Persistent class for entity stored in table "planning"

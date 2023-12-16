@@ -216,6 +216,22 @@ public class Appointment extends BaseEntity {
 				&& !AppointmentStatus.RESCHEDULED.equals(this.status);
 	}
 
+	public String getTypeAsString() {
+		return type != null ? type.name() : null;
+	}
+
+	public String getOriginAsString() {
+		return origin != null ? origin.name() : null;
+	}
+
+	public String getStatusAsString() {
+		return status != null ? status.name() : null;
+	}
+
+	public String getRelationshipAsString() {
+		return relationship != null ? relationship.name() : null;
+	}
+
 	/* toString */
 	@Override
 	public String toString() {

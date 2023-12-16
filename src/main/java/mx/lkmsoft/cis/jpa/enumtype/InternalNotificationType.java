@@ -7,7 +7,7 @@ import org.apache.commons.lang3.EnumUtils;
  *
  */
 public enum InternalNotificationType {
-	PLANNING, APPOINTMENT;
+	PLANNING, APPOINTMENT_NEW, APPOINTMENT_CANCELLATION, APPOINTMENT_CONFIRMATION, APPOINTMENT_EDIT;
 
 	public static boolean isValid(String notificationType) {
 		return EnumUtils.isValidEnum(InternalNotificationType.class, notificationType);

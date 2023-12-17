@@ -9,6 +9,7 @@ import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import mx.lkmsoft.cis.common.datetime.LocalTimeUtils;
 import org.hibernate.proxy.HibernateProxy;
 
 import jakarta.persistence.CascadeType;
@@ -230,6 +231,10 @@ public class Appointment extends BaseEntity {
 
 	public String getRelationshipAsString() {
 		return relationship != null ? relationship.name() : null;
+	}
+
+	public String getTimeAsString() {
+		return LocalTimeUtils.asT12H(startTime) + " - " + LocalTimeUtils.asT12H(endTime);
 	}
 
 	/* toString */

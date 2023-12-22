@@ -1,18 +1,31 @@
 package mx.lkmsoft.cis.jpa.entity;
 
-import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import mx.lkmsoft.cis.jpa.base.AuditableEntity;
-import mx.lkmsoft.cis.jpa.base.BaseEntity;
-import mx.lkmsoft.cis.jpa.enumtype.Role;
-import org.hibernate.proxy.HibernateProxy;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import org.hibernate.proxy.HibernateProxy;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import mx.lkmsoft.cis.jpa.base.AuditableEntity;
+import mx.lkmsoft.cis.jpa.enumtype.Role;
 
 @Entity
 @Table(name = "users", schema = "security")

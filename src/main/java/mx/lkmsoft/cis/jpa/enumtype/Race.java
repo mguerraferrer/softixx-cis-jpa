@@ -1,9 +1,9 @@
 package mx.lkmsoft.cis.jpa.enumtype;
 
-import lombok.extern.slf4j.Slf4j;
-import mx.lkmsoft.cis.common.data.IntegerUtils;
-import mx.lkmsoft.cis.common.data.StringUtils;
 import org.apache.commons.lang3.EnumUtils;
+
+import lombok.extern.slf4j.Slf4j;
+import mx.lkmsoft.cis.common.data.StringUtils;
 
 /**
  * @author Maikel Guerra Ferrer

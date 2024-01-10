@@ -18,7 +18,7 @@ public final class PageUtils {
 	private PageUtils() {
 	}
 
-	public static <T> Page<T> toPage(final List<T> list, final Pageable pageable) {
+	public static <T> Page<T> toPage(List<T> list, Pageable pageable) {
 		if (AssertUtils.isEmpty(list) || AssertUtils.isEmpty(pageable) || (pageable.getOffset() >= list.size())) {
 			return Page.empty();
 		}

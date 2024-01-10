@@ -18,7 +18,7 @@ public enum BloodTypeRh {
 				return BloodTypeRh.valueOf(bloodTypeRh);
 			}
 		} catch (IllegalArgumentException e) {
-			log.error("Get enum value error: {}", e.getMessage());
+			log.error("Error trying to get BloodTypeRh value from '{}'", bloodTypeRh);
 		}
 		return null;
 	}

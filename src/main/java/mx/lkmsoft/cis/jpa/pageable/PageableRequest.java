@@ -17,6 +17,7 @@ import mx.lkmsoft.cis.common.pageable.PageableUtils;
 public record PageableRequest(String key, PageRequest pageRequest) {
 	
 	private static final String EMPTY_KEY = "";
+	private static final String KEY_REQUIRED = "pageable.page.key.required";
 	
 	public static PageableRequest of(Pageable pageable) {
 		val pageRequest = pageRequest(pageable);
@@ -24,7 +25,7 @@ public record PageableRequest(String key, PageRequest pageRequest) {
 	}
 	
 	public static PageableRequest of(String key, Pageable pageable) {
-		Assert.notNull(key, "pageable.page.key.requeired");
+		Assert.notNull(key, KEY_REQUIRED);
 		
 		val pageRequest = pageRequest(pageable);
 		return new PageableRequest(key.toLowerCase(), pageRequest);
@@ -41,14 +42,14 @@ public record PageableRequest(String key, PageRequest pageRequest) {
 	}
 	
 	public static PageableRequest of(String key, int pageNumber, Sort sort) {
-		Assert.notNull(key, "pageable.page.key.requeired");
+		Assert.notNull(key, KEY_REQUIRED);
 		
 		val pageRequest = pageRequest(pageNumber, PageableUtils.RECORDS_PER_PAGE, sort);
 		return new PageableRequest(key.toLowerCase(), pageRequest);
 	}
 	
 	public static PageableRequest of(String key, int pageNumber, int pageSize, Sort sort) {
-		Assert.notNull(key, "pageable.page.key.requeired");
+		Assert.notNull(key, KEY_REQUIRED);
 		
 		val pageRequest = pageRequest(pageNumber, pageSize, sort);
 		return new PageableRequest(key.toLowerCase(), pageRequest);
@@ -62,7 +63,7 @@ public record PageableRequest(String key, PageRequest pageRequest) {
 	}
 	
 	public static PageableRequest of(String key, SortRequest sortRequest) {
-		Assert.notNull(key, "pageable.page.key.requeired");
+		Assert.notNull(key, KEY_REQUIRED);
 
 		val sort = SortUtils.sort(sortRequest);
 		val pageRequest = pageRequest(PageableUtils.DEFAULT_PAGE, PageableUtils.RECORDS_PER_PAGE, sort);
@@ -77,7 +78,7 @@ public record PageableRequest(String key, PageRequest pageRequest) {
 	}
 	
 	public static PageableRequest of(String key, List<SortRequest> sortRequests) {
-		Assert.notNull(key, "pageable.page.key.requeired");
+		Assert.notNull(key, KEY_REQUIRED);
 		
 		val sort = SortUtils.sort(sortRequests);
 		val pageRequest = pageRequest(PageableUtils.DEFAULT_PAGE, PageableUtils.RECORDS_PER_PAGE, sort);
@@ -85,7 +86,7 @@ public record PageableRequest(String key, PageRequest pageRequest) {
 	}
 	
 	public static PageRequest pageRequest(Pageable pageable) {
-		Assert.notNull(pageable, "pageable.pageable.requeired");
+		Assert.notNull(pageable, "pageable.pageable.required");
 		
 		val pageNumber = PageableUtils.pageNumber(pageable.getPageNumber());
 		val recordsPerPage = PageableUtils.recordsPerPage(pageable.getPageSize());

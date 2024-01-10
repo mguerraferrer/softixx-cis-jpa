@@ -18,7 +18,7 @@ public enum Gender {
                 return Gender.valueOf(gender);
             }
         } catch (IllegalArgumentException e) {
-            log.error("Get enum value error: {}", e.getMessage());
+            log.error("Error trying to get Gender value from '{}'", gender);
         }
         return null;
     }

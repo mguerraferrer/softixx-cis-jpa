@@ -17,7 +17,7 @@ import lombok.Getter;
 import lombok.Setter;
 import mx.lkmsoft.cis.common.collection.ListUtils;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
-import mx.lkmsoft.cis.jpa.enumtype.NotificationType;
+import mx.lkmsoft.cis.jpa.enumtype.NotificationMethod;
 import org.hibernate.proxy.HibernateProxy;
 
 /**
@@ -65,25 +65,25 @@ public class AppointmentNotification extends BaseEntity {
 		this.notificationDate = LocalDateTime.now();
 	}
 
-	public AppointmentNotification(Appointment appointment, List<NotificationType> notificationTypes,
+	public AppointmentNotification(Appointment appointment, List<NotificationMethod> notificationMethods,
 			List<String> notifiedEmails, List<String> notifiedMobiles) {
 		this.appointment = appointment;
-		this.notificationType = ListUtils.toString(notificationTypes.stream().map(NotificationType::name).toList());
+		this.notificationType = ListUtils.toString(notificationMethods.stream().map(NotificationMethod::name).toList());
 		this.notifiedEmails = ListUtils.toString(notifiedEmails);
 		this.notifiedMobiles = ListUtils.toString(notifiedMobiles);
 		this.notificationDate = LocalDateTime.now();
 	}
 
-	public List<NotificationType> getNotificationTypes() {
+	public List<NotificationMethod> getNotificationTypes() {
 		if (this.notificationType != null) {
-			return ListUtils.toList(this.notificationType).stream().map(NotificationType::valueOf).toList();
+			return ListUtils.toList(this.notificationType).stream().map(NotificationMethod::valueOf).toList();
 		}
 		return Collections.emptyList();
 	}
 
-	public void setNotificationType(List<NotificationType> notificationTypes) {
+	public void setNotificationType(List<NotificationMethod> notificationTypes) {
 		if (notificationTypes != null) {
-			this.notificationType = ListUtils.toString(notificationTypes.stream().map(NotificationType::name).toList());
+			this.notificationType = ListUtils.toString(notificationTypes.stream().map(NotificationMethod::name).toList());
 		}
 	}
 

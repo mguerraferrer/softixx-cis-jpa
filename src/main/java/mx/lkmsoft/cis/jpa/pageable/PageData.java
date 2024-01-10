@@ -2,6 +2,7 @@ package mx.lkmsoft.cis.jpa.pageable;
 
 import java.util.List;
 
+import mx.lkmsoft.cis.common.assertion.AssertUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.Assert;
 
@@ -43,13 +44,13 @@ public record PageData(int recordsPerPage, int pagesToDisplay, List<Integer> rec
 	 * <b>{@code pagesToDisplay}</b> field will be
 	 * {@code PageableUtils#PAGES_TO_DISPLAY}
 	 * 
-	 * @param Pageable must not be null
+	 * @param pageable must not be null
 	 * @return {@code PageData}
 	 * @throws IllegalArgumentException if pageable is null
-	 * @see {@link PageableUtils#PAGES_TO_DISPLAY}
+	 * @see PageableUtils#PAGES_TO_DISPLAY
 	 */
 	public static PageData of(Pageable pageable) {
-		Assert.notNull(pageable, "pageable.pageable.requeired");
+		Assert.notNull(pageable, "pageable.pageable.required");
 		return PageData.of(pageable.getPageSize(), PageableUtils.PAGES_TO_DISPLAY);
 	}
 	
@@ -65,10 +66,10 @@ public record PageData(int recordsPerPage, int pagesToDisplay, List<Integer> rec
 	 * @return {@code PageData}
 	 * @throws IllegalArgumentException if pageable is null or
 	 *                                  <b>{@code pagesToDisplay}</b> is less than 0
-	 * @see {@link PageableUtils#PAGES_TO_DISPLAY}
+	 * @see PageableUtils#PAGES_TO_DISPLAY
 	 */
 	public static PageData of(Pageable pageable, Integer pagesToDisplay) {
-		Assert.notNull(pageable, "pageable.pageable.requeired");
+		Assert.notNull(pageable, "pageable.pageable.required");
 
 		if (pagesToDisplay != null) {
 			Assert.state(pagesToDisplay > 0, PAGINATE_PAGES_ASSERT_MESSAGE);
@@ -131,8 +132,8 @@ public record PageData(int recordsPerPage, int pagesToDisplay, List<Integer> rec
 	 *                                  0
 	 */
 	public static PageData of(Integer recordsPerPage, Integer pagesToDisplay, List<Integer> recordsPerPages) {
-		if (recordsPerPage == null && pagesToDisplay == null
-				&& (recordsPerPages == null || recordsPerPages.isEmpty())) {
+		if (AssertUtils.isEmpty(recordsPerPage) && AssertUtils.isEmpty(pagesToDisplay) &&
+				AssertUtils.isEmpty(recordsPerPages)) {
 			throw new IllegalArgumentException("pageable.parameter.empty.value");
 		}
 
@@ -149,7 +150,6 @@ public record PageData(int recordsPerPage, int pagesToDisplay, List<Integer> rec
 		}
 
 		recordsPerPages = sanitizeRecordsPerPage(recordsPerPages);
-
 		return new PageData(recordsPerPage, pagesToDisplay, recordsPerPages);
 	}
 
@@ -164,11 +164,10 @@ public record PageData(int recordsPerPage, int pagesToDisplay, List<Integer> rec
 	 * @param recordsPerPages list of record-per-page
 	 * @return {@code PageData}
 	 * @throws IllegalArgumentException if recordsPerPages is null or empty
-	 * @see {@link PageableUtils#RECORDS_PER_PAGE}
+	 * @see PageableUtils#RECORDS_PER_PAGE
 	 */
 	public static PageData of(List<Integer> recordsPerPages) {
 		recordsPerPages = sanitizeRecordsPerPage(recordsPerPages);
-
 		return new PageData(PageableUtils.RECORDS_PER_PAGE, PageableUtils.PAGES_TO_DISPLAY, recordsPerPages);
 	}
 
@@ -181,7 +180,7 @@ public record PageData(int recordsPerPage, int pagesToDisplay, List<Integer> rec
 	 * @param recordsPerPage must not be null and must be greater than 0
 	 * @return {@code PageData}
 	 * @throws IllegalArgumentException if the recordsPerPage is null or less than 0
-	 * @see {@link PageableUtils#PAGES_TO_DISPLAY}
+	 * @see PageableUtils#PAGES_TO_DISPLAY
 	 */
 	public static PageData withRecordPerPage(Integer recordsPerPage) {
 		Assert.notNull(recordsPerPage, PAGEABLE_PAGINATE_PAGE_ASSERT_MESSAGE);
@@ -201,14 +200,13 @@ public record PageData(int recordsPerPage, int pagesToDisplay, List<Integer> rec
 	 * @return {@code PageData}
 	 * @throws IllegalArgumentException if the recordsPerPage is null or less than 0
 	 *                                  or if recordsPerPages is null or empty
-	 * @see {@link PageableUtils#PAGES_TO_DISPLAY}
+	 * @see PageableUtils#PAGES_TO_DISPLAY
 	 */
 	public static PageData withRecordPerPage(Integer recordsPerPage, List<Integer> recordsPerPages) {
 		Assert.notNull(recordsPerPage, PAGEABLE_PAGINATE_PAGE_ASSERT_MESSAGE);
 		Assert.state(recordsPerPage > 0, RECORDS_PER_PAGE_ASSERT_MESSAGE);
 
 		recordsPerPages = sanitizeRecordsPerPage(recordsPerPages);
-
 		return new PageData(recordsPerPage, PageableUtils.PAGES_TO_DISPLAY, recordsPerPages);
 	}
 
@@ -221,8 +219,8 @@ public record PageData(int recordsPerPage, int pagesToDisplay, List<Integer> rec
 	 * @param pagesToDisplay must not be null and must be greater than 0
 	 * @return {@code PageData}
 	 * @throws IllegalArgumentException if the recordsPerPage is null or less than 0
-	 * @see {@link PageableUtils#RECORDS_PER_PAGE}
-	 * @see {@link PageableUtils#RECORDS_PER_PAGES}
+	 * @see PageableUtils#RECORDS_PER_PAGE
+	 * @see PageableUtils#RECORDS_PER_PAGE_LIST
 	 */
 	public static PageData withPagesToDisplay(Integer pagesToDisplay) {
 		Assert.notNull(pagesToDisplay, PAGEABLE_PAGINATE_PAGE_ASSERT_MESSAGE);
@@ -242,18 +240,17 @@ public record PageData(int recordsPerPage, int pagesToDisplay, List<Integer> rec
 	 * @return {@code PageData}
 	 * @throws IllegalArgumentException if the recordsPerPage is null or less than 0
 	 *                                  or if recordsPerPages is null or empty
-	 * @see {@link PageableUtils#RECORDS_PER_PAGE}
+	 * @see PageableUtils#RECORDS_PER_PAGE
 	 */
 	public static PageData withPagesToDisplay(Integer pagesToDisplay, List<Integer> recordsPerPages) {
 		Assert.notNull(pagesToDisplay, PAGEABLE_PAGINATE_PAGE_ASSERT_MESSAGE);
 		Assert.state(pagesToDisplay > 0, PAGINATE_PAGES_ASSERT_MESSAGE);
 
 		recordsPerPages = sanitizeRecordsPerPage(recordsPerPages);
-
 		return new PageData(PageableUtils.RECORDS_PER_PAGE, pagesToDisplay, recordsPerPages);
 	}
 
-	private static final List<Integer> sanitizeRecordsPerPage(List<Integer> recordsPerPages) {
+	private static List<Integer> sanitizeRecordsPerPage(List<Integer> recordsPerPages) {
 		Assert.notNull(recordsPerPages, "pageable.records.per.page.nullable.list");
 
 		recordsPerPages = recordsPerPages.stream().filter(i -> i > 0).distinct().sorted().toList();

@@ -1,6 +1,8 @@
 package mx.lkmsoft.cis.jpa.enumtype;
 
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import mx.lkmsoft.cis.common.assertion.AssertUtils;
 import org.apache.commons.lang3.EnumUtils;
 
 import mx.lkmsoft.cis.common.data.IntegerUtils;
@@ -15,16 +17,20 @@ public enum PasswordChangePeriod {
 	P1, P3, P6;
 	
 	public static Integer getValue(PasswordChangePeriod period) {
-		return IntegerUtils.valueOf(period.name().substring(1));
+		if (AssertUtils.nonNull(period)) {
+			return IntegerUtils.valueOf(period.name().substring(1));
+		}
+		return null;
 	}
 	
 	public static Integer getValue(String period) {
 		try {
 			if (StringUtils.hasValue(period)) {
-				return IntegerUtils.valueOf(period.substring(1));
+				val enumValue = PasswordChangePeriod.valueOf(period);
+				return IntegerUtils.valueOf(getValue(enumValue));
 			}
 		} catch (IllegalArgumentException e) {
-			log.error("Get enum value error: {}", e.getMessage());
+			log.error("Error trying to get PasswordChangePeriod value from '{}'", period);
 		}
 		return null;
 	}

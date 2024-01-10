@@ -9,42 +9,42 @@ package mx.lkmsoft.cis.jpa.pageable;
  */
 public record SortOrderResponse (
 	/**
-     * The field by which the data set is currently sorted.
+     * The field by which the data set is currently sorted
      */
 	String sortBy, 
 
 	/**
-     * The direction of sorting - 'asc' for ascending, 'desc' for descending.
+     * The direction of sorting - 'asc' for ascending, 'desc' for descending
      */
 	String sortDir, 
 
 	/**
-     * The reverse of the current sort direction.
+     * The reverse of the current sort direction
      */
 	String reverseSort, 
 
 	/**
-     * Additional sort data encapsulated in a record.
+     * Additional sort data encapsulated in a record
      */
 	SortData data) {
 	
 	/**
      * A record that encapsulates additional sort data such as the sort up 
-     * and sort down indicators, and the CSS class for the sort indicator.
+     * and sort down indicators, and the CSS class for the sort indicator
      */
-	public static record SortData (
+	public record SortData (
 		/**
-     	 * The sort up indicator.
+     	 * The sort-up indicator
      	 */
 		String sortUp, 
 
 		/**
-     	 * The sort down indicator.
+     	 * The sort down indicator
      	 */
 		String sortDown, 
 
 		/**
-     	 * The CSS class for the sort indicator.
+     	 * The CSS class for the sort indicator
      	 */
 		String sortCss	
 	) {}

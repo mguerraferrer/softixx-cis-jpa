@@ -19,7 +19,7 @@ public enum AcademicStatus {
 				return AcademicStatus.valueOf(academicStatus);
 			}
 		} catch (IllegalArgumentException e) {
-			log.error("Get enum value error: {}", e.getMessage());
+			log.error("Error trying to get AcademicStatus value from '{}'", academicStatus);
 		}
 		return null;
 	}

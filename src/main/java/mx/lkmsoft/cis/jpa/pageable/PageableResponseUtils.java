@@ -46,8 +46,9 @@ public final class PageableResponseUtils {
 	 * @return A map containing pageable data and search key. Returns an empty map
 	 *         if sourceKey is null or pageableResponse is null.
 	 */
-	public static <T, U> Map<String, Object> pageableResult(String sourceKey, String searchValue,
-			PageableResponse<T, U> pageableResponse) {
+	public static <T, U> Map<String, Object> pageableResult(String sourceKey,
+															String searchValue,
+															PageableResponse<T, U> pageableResponse) {
 		if (StringUtils.hasValue(sourceKey) && AssertUtils.nonNull(pageableResponse)) {
 			val pageableData = new HashMap<String, Object>();
 			pageableData.put(sourceKey, pageableResponse.sourceList());

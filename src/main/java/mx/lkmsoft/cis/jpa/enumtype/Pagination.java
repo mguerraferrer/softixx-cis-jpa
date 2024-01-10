@@ -1,6 +1,8 @@
 package mx.lkmsoft.cis.jpa.enumtype;
 
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import mx.lkmsoft.cis.common.assertion.AssertUtils;
 import org.apache.commons.lang3.EnumUtils;
 
 import mx.lkmsoft.cis.common.data.IntegerUtils;
@@ -15,16 +17,20 @@ public enum Pagination {
 	P10, P20, P30, P40, P50;
 	
 	public static String getValue(Pagination pagination) {
-		return pagination.name().substring(1);
+		if (AssertUtils.nonNull(pagination)) {
+			return pagination.name().substring(1);
+		}
+		return null;
 	}
 	
 	public static Integer getValue(String pagination) {
 		try {
 			if (StringUtils.hasValue(pagination)) {
-				return IntegerUtils.valueOf(pagination.substring(1));
+				val enumValue = Pagination.valueOf(pagination);
+				return IntegerUtils.valueOf(getValue(enumValue));
 			}
 		} catch (IllegalArgumentException e) {
-			log.error("Get enum value error: {}", e.getMessage());
+			log.error("Error trying to get Pagination value from '{}'", pagination);
 		}
 		return null;
 	}

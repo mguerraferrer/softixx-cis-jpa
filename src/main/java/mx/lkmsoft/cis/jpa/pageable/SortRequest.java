@@ -8,12 +8,12 @@ package mx.lkmsoft.cis.jpa.pageable;
  */
 public record SortRequest (
 	/**
-     * The field by which the data set should be sorted.
+     * The field by which the data set should be sorted
      */
     String sortBy, 
 
     /**
-     * The direction in which the data set should be sorted - 'asc' for ascending, 'desc' for descending.
+     * The direction in which the data set should be sorted - 'asc' for ascending, 'desc' for descending
      */
     String sortDir
 ) {}

@@ -19,7 +19,7 @@ public enum Race {
                 return Race.valueOf(race);
             }
         } catch (IllegalArgumentException e) {
-            log.error("Get enum value error: {}", e.getMessage());
+            log.error("Error trying to get Race value from '{}'", race);
         }
         return null;
     }

@@ -18,7 +18,7 @@ public enum MaritalStatus {
                 return MaritalStatus.valueOf(maritalStatus);
             }
         } catch (IllegalArgumentException e) {
-            log.error("Get enum value error: {}", e.getMessage());
+            log.error("Error trying to get MaritalStatus value from '{}'", maritalStatus);
         }
         return null;
     }

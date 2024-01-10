@@ -18,7 +18,7 @@ public enum AppointmentConfirmation {
 				return AppointmentConfirmation.valueOf(confirmation);
 			}
 		} catch (IllegalArgumentException e) {
-			log.error("Get enum value error: {}", e.getMessage());
+			log.error("Error trying to get AppointmentConfirmation value from '{}'", confirmation);
 		}
 		return null;
 	}

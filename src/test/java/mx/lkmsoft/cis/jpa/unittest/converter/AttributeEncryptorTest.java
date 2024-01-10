@@ -1,7 +1,8 @@
-package mx.lkmsoft.cis.jpa.unittest.attributeencryptor;
+package mx.lkmsoft.cis.jpa.unittest.converter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,11 +23,11 @@ import mx.lkmsoft.cis.jpa.converter.AttributeEncryptor;
 class AttributeEncryptorTest {
 	
 	private AttributeEncryptor attributeEncryptor;
-    private String secretKey = "a12z3h*8!3ncr1pt0r$5yhcn";
+    private static final String SECRET_KEY = "a12z3h*8!3ncr1pt0r$5yhcn";
 
     @BeforeEach
     public void setUp() throws Exception {
-        attributeEncryptor = new AttributeEncryptor(secretKey);
+        attributeEncryptor = new AttributeEncryptor(SECRET_KEY);
     }
 
     @Test
@@ -42,24 +43,20 @@ class AttributeEncryptorTest {
     void testConvertToDatabaseColumn_nullValue() {
         String input = null;
         String encryptedText = attributeEncryptor.convertToDatabaseColumn(input);
-        assertEquals(null, encryptedText);
+        assertNull(encryptedText);
     }
 
     @Test
     void testConvertToEntityAttribute_nullValue() {
         String input = null;
         String decryptedText = attributeEncryptor.convertToEntityAttribute(input);
-        assertEquals(null, decryptedText);
+        assertNull(decryptedText);
     }
-	
+
 	@ParameterizedTest
 	@CsvSource({
-		"Vivamus, Aliquam, Euismod, Vivamus Aliquam Euismod",
-		", , , ",
-		", , , ",
-		", , , ",
-		", , , ",
-		", , , ",
+        "Lorem, Ipsum, Dolor, Lorem Ipsum Dolor",
+        "Vivamus, Aliquam, Euismod, Vivamus Aliquam Euismod"
 	})
 	void testEncryptionThenDecryption(String text1, String text2, String text3, String text4) {
 		val text1Encrypted = attributeEncryptor.convertToDatabaseColumn(text1);
@@ -67,11 +64,11 @@ class AttributeEncryptorTest {
 		val text3Encrypted = attributeEncryptor.convertToDatabaseColumn(text3);
 		val text4Encrypted = attributeEncryptor.convertToDatabaseColumn(text4);
 		log.info("{}, {}, {}, {}", text1Encrypted, text2Encrypted, text3Encrypted, text4Encrypted);
-		
+
 		assertThat(attributeEncryptor.convertToEntityAttribute(text1Encrypted)).isEqualTo(text1);
 		assertThat(attributeEncryptor.convertToEntityAttribute(text2Encrypted)).isEqualTo(text2);
 		assertThat(attributeEncryptor.convertToEntityAttribute(text3Encrypted)).isEqualTo(text3);
 		assertThat(attributeEncryptor.convertToEntityAttribute(text4Encrypted)).isEqualTo(text4);
 	}
-	
+
 }

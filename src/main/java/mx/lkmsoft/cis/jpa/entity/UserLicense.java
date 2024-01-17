@@ -83,6 +83,10 @@ public class UserLicense {
 	@Getter(AccessLevel.NONE)
 	private List<UserLicenseEditionHistory> userLicenseEditionHistories;
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userLicense", targetEntity = LicenseDirectPromo.class)
+	@Getter(AccessLevel.NONE)
+	private List<LicenseDirectPromo> licenseDirectPromos;
+
 	public UserLicense() {
 	}
 
@@ -139,6 +143,13 @@ public class UserLicense {
 			userLicenseEditionHistories = new ArrayList<>();
 		}
 		return userLicenseEditionHistories;
+	}
+
+	public List<LicenseDirectPromo> getLicenseDirectPromos() {
+		if (licenseDirectPromos == null) {
+			licenseDirectPromos = new ArrayList<>();
+		}
+		return licenseDirectPromos;
 	}
 
 	/* toString */

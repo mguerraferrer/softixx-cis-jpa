@@ -48,6 +48,7 @@ public class LicensePromo extends BaseEntity {
 	private String code;
 
 	@Column(name = "discount")
+	@Getter(AccessLevel.NONE)
 	private Integer discount;
 
 	@Column(name = "start_date")
@@ -62,6 +63,10 @@ public class LicensePromo extends BaseEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "licensePromo", targetEntity = UserLicensePaymentHistory.class)
 	@Getter(AccessLevel.NONE)
 	private List<UserLicensePaymentHistory> userLicensePaymentHistories;
+
+	public Integer getDiscount() {
+		return discount != null ? discount : 0;
+	}
 
 	public List<UserLicensePaymentHistory> getUserLicensePaymentHistories() {
 		if (userLicensePaymentHistories == null) {

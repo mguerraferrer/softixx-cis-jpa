@@ -56,10 +56,6 @@ public class UserLicensePaymentHistory extends BaseEntity {
 	@JoinColumn(name = "license_direct_promo_id", referencedColumnName = "id")
 	private LicenseDirectPromo licenseDirectPromo;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "license_commission_id", referencedColumnName = "id")
-	private LicenseCommission licenseCommission;
-
 	@Column(name = "payment_day")
 	private LocalDateTime paymentDate;
 
@@ -81,9 +77,6 @@ public class UserLicensePaymentHistory extends BaseEntity {
 	@Column(name = "discount")
 	private Double discount;
 
-	@Column(name = "total_commission")
-	private Double totalCommission;
-
 	@Column(name = "total_services")
 	private Double totalServices;
 
@@ -95,15 +88,13 @@ public class UserLicensePaymentHistory extends BaseEntity {
 	public String toString() {
 		long licensePromoId = licensePromo != null ? licensePromo.getId() : null;
 		long licenseDirectPromoId = licenseDirectPromo != null ? licenseDirectPromo.getId() : null;
-		long licenseCommissionId = licenseCommission != null ? licenseCommission.getId() : null;
 
 		return "UserLicensePaymentHistory [id=" + id + ", userLicense=" + userLicense.getId() + ", transactionId="
 				+ transactionId + ", paymentMode=" + paymentMode + ", paymentSource=" + paymentSource
 				+ ", licensePromo=" + licensePromoId + ", licenseDirectPromo=" + licenseDirectPromoId
-				+ ", licenseCommission=" + licenseCommissionId + ", paymentDate=" + paymentDate + ", reference="
+				+ ", paymentDate=" + paymentDate + ", reference="
 				+ reference + ", currency=" + currency + ", discountCode=" + discountCode + ", subtotal=" + subtotal
-				+ ", tax=" + tax + ", discount=" + discount + ", totalCommission=" + totalCommission + ", totalServices="
-				+ totalServices + ", total=" + total + "]";
+				+ ", tax=" + tax + ", discount=" + discount + ", totalServices=" + totalServices + ", total=" + total + "]";
 	}
 
 	@Override

@@ -51,6 +51,9 @@ public class UserLicense {
 	@Column(name = "serie")
 	private String serie;
 
+	@Column(name = "custom_price")
+	private Double customPrice;
+
 	@Column(name = "activation_date")
 	private LocalDateTime activationDate;
 
@@ -87,6 +90,14 @@ public class UserLicense {
 		this.user = user;
 		this.license = license;
 		this.serie = serie;
+		this.dueDate = dueDate;
+	}
+
+	public UserLicense(User user, License license, String serie, Double customPrice, LocalDate dueDate) {
+		this.user = user;
+		this.license = license;
+		this.serie = serie;
+		this.customPrice = customPrice;
 		this.dueDate = dueDate;
 	}
 
@@ -134,8 +145,8 @@ public class UserLicense {
 	@Override
 	public String toString() {
 		return "UserLicense [id=" + id + ", user=" + user.getId() + ", license=" + license.getId() + ", serie=" + serie
-				+ ", activationDate=" + activationDate + ", actualizationDate=" + actualizationDate + ", dueDate="
-				+ dueDate + ", active=" + isActive() + "]";
+				+ ", customPrice= " + customPrice + ", activationDate=" + activationDate + ", actualizationDate="
+				+ actualizationDate + ", dueDate=" + dueDate + ", active=" + isActive() + "]";
 	}
 
 	@Override

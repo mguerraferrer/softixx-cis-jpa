@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
@@ -40,10 +41,15 @@ public class LicenseConfig extends BaseEntity {
 	private PaymentMode paymentMode;
 
 	@Column(name = "discount")
+	@Getter(AccessLevel.NONE)
 	private Integer discount;
 
 	@Column(name = "active")
 	private boolean active;
+
+	public Integer getDiscount() {
+		return discount != null ? discount : 0;
+	}
 
 	/* toString */
 	public String toString() {

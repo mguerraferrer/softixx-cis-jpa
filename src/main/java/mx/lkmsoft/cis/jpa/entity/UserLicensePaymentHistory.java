@@ -1,5 +1,6 @@
 package mx.lkmsoft.cis.jpa.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -69,19 +70,19 @@ public class UserLicensePaymentHistory extends BaseEntity {
 	private String discountCode;
 
 	@Column(name = "subtotal")
-	private Double subtotal;
+	private BigDecimal subtotal;
 
 	@Column(name = "tax")
-	private Double tax;
+	private BigDecimal tax;
 
 	@Column(name = "discount")
-	private Double discount;
+	private BigDecimal discount;
 
 	@Column(name = "total_services")
-	private Double totalServices;
+	private BigDecimal totalServices;
 
 	@Column(name = "total")
-	private Double total;
+	private BigDecimal total;
 
 	/* toString */
 	@Override

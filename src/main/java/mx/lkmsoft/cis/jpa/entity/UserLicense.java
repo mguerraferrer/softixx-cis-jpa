@@ -1,5 +1,6 @@
 package mx.lkmsoft.cis.jpa.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class UserLicense {
 	private String serie;
 
 	@Column(name = "custom_price")
-	private Double customPrice;
+	private BigDecimal customPrice;
 
 	@Column(name = "activation_date")
 	private LocalDateTime activationDate;
@@ -97,7 +98,7 @@ public class UserLicense {
 		this.dueDate = dueDate;
 	}
 
-	public UserLicense(User user, License license, String serie, Double customPrice, LocalDate dueDate) {
+	public UserLicense(User user, License license, String serie, BigDecimal customPrice, LocalDate dueDate) {
 		this.user = user;
 		this.license = license;
 		this.serie = serie;

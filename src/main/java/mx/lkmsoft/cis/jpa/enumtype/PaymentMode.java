@@ -1,6 +1,7 @@
 package mx.lkmsoft.cis.jpa.enumtype;
 
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import mx.lkmsoft.cis.common.data.StringUtils;
 import org.apache.commons.lang3.EnumUtils;
 
@@ -23,8 +24,23 @@ public enum PaymentMode {
 		return null;
 	}
 
+	public static Integer getNumericValue(String paymentMode) {
+		val paymentModeEnum = getValue(paymentMode);
+		return getNumericValue(paymentModeEnum);
+	}
+
+	public static Integer getNumericValue(PaymentMode paymentMode) {
+		return switch (paymentMode) {
+			case MONTHLY -> 1;
+			case QUARTERLY -> 3;
+			case BIYEARLY -> 6;
+			case YEARLY -> 12;
+			case null -> 1;
+		};
+	}
+
 	public static boolean isValid(String paymentMode) {
 		return EnumUtils.isValidEnum(PaymentMode.class, paymentMode);
 	}
-	
+
 }

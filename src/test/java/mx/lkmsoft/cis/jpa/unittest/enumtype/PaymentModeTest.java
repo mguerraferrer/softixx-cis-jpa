@@ -38,4 +38,18 @@ class PaymentModeTest {
         DataTest.commonAssert(isAssert, result);
     }
 
+    @ParameterizedTest
+    @CsvSource({
+        "MONTHLY, 1",
+        "QUARTERLY, 3",
+        "BIYEARLY, 6",
+        "YEARLY, 12",
+        "null, 1"
+    })
+    void testGetNumericValue(String paymentMode, Integer expectedResult) {
+        val result = PaymentMode.getNumericValue(paymentMode);
+
+        assertEquals(expectedResult, result);
+    }
+
 }

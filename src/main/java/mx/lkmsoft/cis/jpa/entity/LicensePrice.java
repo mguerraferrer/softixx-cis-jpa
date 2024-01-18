@@ -12,6 +12,7 @@ import lombok.Setter;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -32,17 +33,8 @@ public class LicensePrice extends BaseEntity {
 	@JoinColumn(name = "license_id", referencedColumnName = "id")
 	private License license;
 
-	@Column(name = "subtotal")
-	private Double subtotal;
-
-	@Column(name = "tax")
-	private boolean tax;
-
-	@Column(name = "tax_rate")
-	private Integer taxRate;
-
-	@Column(name = "total")
-	private Double total;
+	@Column(name = "price")
+	private BigDecimal price;
 
 	@Column(name = "active")
 	private boolean active;
@@ -50,8 +42,8 @@ public class LicensePrice extends BaseEntity {
 	/* toString */
 	@Override
 	public String toString() {
-		return "LicensePrice [id=" + id + ", license=" + license.getId() + ", subtotal=" + subtotal + ", tax=" + tax
-				+ ", taxRate=" + taxRate + ", total=" + total + ", active=" + active + "]";
+		return "LicensePrice [id=" + id + ", license=" + license.getId() + ", price=" + price
+				+ ", active=" + active + "]";
 	}
 
 	@Override

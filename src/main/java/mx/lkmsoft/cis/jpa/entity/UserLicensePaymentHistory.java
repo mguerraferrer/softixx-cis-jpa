@@ -1,24 +1,16 @@
 package mx.lkmsoft.cis.jpa.entity;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Objects;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.enumtype.PaymentMode;
 import mx.lkmsoft.cis.jpa.enumtype.PaymentSource;
 import org.hibernate.proxy.HibernateProxy;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * Persistent class for entity stored in table "user_license_payment_history"
@@ -34,12 +26,17 @@ import org.hibernate.proxy.HibernateProxy;
 @Setter
 public class UserLicensePaymentHistory extends BaseEntity {
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_license_id", referencedColumnName = "id")
-	private UserLicense userLicense;
+	@Column(name = "license_serie")
+	private String licenseSerie;
 
-	@Column(name = "transaction_id")
-	private String transactionId;
+	@Column(name = "promo_code")
+	private String promoCode;
+
+	@Column(name = "direct_promo_code")
+	private String directPromoCode;
+
+	@Column(name = "payment_description")
+	private String paymentDescription;
 
 	@Column(name = "payment_mode")
 	@Enumerated(EnumType.STRING)
@@ -49,53 +46,82 @@ public class UserLicensePaymentHistory extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private PaymentSource paymentSource;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "license_promo_id", referencedColumnName = "id")
-	private LicensePromo licensePromo;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "license_direct_promo_id", referencedColumnName = "id")
-	private LicenseDirectPromo licenseDirectPromo;
-
-	@Column(name = "payment_day")
+	@Column(name = "payment_date")
 	private LocalDateTime paymentDate;
 
-	@Column(name = "reference")
-	private String reference;
+	@Column(name = "payment_subtotal")
+	private BigDecimal paymentSubtotal;
 
-	@Column(name = "currency")
-	private String currency;
+	@Column(name = "payment_tax")
+	private BigDecimal paymentTax;
 
-	@Column(name = "discount_code")
-	private String discountCode;
+	@Column(name = "payment_discount")
+	private Integer paymentDiscount;
 
-	@Column(name = "subtotal")
-	private BigDecimal subtotal;
+	@Column(name = "payment_applied_discount")
+	private BigDecimal paymentAppliedDiscount;
 
-	@Column(name = "tax")
-	private BigDecimal tax;
+	@Column(name = "payment_grand_subtotal")
+	private BigDecimal paymentGrandSubtotal;
 
-	@Column(name = "discount")
-	private BigDecimal discount;
+	@Column(name = "payment_total")
+	private BigDecimal paymentTotal;
 
-	@Column(name = "total_services")
-	private BigDecimal totalServices;
+	@Column(name = "payment_total_in_cents")
+	private BigDecimal paymentTotalInCents;
 
-	@Column(name = "total")
-	private BigDecimal total;
+	@Column(name = "transaction_id")
+	private String transactionId;
+
+	@Column(name = "transaction_ip")
+	private String transactionIp;
+
+	@Column(name = "transaction_currency")
+	private String transactionCurrency;
+
+	@Column(name = "transaction_card_id")
+	private String transactionCardId;
+
+	@Column(name = "transaction_card_zip_code")
+	private String transactionCardZipCode;
+
+	@Column(name = "transaction_card_brand")
+	private String transactionCardBrand;
+
+	@Column(name = "transaction_card_last4")
+	private String transactionCardLast4;
+
+	@Column(name = "transaction_receipt_url")
+	private String transactionReceiptUrl;
 
 	/* toString */
 	@Override
 	public String toString() {
-		long licensePromoId = licensePromo != null ? licensePromo.getId() : null;
-		long licenseDirectPromoId = licenseDirectPromo != null ? licenseDirectPromo.getId() : null;
-
-		return "UserLicensePaymentHistory [id=" + id + ", userLicense=" + userLicense.getId() + ", transactionId="
-				+ transactionId + ", paymentMode=" + paymentMode + ", paymentSource=" + paymentSource
-				+ ", licensePromo=" + licensePromoId + ", licenseDirectPromo=" + licenseDirectPromoId
-				+ ", paymentDate=" + paymentDate + ", reference="
-				+ reference + ", currency=" + currency + ", discountCode=" + discountCode + ", subtotal=" + subtotal
-				+ ", tax=" + tax + ", discount=" + discount + ", totalServices=" + totalServices + ", total=" + total + "]";
+		return "UserLicensePaymentHistory{" +
+				"id=" + id +
+				", licenseSerie=" + licenseSerie +
+				", promoCode=" + promoCode +
+				", directPromoCode=" + directPromoCode +
+				", paymentDescription='" + paymentDescription +
+				", paymentMode=" + paymentMode +
+				", paymentSource=" + paymentSource +
+				", paymentDate=" + paymentDate +
+				", paymentSubtotal=" + paymentSubtotal +
+				", paymentTax=" + paymentTax +
+				", paymentDiscount=" + paymentDiscount +
+				", paymentAppliedDiscount=" + paymentAppliedDiscount +
+				", paymentGrandSubtotal=" + paymentGrandSubtotal +
+				", paymentTotal=" + paymentTotal +
+				", paymentTotalInCents=" + paymentTotalInCents +
+				", transactionId='" + transactionId +
+				", transactionIp='" + transactionIp +
+				", transactionCurrency='" + transactionCurrency +
+				", transactionCardId='" + transactionCardId +
+				", transactionCardZipCode='" + transactionCardZipCode +
+				", transactionCardBrand='" + transactionCardBrand +
+				", transactionCardLast4='" + transactionCardLast4 +
+				", transactionReceiptUrl='" + transactionReceiptUrl +
+				'}';
 	}
 
 	@Override

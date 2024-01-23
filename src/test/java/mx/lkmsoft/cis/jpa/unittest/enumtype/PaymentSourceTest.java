@@ -21,14 +21,14 @@ class PaymentSourceTest {
     @Test
     void testGetValue() {
         assertEquals(PaymentSource.CASH, PaymentSource.getValue("CASH"));
-        assertEquals(PaymentSource.CREDIT, PaymentSource.getValue("CREDIT"));
+        assertEquals(PaymentSource.CARD, PaymentSource.getValue("CARD"));
         assertNull(PaymentSource.getValue(null));
         assertNull(PaymentSource.getValue("Invalid value"));
     }
 
     @ParameterizedTest
     @CsvSource({
-        "DEBIT, true",
+        "CARD, true",
         "PAYPAL, true",
         "null, false",
         "Invalid value, false"

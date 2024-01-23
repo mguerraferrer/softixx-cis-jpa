@@ -10,7 +10,7 @@ import org.apache.commons.lang3.EnumUtils;
  */
 @Slf4j(topic = "PaymentSource")
 public enum PaymentSource {
-	CASH, CREDIT, DEBIT, SPEI, PAYPAL;
+	CASH, CARD, SPEI, PAYPAL;
 
 	public static PaymentSource getValue(String paymentSource) {
 		try {

@@ -52,19 +52,8 @@ public class LicenseDirectPromo extends BaseEntity {
 	@Column(name = "active")
 	private boolean active;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "licenseDirectPromo", targetEntity = UserLicensePaymentHistory.class)
-	@Getter(AccessLevel.NONE)
-	private List<UserLicensePaymentHistory> userLicensePaymentHistories;
-
 	public Integer getDiscount() {
 		return discount != null ? discount : 0;
-	}
-
-	public List<UserLicensePaymentHistory> getUserLicensePaymentHistories() {
-		if (userLicensePaymentHistories == null) {
-			userLicensePaymentHistories = new ArrayList<>();
-		}
-		return userLicensePaymentHistories;
 	}
 
 	/* toString */

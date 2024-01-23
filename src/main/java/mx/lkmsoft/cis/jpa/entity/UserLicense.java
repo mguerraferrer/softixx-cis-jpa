@@ -64,10 +64,6 @@ public class UserLicense {
 	@Column(name = "due_date")
 	private LocalDate dueDate;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userLicense", targetEntity = UserLicensePaymentHistory.class)
-	@Getter(AccessLevel.NONE)
-	private List<UserLicensePaymentHistory> userLicensePaymentHistories;
-
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userLicense", targetEntity = UserLicenseAvailableItem.class)
 	@Getter(AccessLevel.NONE)
 	private List<UserLicenseAvailableItem> userLicenseServices;
@@ -109,13 +105,6 @@ public class UserLicense {
 	@Transient
 	public boolean isActive() {
 		return LocalDateUtils.isFutureOrPresent(dueDate);
-	}
-
-	public List<UserLicensePaymentHistory> getUserLicensePaymentHistories() {
-		if (userLicensePaymentHistories == null) {
-			userLicensePaymentHistories = new ArrayList<>();
-		}
-		return userLicensePaymentHistories;
 	}
 
 	public List<UserLicenseAvailableItem> getUserLicenseServices() {

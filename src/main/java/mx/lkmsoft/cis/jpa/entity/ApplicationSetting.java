@@ -1,13 +1,7 @@
 package mx.lkmsoft.cis.jpa.entity;
 
-import java.time.LocalDateTime;
-import java.util.Objects;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -15,39 +9,44 @@ import lombok.Setter;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.util.Objects;
+
 /**
- * Persistent class for entity stored in table "user_license_edition_history"
+ * Persistent class for entity stored in table "settings_bag"
  *
  * @author Maikel Guerra Ferrer
  *
  */
 
 @Entity
-@Table(name = "user_license_edition_history", schema = "sales")
-@SequenceGenerator(name = "default_gen", sequenceName = "sales.user_license_edition_history_seq", allocationSize = 1)
+@Table(name = "application_settings", schema = "config")
+@SequenceGenerator(name = "default_gen", sequenceName = "config.application_settings_seq", allocationSize = 1)
 @Getter
 @Setter
-public class UserLicenseEditionHistory extends BaseEntity {
+public class ApplicationSetting extends BaseEntity {
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_license_id", referencedColumnName = "id")
-	private UserLicense userLicense;
+    @Column(name = "code")
+    private String code;
 
-	@Column(name = "date_time")
-	private LocalDateTime dateTime;
+    @Column(name = "value")
+    private String value;
 
-	public UserLicenseEditionHistory() {
-		super();
-	}
+    @Column(name = "active")
+    private boolean active;
 
-	public UserLicenseEditionHistory(UserLicense userLicense) {
-		this.userLicense = userLicense;
-		this.dateTime = LocalDateTime.now();
+    public ApplicationSetting() {
+    }
+    
+    public ApplicationSetting(String code, String value) {
+		this.code = code;
+		this.value = value;
+		this.active = true;
 	}
 
 	/* toString */
+	@Override
 	public String toString() {
-		return "UserLicenseEditionHistory [id=" + id + ", userLicense=" + userLicense.getSerie() + ", dateTime=" + dateTime + "]";
+		return "SettingsBag [id=" + id + ", code=" + code + ", value=" + value + ", active=" + active + "]";
 	}
 
 	@Override
@@ -61,7 +60,7 @@ public class UserLicenseEditionHistory extends BaseEntity {
 			? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
 			: this.getClass();
 		if (thisEffectiveClass != oEffectiveClass) return false;
-		UserLicenseEditionHistory that = (UserLicenseEditionHistory) o;
+		ApplicationSetting that = (ApplicationSetting) o;
 		return getId() != null && Objects.equals(getId(), that.getId());
 	}
 

@@ -7,17 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -64,6 +54,9 @@ public class UserLicense {
 	@Column(name = "due_date")
 	private LocalDate dueDate;
 
+	@org.springframework.data.annotation.Version
+	private Long version;
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userLicense", targetEntity = UserLicenseAvailableItem.class)
 	@Getter(AccessLevel.NONE)
 	private List<UserLicenseAvailableItem> userLicenseServices;
@@ -75,10 +68,6 @@ public class UserLicense {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userLicense", targetEntity = UserLicenseFrequentlyPayment.class)
 	@Getter(AccessLevel.NONE)
 	private List<UserLicenseFrequentlyPayment> userLicenseFrequentlyPayments;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userLicense", targetEntity = UserLicenseEditionHistory.class)
-	@Getter(AccessLevel.NONE)
-	private List<UserLicenseEditionHistory> userLicenseEditionHistories;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userLicense", targetEntity = LicenseDirectPromo.class)
 	@Getter(AccessLevel.NONE)
@@ -126,13 +115,6 @@ public class UserLicense {
 			userLicenseFrequentlyPayments = new ArrayList<>();
 		}
 		return userLicenseFrequentlyPayments;
-	}
-
-	public List<UserLicenseEditionHistory> getUserLicenseEditionHistories() {
-		if (userLicenseEditionHistories == null) {
-			userLicenseEditionHistories = new ArrayList<>();
-		}
-		return userLicenseEditionHistories;
 	}
 
 	public List<LicenseDirectPromo> getLicenseDirectPromos() {

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import mx.lkmsoft.cis.jpa.base.BaseEntity;
 import mx.lkmsoft.cis.jpa.enumtype.PaymentMode;
+import mx.lkmsoft.cis.jpa.enumtype.PaymentProvider;
 import mx.lkmsoft.cis.jpa.enumtype.PaymentSource;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -37,6 +38,10 @@ public class UserLicensePaymentHistory extends BaseEntity {
 
 	@Column(name = "payment_description")
 	private String paymentDescription;
+
+	@Column(name = "payment_provider")
+	@Enumerated(EnumType.STRING)
+	private PaymentProvider paymentProvider;
 
 	@Column(name = "payment_mode")
 	@Enumerated(EnumType.STRING)
@@ -103,6 +108,7 @@ public class UserLicensePaymentHistory extends BaseEntity {
 				", promoCode=" + promoCode +
 				", directPromoCode=" + directPromoCode +
 				", paymentDescription='" + paymentDescription +
+				", paymentProvider=" + paymentProvider +
 				", paymentMode=" + paymentMode +
 				", paymentSource=" + paymentSource +
 				", paymentDate=" + paymentDate +

@@ -2,7 +2,7 @@ package mx.lkmsoft.cis.jpa.unittest.enumtype;
 
 import lombok.val;
 import mx.lkmsoft.cis.common.data.StringUtils;
-import mx.lkmsoft.cis.jpa.enumtype.OnlinePayment;
+import mx.lkmsoft.cis.jpa.enumtype.PaymentProvider;
 import mx.lkmsoft.cis.jpa.unittest.commondatatest.DataTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,29 +12,29 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
- * {@link OnlinePayment} test class
+ * {@link PaymentProvider} test class
  *
  * @author Maikel Guerra Ferrer
  */
-class OnlinePaymentTest {
+class PaymentProviderTest {
 
     @Test
     void testGetValue() {
-        assertEquals(OnlinePayment.STRIPE, OnlinePayment.getValue("STRIPE"));
-        assertEquals(OnlinePayment.OPENPAY, OnlinePayment.getValue("OPENPAY"));
-        assertNull(OnlinePayment.getValue(null));
-        assertNull(OnlinePayment.getValue("Invalid value"));
+        assertEquals(PaymentProvider.STRIPE, PaymentProvider.getValue("STRIPE"));
+        assertEquals(PaymentProvider.PAYPAL, PaymentProvider.getValue("PAYPAL"));
+        assertNull(PaymentProvider.getValue(null));
+        assertNull(PaymentProvider.getValue("Invalid value"));
     }
 
     @ParameterizedTest
     @CsvSource({
         "STRIPE, true",
-        "OPENPAY, true",
+        "PAYPAL, true",
         "null, false",
         "Invalid value, false"
     })
     void testIsValid(String value, boolean isAssert) {
-        val result = OnlinePayment.isValid(StringUtils.clean(value));
+        val result = PaymentProvider.isValid(StringUtils.clean(value));
         DataTest.commonAssert(isAssert, result);
     }
 

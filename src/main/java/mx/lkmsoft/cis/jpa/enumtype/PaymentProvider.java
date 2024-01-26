@@ -8,23 +8,23 @@ import org.apache.commons.lang3.EnumUtils;
  * @author Maikel Guerra Ferrer
  *
  */
-@Slf4j(topic = "OnlinePayment")
-public enum OnlinePayment {
-	STRIPE, OPENPAY;
+@Slf4j(topic = "PaymentProvider")
+public enum PaymentProvider {
+	STRIPE, PAYPAL;
 
-	public static OnlinePayment getValue(String onlinePayment) {
+	public static PaymentProvider getValue(String onlinePayment) {
 		try {
 			if (StringUtils.hasValue(onlinePayment)) {
-				return OnlinePayment.valueOf(onlinePayment);
+				return PaymentProvider.valueOf(onlinePayment);
 			}
 		} catch (IllegalArgumentException e) {
-			log.error("Error trying to get OnlinePayment value from '{}'", onlinePayment);
+			log.error("Error trying to get PaymentProvider value from '{}'", onlinePayment);
 		}
 		return null;
 	}
 
 	public static boolean isValid(String onlinePayment) {
-		return EnumUtils.isValidEnum(OnlinePayment.class, onlinePayment);
+		return EnumUtils.isValidEnum(PaymentProvider.class, onlinePayment);
 	}
 	
 }
